@@ -1,4 +1,3 @@
-// let ejs = require('ejs');
 let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
@@ -19,7 +18,6 @@ app.all('*', crossDomain);  //跨域处理（不建议用）
 
 
 // view engine setup
-// app.engine('html', ejs.__express);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -34,17 +32,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 app.use(cookieParser(cookieSecret.cookieSecret));
-
 app.use(expressSession(cookieSecret.cookieSecret));
-
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(require('./routes/index'));
-
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

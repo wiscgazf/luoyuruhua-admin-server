@@ -1,7 +1,7 @@
 let config = require('config');
 let mongoose = require('mongoose');
 
-let zhoufeiMongoose = mongoose.createConnection('mongodb://' + config.host + ':' + config.dbPort + '/' + 'luoyuruhua');
+let zhoufeiMongoose = mongoose.createConnection('mongodb://' + config.host + ':' + config.dbPort + '/' + 'luoyuruhua', {useNewUrlParser: true});
 
 
 /**

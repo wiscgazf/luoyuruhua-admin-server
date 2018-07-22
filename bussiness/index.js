@@ -6,7 +6,6 @@ let Admin = require('../models/Admin');
 
 // index page
 objFun.indexSuc = function (req, res, next) {
-    req.session.userMsg = '123';
     res.render('index', {title: '123'})
 };
 
@@ -14,7 +13,6 @@ objFun.indexSuc = function (req, res, next) {
 
 // login  bussiness
 objFun.loginAjax = function (req, res, next) {
-    console.log(req.session)
     let obj = {
         name: req.body.name,
         password: req.body.password
