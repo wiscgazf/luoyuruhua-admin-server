@@ -2,9 +2,9 @@ let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
-let expressSession = require('express-session');
+// let expressSession = require('express-session');
 let bodyParser = require('body-parser');
-let Cookies = require('cookies');
+// let Cookies = require('cookies');
 
 
 let logger = require('morgan');
@@ -32,8 +32,8 @@ app.use(bodyParser.urlencoded());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-app.use(cookieParser());
-app.use(expressSession({secret: 'test', name: "userInfo", cookie: {maxAge: 1000 * 60}}));// set session
+app.use(cookieParser(cookieSecret.cookieSecret));
+// app.use(expressSession({secret: cookieSecret.cookieSecret, name: "userInfo", cookie: {maxAge: 1000 * 60}}));// set session
 app.use(express.static(path.join(__dirname, 'public')));
 
 
