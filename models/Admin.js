@@ -1,4 +1,5 @@
 let mongoose = require('mongoose');
+
 let db = require('../config/mongodbConfig');
 
 let adminSchema = new mongoose.Schema({
@@ -16,6 +17,14 @@ let adminSchema = new mongoose.Schema({
     password: {
         type: String,
         require: true
+    },
+    createTime: {
+        type: Date,
+        default: Date.now()
+    },
+    lastUpdateTime: {
+        type: Date,
+        default: Date.now()
     }
 });
 
