@@ -18,6 +18,7 @@ let adminSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    userImg: String,
     createTime: {
         type: Date,
         default: Date.now()

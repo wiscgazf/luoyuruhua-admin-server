@@ -10,5 +10,7 @@ router.get('/', bussinessFun.indexSuc);
 // login ajax
 router.post('/login', bussinessFun.loginAjax);
 
+// isLogin ajax
+router.post('/isLogin', bussinessFun.isLoginAjax);
 
 module.exports = router;
