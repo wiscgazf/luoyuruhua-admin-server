@@ -58,7 +58,7 @@ objFun.isLoginAjax = function (req, res, next) {
                 phone: data.phone,
                 password: md5.aseDecode(data.password, data.name),
                 userImg: data.userImg,
-                status: 'OK'
+                msg: '1'
             });
         }
     });
