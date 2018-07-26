@@ -26,7 +26,8 @@ let adminSchema = new mongoose.Schema({
     lastUpdateTime: {
         type: Date,
         default: Date.now()
-    }
+    },
+    loginTime: ''
 });
 
 

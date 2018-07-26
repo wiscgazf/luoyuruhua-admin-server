@@ -2,6 +2,7 @@ let objFun = {};
 let fs = require('fs');
 let moment = require('moment');
 let md5 = require('../utils/md5');
+let otherUtil = require('../utils/others');
 
 // admin db
 let Admin = require('../models/Admin');
@@ -31,7 +32,14 @@ objFun.loginAjax = function (req, res, next) {
             res.json({msg: '2'});
         } else {
             if (obj.password == md5.aseDecode(data.password, data.name)) {
-                res.json({msg: '1', user: md5.aseEncode(obj.name, 'zhoufei')});
+                Admin.update({_id: data._id}, {$set: {loginTime: moment().format()}}, function (err, res) {
+                    if (err) {
+                        res.send(500);
+                        res.json({msg: '网络异常错误！'});
+                    } else {
+                        res.json({msg: '1', user: md5.aseEncode(obj.name, 'zhoufei')});
+                    }
+                });
             } else {
                 res.json({msg: '3'});
             }
@@ -58,6 +66,30 @@ objFun.isLoginAjax = function (req, res, next) {
                 phone: data.phone,
                 password: md5.aseDecode(data.password, data.name),
                 userImg: data.userImg,
+                loginTime: data.loginTime,
+                msg: '1'
+            });
+        }
+    });
+};
+// getClientMsg bussiness
+objFun.getClientMsg = function (req, res, next) {
+    Admin.findOne({name: req.query.name}, function (err, data) {
+        if (err) {
+            res.send(500);
+            res.json({msg: '网络异常错误！'});
+        } else if (!data) {
+            res.json({msg: 0});
+        } else {
+            res.json({
+                name: data.name,
+                age: data.age,
+                sex: data.sex,
+                email: data.email,
+                phone: data.phone,
+                userImg: data.userImg,
+                loginTime: data.loginTime,
+                ip: otherUtil.getUserIp(req),
                 msg: '1'
             });
         }
