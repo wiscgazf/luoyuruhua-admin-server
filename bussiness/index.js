@@ -32,7 +32,7 @@ objFun.loginAjax = function (req, res, next) {
             res.json({msg: '2'});
         } else {
             if (obj.password == md5.aseDecode(data.password, data.name)) {
-                Admin.update({_id: data._id}, {$set: {loginTime: moment().format()}}, function (err, res) {
+                Admin.update({_id: data._id}, {$set: {loginTime: moment().format()}}, function (err, data1) {
                     if (err) {
                         res.send(500);
                         res.json({msg: '网络异常错误！'});
