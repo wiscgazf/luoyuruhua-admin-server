@@ -4,18 +4,15 @@ let moment = require('moment');
 let md5 = require('../utils/md5');
 let otherUtil = require('../utils/others');
 
-// admin db
-let Admin = require('../models/Admin');
+let Admin = require('../models/Admin'); // admin db
 
-// index page
-objFun.indexSuc = function (req, res, next) {
+objFun.indexSuc = function (req, res, next) {   // index page
     res.render('index', {title: '123'})
 };
 
 // ajax bussiness  -------------------------
 
-// login  bussiness
-objFun.loginAjax = function (req, res, next) {
+objFun.loginAjax = function (req, res, next) {  // login ajax  bussiness
     let obj = {
         name: req.body.name,
         password: req.body.password
@@ -47,8 +44,8 @@ objFun.loginAjax = function (req, res, next) {
     });
 };
 
-// isLogin  bussiness
-objFun.isLoginAjax = function (req, res, next) {
+
+objFun.isLoginAjax = function (req, res, next) {    // isLogin ajax  bussiness
     let userName = md5.aseDecode(req.body.user, 'zhoufei');
     Admin.findOne({name: userName}, function (err, data) {
         if (err) {
@@ -72,8 +69,8 @@ objFun.isLoginAjax = function (req, res, next) {
         }
     });
 };
-// getClientMsg bussiness
-objFun.getClientMsg = function (req, res, next) {
+
+objFun.getClientMsg = function (req, res, next) {   // getClientMsg ajax bussines
     Admin.findOne({name: req.query.name}, function (err, data) {
         if (err) {
             res.send(500);

@@ -5,7 +5,7 @@ module.exports = function (str) {
         host: 'qq',
         auth: {
             user: '599803422@qq.com',
-            pass: 'rxgkmgpqbjxzbbdf' //授权码,通过QQ获取
+            pass: '' //授权码,通过QQ获取
 
         }
     });

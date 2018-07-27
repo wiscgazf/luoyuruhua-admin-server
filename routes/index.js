@@ -2,18 +2,14 @@ let express = require('express');
 let router = express.Router();
 let bussinessFun = require('../bussiness/index');
 
-// index page
-router.get('/', bussinessFun.indexSuc);
+router.get('/', bussinessFun.indexSuc); // index page
 
 // ajax request ---------------------------------------
 
-// login ajax
-router.post('/login', bussinessFun.loginAjax);
+router.post('/login', bussinessFun.loginAjax);  // login ajax
 
-// isLogin ajax
-router.post('/isLogin', bussinessFun.isLoginAjax);
+router.post('/isLogin', bussinessFun.isLoginAjax);  // isLogin ajax
 
-// clientMsg ajax
-router.get('/getClientMsg', bussinessFun.getClientMsg);
+router.get('/getClientMsg', bussinessFun.getClientMsg); // clientMsg ajax
 
 module.exports = router;

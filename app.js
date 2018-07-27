@@ -36,8 +36,9 @@ app.use(cookieParser(cookieSecret.cookieSecret));
 // app.use(expressSession({secret: cookieSecret.cookieSecret, name: "userInfo", cookie: {maxAge: 1000 * 60}}));// set session
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(require('./routes/index')); // 处理首页方面的路由
 
-app.use(require('./routes/index'));
+app.use(require('./routes/admin')); // 处理管理员方面的路由
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

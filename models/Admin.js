@@ -18,7 +18,11 @@ let adminSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    userImg: String,
+    userImg: {
+        type: String,
+        default: ''
+    },
+    signature: String,
     createTime: {
         type: Date,
         default: Date.now()
@@ -27,7 +31,10 @@ let adminSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    loginTime: ''
+    loginTime: {
+        type: String,
+        default: ''
+    }
 });
 
 
