@@ -1,4 +1,4 @@
-let get_client_ip = function (req) {    // 获取用户的IP
+let get_client_ip = function (req) {    // 鑾峰彇鐢ㄦ埛鐨処P
     var ip = req.headers['x-forwarded-for'] ||
         req.ip ||
         req.connection.remoteAddress ||
@@ -24,7 +24,7 @@ function dataType(obj) {
     return Object.prototype.toString.call(obj).slice(8, -1);
 };
 
-function dealObjectValue(obj) { // 判断对象的属性值是否为空或者undefined
+function dealObjectValue(obj) { // 杩囨护瀵硅薄鐨勫睘鎬у�间负null鎴栬�卽ndefined
     var param = {};
     if (obj === null || obj === undefined || obj === "") return param;
     for (var key in obj) {

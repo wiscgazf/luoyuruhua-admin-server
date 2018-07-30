@@ -43,7 +43,7 @@ objFun.addAdminAjax = function (req, res, next) { // add admin ajax  bussiness
 
 objFun.findAllAdminAjax = function (req, res, next) {      // find all admin ajax bussiness
     let obj = req.query;
-    Admin.find(obj, function (err, data) {
+    Admin.find(Others.dealObjectValue(obj), function (err, data) {
         if (err) {
             res.send(500);
             res.json(Errors.networkError);
@@ -71,13 +71,6 @@ objFun.findAllAdminAjax = function (req, res, next) {      // find all admin aja
             }
         }
     });
-
-    function isObjEmpty(obj) {
-        for (var key in obj) {
-            return false;
-        }
-        return true;
-    }
 }
 
 module.exports = objFun;
