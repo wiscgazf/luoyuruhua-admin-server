@@ -2,6 +2,7 @@ let objFun = {};
 let fs = require('fs');
 let md5 = require('../utils/md5');
 let Errors = require('../err/errors');
+let Others = require('../utils/others');
 
 let Admin = require('../models/Admin'); // admin db
 
@@ -39,5 +40,44 @@ objFun.addAdminAjax = function (req, res, next) { // add admin ajax  bussiness
         }
     });
 };
+
+objFun.findAllAdminAjax = function (req, res, next) {      // find all admin ajax bussiness
+    let obj = req.query;
+    Admin.find(obj, function (err, data) {
+        if (err) {
+            res.send(500);
+            res.json(Errors.networkError);
+        } else {
+            if (data.length > 0) {
+                res.json({
+                    msg: '1',
+                    code: '200',
+                    res: data.map(function (item) {
+                        return {
+                            id: item._id,
+                            name: item.name,
+                            phone: item.phone,
+                            email: item.email,
+                            age: item.age,
+                            sex: item.sex,
+                            signature: item.signature,
+                            userImg: item.userImg,
+                            createTime: item.createTime
+                        }
+                    })
+                });
+            } else {
+                res.json({msg: '0', res: []});
+            }
+        }
+    });
+
+    function isObjEmpty(obj) {
+        for (var key in obj) {
+            return false;
+        }
+        return true;
+    }
+}
 
 module.exports = objFun;
