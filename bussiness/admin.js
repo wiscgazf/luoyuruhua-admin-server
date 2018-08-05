@@ -50,6 +50,7 @@ objFun.findAllAdminAjax = function (req, res, next) {      // find all admin aja
         } else {
             if (data.length > 0) {
                 res.json({
+
                     msg: '1',
                     code: '200',
                     res: data.map(function (item) {
@@ -69,6 +70,32 @@ objFun.findAllAdminAjax = function (req, res, next) {      // find all admin aja
             } else {
                 res.json({msg: '0', res: []});
             }
+        }
+    });
+};
+
+objFun.adminDetailAjax = function (req, res, next) {
+    let userId = req.query.id;
+    Admin.findById(userId, function (err, data) {
+        if (err) {
+            res.send(500);
+            res.json(Errors.networkError);
+        } else {
+            res.json({
+                msg: '1',
+                code: '200',
+                data: {
+                    id: data._id,
+                    name: data.name,
+                    phone: data.phone,
+                    email: data.email,
+                    age: data.age,
+                    sex: data.sex,
+                    signature: data.signature,
+                    userImg: data.userImg,
+                    createTime: data.createTime
+                }
+            });
         }
     });
 }
