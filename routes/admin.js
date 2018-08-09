@@ -10,4 +10,6 @@ router.get('/findAllAdmin', bussinessFun.findAllAdminAjax);    // find all admin
 
 router.get('/adminDetail', bussinessFun.adminDetailAjax);    // find  admin detail ajax
 
+router.put('/editAdmin', bussinessFun.editAdminAjax);    // find  admin detail ajax
+
 module.exports = router;

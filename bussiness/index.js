@@ -17,6 +17,7 @@ objFun.loginAjax = function (req, res, next) {  // login ajax  bussiness
         name: req.body.name,
         password: req.body.password
     };
+    console.log(obj)
     if (obj.name == '' || obj.password == '') {
         res.json({msg: '0'});
         return;
@@ -34,7 +35,7 @@ objFun.loginAjax = function (req, res, next) {  // login ajax  bussiness
                         res.send(500);
                         res.json({msg: '网络异常错误！'});
                     } else {
-                        res.json({msg: '1', user: md5.aseEncode(obj.name, 'zhoufei')});
+                        res.json({msg: '1', id: data1._id, user: md5.aseEncode(obj.name, 'zhoufei')});
                     }
                 });
             } else {
@@ -71,7 +72,7 @@ objFun.isLoginAjax = function (req, res, next) {    // isLogin ajax  bussiness
 };
 
 objFun.getClientMsg = function (req, res, next) {   // getClientMsg ajax bussines
-    Admin.findOne({name: req.query.name}, function (err, data) {
+    Admin.findOne({name: md5.aseDecode(req.query.name, 'zhoufei')}, function (err, data) {
         if (err) {
             res.send(500);
             res.json({msg: '网络异常错误！'});

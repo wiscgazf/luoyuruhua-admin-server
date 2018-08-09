@@ -34,7 +34,9 @@ app.use(express.urlencoded({extended: false}));
 
 app.use(cookieParser(cookieSecret.cookieSecret));
 // app.use(expressSession({secret: cookieSecret.cookieSecret, name: "userInfo", cookie: {maxAge: 1000 * 60}}));// set session
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'))); // 映射公共文件到public
+
+app.use(express.static(path.join(__dirname, './'))); // 映射文件到当前目录
 
 app.use(require('./routes/index')); // 处理首页方面的路由
 
