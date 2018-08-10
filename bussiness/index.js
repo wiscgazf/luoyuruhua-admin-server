@@ -17,7 +17,6 @@ objFun.loginAjax = function (req, res, next) {  // login ajax  bussiness
         name: req.body.name,
         password: req.body.password
     };
-    console.log(obj)
     if (obj.name == '' || obj.password == '') {
         res.json({msg: '0'});
         return;

@@ -101,62 +101,56 @@ objFun.adminDetailAjax = function (req, res, next) {    // adminDetail  business
 };
 
 objFun.editAdminAjax = function (req, res, next) {    // editAdmin  business
+    let baseImg = '';
     let saveUser = {};
     let adminMsg = req.body;
-    console.log(adminMsg)
-    /* let base64Data = userId[0].replace(/^data:image\/\w+;base64,/, "");
-     let dataBuffer = new Buffer(base64Data, 'base64');*/
-    /*fs.writeFile('static/upload/' + new Date().getTime() + '.png', dataBuffer, function (err) {
-        if (err) {
-            res.send(err);
+    Admin.findOne({_id: req.body.userId}).then((data) => {
+        saveUser.name = data.name;
+        saveUser.phone = data.phone;
+        saveUser.password = data.password;
+        return Admin.find({name: adminMsg.name});
+    }).then((data) => {
+        if (data.length > 1 || (data.length == 1 && saveUser.name != data[0].name)) {
+            res.json(Errors.nameOccupied);
         } else {
-            res.json({suc: '1'});
+            return Admin.find({phone: adminMsg.phone});
         }
-    });*/
-    Admin.findOne({_id: req.body.userId}, function (err, data) {
-        if (err) {
-            res.send(500);
-            res.json(Errors.networkError);
+    }).then((data) => {
+        if (data.length > 1 || (data.length == 1 && saveUser.phone != data[0].phone)) {
+            res.json(Errors.phoneregisted);
         } else {
-            saveUser.name = data.name;
-            saveUser.phone = data.phone;
-            if (saveUser.name != adminMsg.name) {
-                Admin.find({name: adminMsg.name}, function (err1, data1) {
-                    if (err1) {
-                        res.send(500);
-                        res.json(Errors.networkError);
+            if (/^data:image\/(jpeg|png|gif);base64,/.test(adminMsg.imgUrl)) {  // The image of parsing base64 is saved in the '__dirname\static\upload' folder
+                let base64Data = adminMsg.imgUrl.replace(/^data:image\/\w+;base64,/, "");
+                let dataBuffer = new Buffer(base64Data, 'base64');
+                fs.writeFile('static/upload/' + adminMsg.userId + '.png', dataBuffer, function (err, data) {
+                    if (err) {
+                        res.status(500).json(Errors.networkError);
                     } else {
-                        if (data1.length > 0) {
-                            res.json(Errors.nameOccupied);
-                        } else {
-                            if (saveUser.phone != adminMsg.phone) {
-                                Admin.find({phone: adminMsg.phone}, function (err2, data2) {
-                                    if (err2) {
-                                        res.send(500);
-                                        res.json(Errors.networkError);
-                                    } else {
-                                        if (data2.length > 0) {
-                                            res.json(Errors.phoneregisted);
-                                        } else {
-                                            res.json({suc: '1'});
-                                            /*Admin.update({_id: adminMsg.userId}, {$set: adminMsg}, function (err3, data3) {
-                                                if (err3) {
-                                                    res.send(500);
-                                                    res.json(Errors.networkError);
-                                                } else {
-                                                    res.json(Errors.editAdminSuc);
-                                                }
-                                            });*/
-                                        }
-                                    }
-                                });
-                            }
-                        }
+                        baseImg = '/static/upload/' + adminMsg.userId + '.png';
+                        updateAdmin(res, adminMsg, baseImg, adminMsg.userId, saveUser);
                     }
                 });
+            } else {
+                baseImg = adminMsg.imgUrl;
+                updateAdmin(res, adminMsg, baseImg, adminMsg.userId, saveUser);
             }
         }
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
     });
 };
+
+// update admin message
+function updateAdmin(res, adminMsg, portrait, id, saveUser) {
+    delete adminMsg.imgUrl;
+    delete adminMsg.userId;
+    adminMsg.userImg = portrait;
+    Admin.update({_id: id}, {$set: Object.assign(adminMsg, {password: md5.aseEncode(md5.aseDecode(saveUser.password, saveUser.name), adminMsg.name)})}).then(data => {
+        console.log(data);
+        res.json(Object.assign(Errors.editAdminSuc, {user: md5.aseEncode(adminMsg.name, 'zhoufei')}));
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    })
+}
 
 module.exports = objFun;
