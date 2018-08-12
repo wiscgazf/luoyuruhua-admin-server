@@ -8,36 +8,23 @@ let Admin = require('../models/Admin'); // admin db
 
 objFun.addAdminAjax = function (req, res, next) { // add admin ajax  bussiness
     let obj = req.body;
-    Admin.find({name: obj.name}, function (err, data) {
-        if (err) {
-            res.send(500);
-            res.json(Errors.networkError);
+    Admin.find({name: obj.name}).then(data => {
+        if (data.length > 0) {
+            res.json(Errors.nameOccupied);
         } else {
-            if (data.length > 0) {
-                res.json(Errors.nameOccupied);
-            } else {
-                Admin.findOne({phone: obj.phone}, function (err, data1) {
-                    if (err) {
-                        res.send(500);
-                        res.json(Errors.networkError);
-                    } else {
-                        if (data1) {
-                            res.json(Errors.phoneregisted);
-                        } else {
-                            let createData = Object.assign(obj, {password: md5.aseEncode(obj.password, obj.name)});
-                            Admin.create(createData, function (err, data2) {
-                                if (err) {
-                                    res.send(500);
-                                    res.json(Errors.networkError);
-                                } else {
-                                    res.json(Errors.addAdminSuc);
-                                }
-                            });
-                        }
-                    }
-                });
-            }
+            return Admin.findOne({phone: obj.phone});
         }
+    }).then(data => {
+        if (data) {
+            res.json(Errors.phoneregisted);
+        } else {
+            let createData = Object.assign(obj, {password: md5.aseEncode(obj.password, obj.name)});
+            return Admin.create(createData);
+        }
+    }).then(data => {
+        res.json(Errors.addAdminSuc);
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
     });
 };
 
@@ -50,7 +37,6 @@ objFun.findAllAdminAjax = function (req, res, next) {      // find all admin aja
         } else {
             if (data.length > 0) {
                 res.json({
-
                     msg: '1',
                     code: '200',
                     res: data.map(function (item) {
@@ -146,7 +132,6 @@ function updateAdmin(res, adminMsg, portrait, id, saveUser) {
     delete adminMsg.userId;
     adminMsg.userImg = portrait;
     Admin.update({_id: id}, {$set: Object.assign(adminMsg, {password: md5.aseEncode(md5.aseDecode(saveUser.password, saveUser.name), adminMsg.name)})}).then(data => {
-        console.log(data);
         res.json(Object.assign(Errors.editAdminSuc, {user: md5.aseEncode(adminMsg.name, 'zhoufei')}));
     }).catch(err => {
         res.status(500).json(Errors.networkError);
