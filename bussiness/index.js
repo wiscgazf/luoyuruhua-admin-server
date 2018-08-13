@@ -77,6 +77,7 @@ objFun.getClientMsg = function (req, res, next) {   // getClientMsg ajax bussine
                 name: data.name,
                 loginTime: data.loginTime,
                 ip: otherUtil.getUserIp(req),
+                userImg: data.userImg,
                 msg: '1'
             });
         }
