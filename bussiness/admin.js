@@ -138,4 +138,22 @@ function updateAdmin(res, adminMsg, portrait, id, saveUser) {
     })
 }
 
+objFun.changePswAjax = function (req, res, next) {  // change admin password
+    let reqData = req.body;
+    console.log(reqData)
+    Admin.findById(reqData.id).then(data => {
+        if (md5.aseDecode(data.password, data.name) != reqData.originalPassword) {
+            res.json(Errors.originalPasswordErr);
+        } else if (md5.aseDecode(data.password, data.name) == reqData.password) {
+            res.json(Errors.twoPswSame);
+        } else {
+            return Admin.update({_id: reqData.id}, {$set: {password: md5.aseEncode(reqData.password, data.name)}});
+        }
+    }).then(data => {
+        res.json(Errors.changePswSuc);
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    });
+}
+
 module.exports = objFun;
