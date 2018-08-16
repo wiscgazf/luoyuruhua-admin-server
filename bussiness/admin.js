@@ -1,5 +1,6 @@
 let objFun = {};
 let fs = require('fs');
+let Promise = require("bluebird");
 let md5 = require('../utils/md5');
 let Errors = require('../err/errors');
 let Others = require('../utils/others');
@@ -8,7 +9,9 @@ let Admin = require('../models/Admin'); // admin db
 
 objFun.addAdminAjax = function (req, res, next) { // add admin ajax  bussiness
     let obj = req.body;
-    Admin.find({name: obj.name}).then(data => {
+    Promise.try(() => {
+        return Admin.find({name: obj.name});
+    }).then(data => {
         if (data.length > 0) {
             res.json(Errors.nameOccupied);
         } else {
@@ -30,35 +33,38 @@ objFun.addAdminAjax = function (req, res, next) { // add admin ajax  bussiness
 
 objFun.findAllAdminAjax = function (req, res, next) {      // find all admin ajax bussiness
     let obj = req.query;
-    Admin.find(Others.dealObjectValue(obj), function (err, data) {
-        if (err) {
-            res.send(500);
-            res.json(Errors.networkError);
-        } else {
-            if (data.length > 0) {
-                res.json({
-                    msg: '1',
-                    code: '200',
-                    res: data.map(function (item) {
-                        return {
-                            id: item._id,
-                            name: item.name,
-                            phone: item.phone,
-                            email: item.email,
-                            age: item.age,
-                            sex: item.sex,
-                            signature: item.signature,
-                            userImg: item.userImg,
-                            createTime: item.createTime
-                        }
-                    })
-                });
+    let reg = new RegExp(obj.phone);
+    Admin.find({phone: {$regex: reg}}, function (err, data) {
+            if (err) {
+                res.send(500);
+                res.json(Errors.networkError);
             } else {
-                res.json({msg: '0', res: []});
+                if (data.length > 0) {
+                    res.json({
+                        msg: '1',
+                        code: '200',
+                        res: data.map(function (item) {
+                            return {
+                                id: item._id,
+                                name: item.name,
+                                phone: item.phone,
+                                email: item.email,
+                                age: item.age,
+                                sex: item.sex,
+                                signature: item.signature,
+                                userImg: item.userImg,
+                                createTime: item.createTime
+                            }
+                        })
+                    });
+                }
+                else {
+                    res.json({msg: '0', res: []});
+                }
             }
         }
-    });
-};
+    )
+}
 
 objFun.adminDetailAjax = function (req, res, next) {    // adminDetail  business
     let userId = req.query.id;
@@ -90,7 +96,9 @@ objFun.editAdminAjax = function (req, res, next) {    // editAdmin  business
     let baseImg = '';
     let saveUser = {};
     let adminMsg = req.body;
-    Admin.findOne({_id: req.body.userId}).then((data) => {
+    Promise.try(() => {
+        return Admin.findOne({_id: req.body.userId});
+    }).then((data) => {
         saveUser.name = data.name;
         saveUser.phone = data.phone;
         saveUser.password = data.password;
@@ -140,8 +148,9 @@ function updateAdmin(res, adminMsg, portrait, id, saveUser) {
 
 objFun.changePswAjax = function (req, res, next) {  // change admin password
     let reqData = req.body;
-    console.log(reqData)
-    Admin.findById(reqData.id).then(data => {
+    Promise.try(() => {
+        return Admin.findById(reqData.id);
+    }).then(data => {
         if (md5.aseDecode(data.password, data.name) != reqData.originalPassword) {
             res.json(Errors.originalPasswordErr);
         } else if (md5.aseDecode(data.password, data.name) == reqData.password) {

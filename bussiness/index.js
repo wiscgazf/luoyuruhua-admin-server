@@ -1,5 +1,6 @@
 let objFun = {};
 let fs = require('fs');
+let Promise = require("bluebird");
 let moment = require('moment');
 let md5 = require('../utils/md5');
 let otherUtil = require('../utils/others');
@@ -22,7 +23,9 @@ objFun.loginAjax = function (req, res, next) {  // login ajax  bussiness
         res.json({msg: '0'});
         return;
     }
-    Admin.findOne({name: obj.name}).then(data => {
+    Promise.try(() => {
+        return Admin.findOne({name: obj.name});
+    }).then(data => {
         if (!data) {
             res.json({msg: '2'});
         } else {
