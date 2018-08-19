@@ -53,7 +53,8 @@ objFun.findAllAdminAjax = function (req, res, next) {      // find all admin aja
                                 sex: item.sex,
                                 signature: item.signature,
                                 userImg: item.userImg,
-                                createTime: item.createTime
+                                createTime: item.createTime,
+                                permissions:item.permissions
                             }
                         })
                     });
@@ -85,7 +86,8 @@ objFun.adminDetailAjax = function (req, res, next) {    // adminDetail  business
                     sex: data.sex,
                     signature: data.signature,
                     userImg: data.userImg,
-                    createTime: data.createTime
+                    createTime: data.createTime,
+                    permissions: data.permissions
                 }
             });
         }

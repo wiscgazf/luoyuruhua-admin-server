@@ -34,7 +34,8 @@ let adminSchema = new mongoose.Schema({
     loginTime: {
         type: String,
         default: ''
-    }
+    },
+    permissions: String
 });
 
 
