@@ -172,7 +172,7 @@ objFun.authPermissionAjax = function (req, res, next) {  // change admin passwor
     Promise.try(() => {
         return Admin.findOne({name: md5.aseDecode(reqData.name, 'zhoufei')});
     }).then(data => {
-        res.json({msg: '1', code: '200', isAuth: data.permissions});
+        res.json({msg: '1', code: '200', id: data._id, isAuth: data.permissions});
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })
