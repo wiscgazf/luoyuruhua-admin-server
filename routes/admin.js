@@ -14,4 +14,6 @@ router.put('/editAdmin', bussinessFun.editAdminAjax);    // edit  adminMsg ajax
 
 router.put('/changeAdminPsw', bussinessFun.changePswAjax);    // edit  adminMsg ajax
 
+router.get('/authPermission', bussinessFun.authPermissionAjax);    // authority levels
+
 module.exports = router;

@@ -42,6 +42,8 @@ app.use(require('./routes/index')); // 处理首页方面的路由
 
 app.use(require('./routes/admin')); // 处理管理员方面的路由
 
+app.use(require('./routes/user')); // 处理用户方面的路由
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));

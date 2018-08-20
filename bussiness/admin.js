@@ -54,7 +54,7 @@ objFun.findAllAdminAjax = function (req, res, next) {      // find all admin aja
                                 signature: item.signature,
                                 userImg: item.userImg,
                                 createTime: item.createTime,
-                                permissions:item.permissions
+                                permissions: item.permissions
                             }
                         })
                     });
@@ -117,7 +117,7 @@ objFun.editAdminAjax = function (req, res, next) {    // editAdmin  business
         } else {
             if (/^data:image\/(jpeg|png|gif);base64,/.test(adminMsg.imgUrl)) {  // The image of parsing base64 is saved in the '__dirname\static\upload' folder
                 let base64Data = adminMsg.imgUrl.replace(/^data:image\/\w+;base64,/, "");
-                let dataBuffer = new Buffer(base64Data, 'base64');
+                let dataBuffer = Buffer.from(base64Data, 'base64');
                 fs.writeFile('static/upload/' + adminMsg.userId + '.png', dataBuffer, function (err, data) {
                     if (err) {
                         res.status(500).json(Errors.networkError);
@@ -165,6 +165,17 @@ objFun.changePswAjax = function (req, res, next) {  // change admin password
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     });
+}
+
+objFun.authPermissionAjax = function (req, res, next) {  // change admin password
+    let reqData = req.query;
+    Promise.try(() => {
+        return Admin.findOne({name: md5.aseDecode(reqData.name, 'zhoufei')});
+    }).then(data => {
+        res.json({msg: '1', code: '200', isAuth: data.permissions});
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    })
 }
 
 module.exports = objFun;
