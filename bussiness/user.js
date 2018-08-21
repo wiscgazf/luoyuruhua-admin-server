@@ -7,11 +7,15 @@ let Errors = require('../err/errors');
 let User = require('../models/User'); // admin db
 
 objFun.addUserAjax = function (req, res, next) {    // add user  bussiness
-    async function createUser() {
-        return await User.create(req.body);
-    }
-
-    createUser().then(data => {
+    Promise.try(() => {
+        return User.find({name: req.body.name});
+    }).then(data => {
+        if (data.length > 0) {
+            res.json(Errors.userOccupied);
+        } else {
+            return User.create(req.body);
+        }
+    }).then(data => {
         res.json(Errors.addUserSuc);
     }).catch(err => {
         res.status(500).json(Errors.networkError);
@@ -67,5 +71,29 @@ objFun.allUserAjax = function (req, res, next) {    // find all user business
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     });
+}
+
+objFun.userDetailAjax = function (req, res, next) { // get user detail
+    User.findById(req.query.id, function (err, data) {
+        if (err) {
+            res.status(500).json(Errors.networkError);
+        } else {
+            res.json({
+                suc: '1',
+                code: '200',
+                Data: {
+                    id: data._id,
+                    name: data.name,
+                    password: data.password,
+                    phone: data.phone,
+                    email: data.email,
+                    age: data.age,
+                    sex: data.sex,
+                    signature: data.signature,
+                    userImg: data.userImg,
+                }
+            });
+        }
+    })
 }
 module.exports = objFun;

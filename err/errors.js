@@ -9,4 +9,5 @@ module.exports = {
     editAdminSuc: {msg: '1', code: '200', des: '编辑资料成功'},
     changePswSuc: {msg: '1', code: '200', des: '密码修改成功'},
     addUserSuc: {msg: '1', code: '200', des: '添加用户成功'},
+    userOccupied: {msg: '0', code: '10005', des: '该用户名已存在'},
 }
