@@ -32,7 +32,7 @@ let userSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    reply: {type: mongoose.Schema.Types.ObjectId, ref: 'reply'}
+    replyData: [{type: mongoose.Schema.Types.ObjectId, ref: 'reply'}]
 });
 
 

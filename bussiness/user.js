@@ -4,7 +4,8 @@ let moment = require('moment');
 let Promise = require('bluebird')
 let Errors = require('../err/errors');
 
-let User = require('../models/User'); // admin db
+let User = require('../models/User'); // user db
+let Admin = require('../models/Admin'); // admin db
 
 objFun.addUserAjax = function (req, res, next) {    // add user  bussiness
     Promise.try(() => {
@@ -93,6 +94,15 @@ objFun.userDetailAjax = function (req, res, next) { // get user detail
                     userImg: data.userImg,
                 }
             });
+        }
+    })
+}
+objFun.delUserAjax = function (req, res, next) {  // delete user bussiness
+    User.remove({_id: req.body.id}, function (err, data) {
+        if (err) {
+            res.status(500).json(Errors.networkError);
+        } else {
+            res.json(Errors.delUserSuc);
         }
     })
 }

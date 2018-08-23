@@ -17,6 +17,7 @@
     "http-errors": "~1.6.2",
     "moment": "^2.22.2",
     "mongoose": "^5.2.4",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "ueditor": "^1.2.3"
   }
 }

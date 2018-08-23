@@ -1,0 +1,2 @@
+webpackJsonp([4],{"21dA":function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a={render:function(){var e=this.$createElement;return(this._self._c||e)("div",[this._v("随笔")])},staticRenderFns:[]};var r=n("VU/8")({name:"NotesMain"},a,!1,function(e){n("EgVW")},"data-v-789515af",null);t.default=r.exports},EgVW:function(e,t){}});
+//# sourceMappingURL=4.1fd6d7fbe827b4ca55cb.js.map

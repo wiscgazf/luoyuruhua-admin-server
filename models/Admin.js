@@ -35,7 +35,9 @@ let adminSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    permissions: String
+    permissions: String,
+    replyData: [{type: mongoose.Schema.Types.ObjectId, ref: 'reply'}],
+    notesData: [{type: mongoose.Schema.Types.ObjectId, ref: 'notes'}]
 });
 
 
