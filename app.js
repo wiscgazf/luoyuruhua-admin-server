@@ -46,7 +46,7 @@ app.use(require('./routes/user')); // 处理用户方面的路由
 
 app.use(require('./routes/notes')); // 处理随笔方面的路由
 
-app.use("/ue/upload", ueditor(path.join(__dirname, 'Manger'), function (req, res, next) {
+app.use("/ue/upload", ueditor(path.join(__dirname, 'static'), function (req, res, next) {
     //客户端上传文件设置
     var imgDir = './ue_upload/images/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/';
     var ActionType = req.query.action;
@@ -54,10 +54,10 @@ app.use("/ue/upload", ueditor(path.join(__dirname, 'Manger'), function (req, res
         var file_url = imgDir;//默认图片上传地址
         /*其他上传格式的地址*/
         if (ActionType === 'uploadfile') {
-            file_url = './ue_upload/file/'; //附件
+            file_url = './ue_upload/file/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/'; //附件
         }
         if (ActionType === 'uploadvideo') {
-            file_url = './ue_upload/video/'; //视频
+            file_url = './ue_upload/video/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/'; //视频
         }
         res.ue_up(file_url); //你只要输入要保存的地址 。保存操作交给ueditor来做
         res.setHeader('Content-Type', 'text/html');
