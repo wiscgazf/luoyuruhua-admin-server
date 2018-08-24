@@ -17,7 +17,7 @@ let userSchema = new mongoose.Schema({
     },
     userImg: {
         type: String,
-        default: '/static/upload/admin.png'
+        default: '/static/upload/user/user.png'
     },
     signature: String,
     createTime: {

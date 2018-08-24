@@ -25,8 +25,8 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false, limit: '100000kb'}));
+app.use(bodyParser.json({limit: '100000kb'}));
 //app.use(bodyParser.urlencoded());
 
 app.use(express.json());

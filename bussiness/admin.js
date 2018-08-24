@@ -115,14 +115,15 @@ objFun.editAdminAjax = function (req, res, next) {    // editAdmin  business
         if (data.length > 1 || (data.length == 1 && saveUser.phone != data[0].phone)) {
             res.json(Errors.phoneregisted);
         } else {
-            if (/^data:image\/(jpeg|png|gif);base64,/.test(adminMsg.imgUrl)) {  // The image of parsing base64 is saved in the '__dirname\static\upload' folder
+            if (/^data:image\/(jpeg|png|gif);base64,/.test(adminMsg.imgUrl)) {  // The image of parsing base64 is saved in the '__dirname\static\upload\admin' folder
                 let base64Data = adminMsg.imgUrl.replace(/^data:image\/\w+;base64,/, "");
                 let dataBuffer = Buffer.from(base64Data, 'base64');
-                fs.writeFile('static/upload/' + adminMsg.userId + '.png', dataBuffer, function (err, data) {
+                var imgName = new Date().getTime();
+                fs.writeFile('static/upload/admin/' + imgName + '.png', dataBuffer, function (err, data) {
                     if (err) {
                         res.status(500).json(Errors.networkError);
                     } else {
-                        baseImg = '/static/upload/' + adminMsg.userId + '.png';
+                        baseImg = '/static/upload/admin/' + imgName + '.png';
                         updateAdmin(res, adminMsg, baseImg, adminMsg.userId, saveUser);
                     }
                 });
