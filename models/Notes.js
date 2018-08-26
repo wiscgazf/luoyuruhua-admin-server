@@ -25,4 +25,4 @@ let nodesSchema = new mongoose.Schema({
 });
 
 
-module.exports = db.zhoufeiMongoose.model('nodes', nodesSchema);
+module.exports = db.zhoufeiMongoose.model('notes', nodesSchema);

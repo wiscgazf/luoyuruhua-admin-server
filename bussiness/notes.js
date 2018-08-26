@@ -7,7 +7,7 @@ let Errors = require('../err/errors');
 
 let Admin = require('../models/Admin'); // admin db
 let User = require('../models/User'); // user db
-let Notes = require('../models/Notes'); // admin db
+let Notes = require('../models/Notes'); // notes db
 
 objFun.addthumbImgAjax = function (req, res, next) {    // add notes thumbImg  bussiness
     let base64Data = req.body.thumbImg.replace(/^data:image\/\w+;base64,/, "");
@@ -25,23 +25,31 @@ objFun.addthumbImgAjax = function (req, res, next) {    // add notes thumbImg  b
 
 objFun.addNotesAjax = function (req, res, next) {
     let notesData = req.body;
-    /*Notes.find().populate({path: 'author', model: 'admin'}).exec(function (err, data) {
+    let newArr = [];
+    /*Admin.find({_id: '5b796ea1a1dfff19a491fd56'}).populate({
+        path: 'notesData',
+        select: 'title category',
+        model: 'notes'
+    }).exec(function (err, data) {
         if (err) {
             res.status(500).json(Errors.networkError);
         } else {
-            console.log(data)
-            res.json({suc: '1'});
+            console.log(data);
+            res.json({suc: '1', code: '200'});
         }
     })*/
     Promise.try(() => {
         return Admin.findOne({name: md5.aseDecode(notesData.name, 'zhoufei')});
     }).then(data => {
-        console.log(data._id)
+        newArr = data.notesData;
         return Notes.create(Object.assign(notesData.form, {
             createTime: moment().format('MMMM Do YYYY, h:mm:ss a'),
             updateTime: moment().format('MMMM Do YYYY, h:mm:ss a'),
             author: data._id
         }))
+    }).then(data => {
+        newArr.push(data._id);
+        return Admin.update({_id: data.author}, {$set: {notesData: newArr}});
     }).then(data => {
         res.json(Errors.addNotesSuc);
     }).catch(err => {
