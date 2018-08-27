@@ -3,8 +3,14 @@ let mongoose = require('mongoose');
 let db = require('../config/mongodbConfig');
 
 let nodesSchema = new mongoose.Schema({
-    createTime: String,
-    updateTime: String,
+    createTime: {
+        type: Date,
+        default: Date.now
+    },
+    updateTime: {
+        type: Date,
+        default: Date.now
+    },
     title: {
         type: String,
         require: true

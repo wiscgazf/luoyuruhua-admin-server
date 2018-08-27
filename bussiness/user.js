@@ -30,9 +30,9 @@ objFun.allUserAjax = function (req, res, next) {    // find all user business
     let count = 0;
     Promise.try(() => {
         if (req.query.name == '') {
-            return User.count();
+            return User.countDocuments();
         } else {
-            return User.count({name: {$regex: reg}});
+            return User.countDocuments({name: {$regex: reg}});
         }
     }).then(num => {
         count = num;

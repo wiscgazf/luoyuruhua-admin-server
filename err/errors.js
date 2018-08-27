@@ -13,4 +13,5 @@ module.exports = {
     delUserSuc: {msg: '1', code: '200', des: '该用户已删除'},
     addthumbImgSuc: {msg: '1', code: '200', des: '上传成功'},
     addNotesSuc: {msg: '1', code: '200', des: '添加成功'},
+    editNotesSuc: {msg: '1', code: '200', des: '更新随笔成功'},
 }
