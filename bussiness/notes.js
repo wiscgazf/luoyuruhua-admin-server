@@ -106,7 +106,8 @@ objFun.findNotesAjax = function (req, res, next) {  // find notes bussiness
                     category: data.category,
                     tag: data.tag,
                     thumbImg: data.thumbImg,
-                    content: data.content
+                    content: data.content,
+                    description: data.description
                 }
             }))
         }

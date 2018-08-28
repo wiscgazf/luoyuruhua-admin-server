@@ -26,6 +26,7 @@ let nodesSchema = new mongoose.Schema({
     },
     tag: Array,
     category: String,
+    description: String,
     author: {type: mongoose.Schema.Types.ObjectId, ref: 'admin'},
     replyData: [{type: mongoose.Schema.Types.ObjectId, ref: 'reply'}]
 });
