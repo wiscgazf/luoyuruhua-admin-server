@@ -9,7 +9,8 @@ let Errors = require('../err/errors');
 let Admin = require('../models/Admin'); // admin db
 
 objFun.indexSuc = function (req, res, next) {   // index page
-    res.render('index', {title: '123'})
+    res.locals.message = '132';
+    res.render('pc/index', {title: '123'})
 };
 
 // ajax bussiness  -------------------------

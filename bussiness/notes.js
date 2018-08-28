@@ -58,7 +58,7 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
     }).then(data => {
         totalCount = data;
         if (totalCount == 0) {
-            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: '成功', Datas: []})
+            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: '鎴愬姛', Datas: []})
         }
         let currentPage = baseMsg.currentPage ? baseMsg.currentPage : 1;
         totalPage = Math.ceil(totalCount / baseMsg.showCount);
@@ -89,7 +89,7 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
             }).sort({createTime: -1}).skip(pageOffset).limit(parseInt(baseMsg.showCount)).exec();
         }
     }).then(data => {
-        res.json({msg: 'suc', code: '200', totalPage: totalPage, totalCount: totalCount, des: '成功', Datas: data})
+        res.json({msg: 'suc', code: '200', totalPage: totalPage, totalCount: totalCount, des: '鎴愬姛', Datas: data})
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })
@@ -100,10 +100,7 @@ objFun.findNotesAjax = function (req, res, next) {  // find notes bussiness
         if (err) {
             res.status(500).json(Errors.networkError);
         } else {
-            res.json({
-                msg: 'suc',
-                code: '200',
-                des: '成功',
+            res.json(Object.assign(Errors.findNotesSuc, {
                 Datas: {
                     title: data.title,
                     category: data.category,
@@ -111,19 +108,38 @@ objFun.findNotesAjax = function (req, res, next) {  // find notes bussiness
                     thumbImg: data.thumbImg,
                     content: data.content
                 }
-            })
+            }))
         }
     })
 }
 
 objFun.editNotesAjax = function (req, res, next) {
-    console.log(req.body);
     Notes.update({_id: req.body.id}, {$set: req.body.form}, function (err, data) {
         if (err) {
             res.status(500).json(Errors.networkError);
         } else {
             res.json(Errors.editNotesSuc);
         }
+    })
+}
+
+objFun.delNotesAjax = function (req, res, next) {
+    let updateData = [];
+    Promise.try(() => {
+        return Admin.findById(req.body.id);
+    }).then(data => {
+        data.notesData.map((item, index) => {
+            if (item._id == req.body.notesId) {
+                return data.notesData.splice(index, 1)
+            }
+        })
+        return Admin.update({_id: req.body.id}, {$set: {notesData: data.notesData}});
+    }).then(data => {
+        return Notes.remove({_id: req.body.notesId});
+    }).then(data => {
+        res.json(Errors.delNotesSuc);
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
     })
 }
 
