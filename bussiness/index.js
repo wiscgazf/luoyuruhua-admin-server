@@ -8,9 +8,34 @@ let Errors = require('../err/errors');
 
 let Admin = require('../models/Admin'); // admin db
 
+let Notes = require('../models/Notes'); // notes db
+
 objFun.indexSuc = function (req, res, next) {   // index page
-    res.locals.message = '132';
-    res.render('pc/index', {title: '123'})
+    Notes.find().populate({
+        path: 'author',
+        select: 'name',
+        model: 'admin'
+    }).limit(10).sort({createTime: -1}).exec(function (err, data) {
+        if (err) {
+            res.status(500).json(Errors.networkError);
+        } else {
+            res.render('pc/index', {
+                Datas: data.map(item => {
+                    return {
+                        id: item._id,
+                        createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                        title: item.title,
+                        thumbImg: item.thumbImg,
+                        pageView: item.pageView,
+                        category: item.category,
+                        description: item.description,
+                        author: item.author,
+                        replyData: item.replyData.length
+                    }
+                })
+            })
+        }
+    })
 };
 
 // ajax bussiness  -------------------------
