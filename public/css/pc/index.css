@@ -1,5 +1,4 @@
 html, body {
-    /*background: #f5f6f7;*/
     background: #e9eaec;
     position: relative;
 }
@@ -295,12 +294,17 @@ html, body {
     background: url(../../img/pc/create_time.png) no-repeat left center;
 }
 
-.viewnum {
+.page_view {
     background: url(../../img/pc/newsbg04.png) no-repeat left center;
 }
 
-.pingl {
+.reply_num {
     background: url(../../img/pc/newsbg03.png) no-repeat left center;
+}
+
+.author_icon {
+    background: url(../../img/pc/author.png) no-repeat left center;
+    background-size: 21px;
 }
 
 .tit01 h3 {

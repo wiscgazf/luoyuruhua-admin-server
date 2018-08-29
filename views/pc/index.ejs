@@ -50,9 +50,11 @@
                         </a>
                         <div class="tags">
                             <span class="create_time left"><%= item.createTime %></span>
-                            <span class="viewnum left">浏览(<a href="javascript:void(0)"><%= item.pageView %></a>)</span>
-                            <span class="pingl left">评论(<a href="javascript:void(0)"><span
-                                            id="sourceId::cn.lwy.website.article.80" class="cy_cmt_count"
+                            <span class="author_icon left"><a
+                                        href="javascript:void(0)"><%= item.author.name %></a></span>
+                            <span class="page_view left">浏览(<a
+                                        href="javascript:void(0)"><%= item.pageView %></a>)</span>
+                            <span class="reply_num left">评论(<a href="javascript:void(0)"><span
                                             style="padding-left: 0px;margin-right: 0px;"><%= item.replyData %></span></a>)</span>
                             <span class="lm right"><a href="javascript:void(0)"><%= item.category %></a></span>
                         </div>
