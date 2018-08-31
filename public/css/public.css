@@ -32,6 +32,7 @@ h6,
 img,
 video,
 audio,
+input,
 a,
 textarea {
     padding: 0;
