@@ -353,6 +353,7 @@ html, body {
     border: none;
     font-size: 14px;
     padding-left: 10px;
+    background: transparent;
 }
 
 .mini_search .search_in .search_in_con i {
@@ -370,6 +371,12 @@ html, body {
     height: 200px;
 }
 
+/*user center*/
+.user_center > p {
+    background: rgba(255, 255, 255, .8) url("../../img/pc/user_tag.png") no-repeat 10px center;
+    background-size: auto;
+}
+
 /*new_information*/
 .new_information > p {
     background: rgba(255, 255, 255, .8) url("../../img/pc/new_information.png") no-repeat 10px center;
@@ -379,7 +386,7 @@ html, body {
 .new_information > ul li {
     overflow: hidden;
     padding: 15px;
-    background: #fff;
+    /*background: #fff;*/
     transition: all .3s linear 0s;
     -webkit-transition: all .3s linear 0s;
     border-bottom: 1px dotted #ddd;
@@ -412,6 +419,11 @@ html, body {
     overflow: hidden;
 }
 
+.new_information > ul li .inform_right > a:hover {
+    color: #2C9BD8;
+    text-decoration: underline;
+}
+
 .inform_right .inform_des {
     position: absolute;
     left: 0;
@@ -430,7 +442,197 @@ html, body {
 .new_information > ul li:hover {
     box-shadow: 0 1px 8px rgba(46, 143, 237, 0.3);
     -webkit-box-shadow: 0 1px 8px rgba(46, 143, 237, 0.3);
-    transform: translate(-10px, 0px);
-    -webkit-transform: translate(-10px, 0px);
-    border-bottom: transparent;
+    transform: translateX(-10px);
+    -webkit-transform: translateX(-10px);
+    border-bottom: 1px dotted transparent;
+}
+
+/*new_reply*/
+.new_reply > p {
+    background: rgba(255, 255, 255, .8) url("../../img/pc/new_reply.png") no-repeat 10px center;
+    background-size: auto;
+}
+
+.new_reply_con .reply_item {
+    border-bottom: 1px dotted #ddd;
+    overflow: hidden;
+    padding: 15px;
+    transition: all .2s linear 0s;
+    -webkit-transition: all .2s linear 0s;
+    /*background: #fff;*/
+}
+
+.new_reply_con .reply_item .reply_img {
+    width: 43px;
+    height: 43px;
+}
+
+.new_reply_con .reply_item .reply_img img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.new_reply_con .reply_item > .right .replyer {
+    overflow: hidden;
+}
+
+.new_reply_con .reply_item > .right {
+    width: 288px;
+}
+
+.new_reply_con .reply_item > .right .replyer span:first-child {
+    color: #666;
+    font-size: 14px;
+    float: left;
+}
+
+.new_reply_con .reply_item > .right .replyer span:nth-child(2) {
+    color: #999;
+    font-size: 12px;
+    float: right;
+}
+
+.new_reply_con .reply_item > .right > a {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    line-height: 34px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.new_reply_con .reply_item > .right > a:hover {
+    color: #2C9BD8;
+    text-decoration: underline;
+}
+
+.new_reply_con .reply_item:hover {
+    box-shadow: 0 1px 8px rgba(46, 143, 237, 0.3);
+    -webkit-box-shadow: 0 1px 8px rgba(46, 143, 237, 0.3);
+    transform: translateX(-10px);
+    -webkit-transform: translateX(-10px);
+    border-bottom: 1px dotted transparent;
+}
+
+/*page_views and Most commented*/
+.page_views > p {
+    background: rgba(255, 255, 255, .8) url("../../img/pc/fire.png") no-repeat 10px center;
+    background-size: 22px;
+}
+
+/*tag_list*/
+.tag_list > p {
+    background: rgba(255, 255, 255, .8) url("../../img/pc/tag.png") no-repeat 10px center;
+    background-size: auto;
+}
+
+.tag_list .tag_wrap {
+    overflow: hidden;
+}
+
+.tag_list .tag_wrap li a {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+    padding: 5px 8px;
+}
+
+.tag_list .tag_wrap li {
+    float: left;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    background: #00a0e9;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/*friend_link*/
+.friend_link .friend_link_title {
+    overflow: hidden;
+    padding: 12px 12px 10px 0;
+}
+
+.friend_link .friend_link_title a, .friend_link .friend_link_title p {
+    font-size: 14px;
+    color: #666;
+    padding-left: 33px;
+}
+
+.friend_link .friend_link_title p {
+    float: left;
+    background: rgba(255, 255, 255, .8) url("../../img/pc/fire.png") no-repeat 10px center;
+    background-size: 22px;
+}
+
+.friend_link .friend_link_title a {
+    display: block;
+    float: right;
+    background: rgba(255, 255, 255, .8) url("../../img/pc/add.png") no-repeat 10px center;
+    background-size: 20px;
+}
+
+.friend_link .friend_link_title a:hover {
+    color: #759b08;
+}
+
+.friend_link .friend_link_list {
+    overflow: hidden;
+}
+
+.friend_link .friend_link_list li {
+    float: left;
+    margin-right: 10px;
+}
+
+.friend_link .friend_link_list li a {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: #4078c0;
+    padding: 5px 8px;
+}
+
+.friend_link .friend_link_list li:hover a {
+    color: #333;
+}
+
+/*footer*/
+.footer {
+    background: #333a40;
+    margin-top: 40px;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer > ul {
+    width: 1200px;
+    margin: 0 auto 5px;
+    text-align: center;
+}
+
+.footer > ul li {
+    display: inline-block;
+}
+
+.footer > ul li a {
+    color: #93959a;
+    font-size: 14px;
+    margin: 0 20px;
+    line-height: 40px;
+}
+
+.footer > p, .footer > p a {
+    color: #93959a;
+    font-size: 14px;
+}
+
+.footer > ul li a:hover {
+    color: #fff;
+}
+
+.footer > p a:hover {
+    color: #fff;
 }
