@@ -1,5 +1,6 @@
 window.onscroll = function (e) {
-    if (document.body.scrollTop > 0) {
+    var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+    if (scrollTop > 0) {
         document.getElementsByClassName('header')[0].style.opacity = '0';
         document.getElementsByClassName('header')[0].style.transform = 'translateY(-70px)';
     } else {

@@ -16,17 +16,63 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
     let currentPage = req.query.page || 1;
     Promise.try(() => {
         if (req.query.search) {
-            return Notes.countDocuments({$or: [{name: {$regex: new RegExp(req.query.search, 'i')}}, {description: {$regex: new RegExp(req.query.search, 'i')}}]});
+            return Notes.countDocuments({$or: [{name: {$regex: new RegExp(req.query.search, 'i')}}, {category: {$regex: new RegExp(req.query.search, 'i')}}, {description: {$regex: new RegExp(req.query.search, 'i')}}]});
         } else {
             return Notes.countDocuments();
         }
     }).then(data => {
+        let queryData = '';
         count = data;
+        if (count == 0) {
+            res.render('pc/notesList', {Data: []});
+        } else {
+            pageSize = Math.ceil(count / showCount);
+
+            if (currentPage >= pageSize) {
+                currentPage = pageSize;
+            }
+
+            if (currentPage <= 0) {
+                currentPage = 1;
+            }
+
+            if (req.query.search) {
+                queryData = Notes.find({$or: [{name: {$regex: new RegExp(req.query.search, 'i')}}, {category: {$regex: new RegExp(req.query.search, 'i')}}, {description: {$regex: new RegExp(req.query.search, 'i')}}]});
+            } else {
+                queryData = Notes.find();
+            }
+            return queryData.populate({
+                path: 'author',
+                select: 'name',
+                model: 'admin'
+            }).limit(showCount).skip(currentPage - 1).sort({createTime: -1}).exec();
+        }
+    }).then(data => {
+        res.render('pc/notesList', {
+            Datas: data.map(item => {
+                return {
+                    id: item._id,
+                    createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                    title: item.title,
+                    thumbImg: item.thumbImg,
+                    pageView: item.pageView,
+                    category: item.category,
+                    description: item.description,
+                    author: item.author,
+                    replyData: item.replyData.length
+                }
+            }),
+            search: req.query.search,
+            count: count,
+            pageSize: pageSize,
+            showCount: showCount,
+            currentPage: currentPage
+        })
     }).catch(err => {
         console.log(err)
     })
 
-    Notes.find().populate({
+    /*Notes.find().populate({
         path: 'author',
         select: 'name',
         model: 'admin'
@@ -50,7 +96,7 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
                 })
             })
         }
-    })
+    })*/
 }
 
 objFun.notesDetail = function (req, res, next) {  //notesDetail

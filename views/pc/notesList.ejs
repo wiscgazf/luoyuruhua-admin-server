@@ -21,7 +21,7 @@
 <div class="content">
     <div class="content_con">
         <div class="con_left left">
-            <div class="notes_num">全部<b>56</b>篇</div>
+            <div class="notes_num">全部<b><%= count %></b>篇</div>
             <!--notes list-->
             <div class="notes">
                 <% Datas.forEach((item, index)=>{ %>
@@ -68,4 +68,11 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/pace.min.js"></script>
 <script type="text/javascript" src="/js/pc/listening.js"></script>
+<script type="text/javascript">
+    console.log('<%= count %>')
+    console.log('<%= pageSize %>')
+    console.log('<%= showCount %>')
+    console.log('<%= currentPage %>')
+    console.log('<%= search %>')
+</script>
 </html>
