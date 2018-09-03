@@ -9,6 +9,61 @@ let Admin = require('../models/Admin'); // admin db
 let User = require('../models/User'); // user db
 let Notes = require('../models/Notes'); // notes db
 
+objFun.notesList = function (req, res, next) {  // find all notes and condition find
+    let count = 0;
+    let pageSize = 0;
+    let showCount = 10;
+    let currentPage = req.query.page || 1;
+    Promise.try(() => {
+        if (req.query.search) {
+            return Notes.countDocuments({$or: [{name: {$regex: new RegExp(req.query.search, 'i')}}, {description: {$regex: new RegExp(req.query.search, 'i')}}]});
+        } else {
+            return Notes.countDocuments();
+        }
+    }).then(data => {
+        count = data;
+    }).catch(err => {
+        console.log(err)
+    })
+
+    Notes.find().populate({
+        path: 'author',
+        select: 'name',
+        model: 'admin'
+    }).limit(10).sort({createTime: -1}).exec(function (err, data) {
+        if (err) {
+            res.status(500).json(Errors.networkError);
+        } else {
+            res.render('pc/notesList', {
+                Datas: data.map(item => {
+                    return {
+                        id: item._id,
+                        createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                        title: item.title,
+                        thumbImg: item.thumbImg,
+                        pageView: item.pageView,
+                        category: item.category,
+                        description: item.description,
+                        author: item.author,
+                        replyData: item.replyData.length
+                    }
+                })
+            })
+        }
+    })
+}
+
+objFun.notesDetail = function (req, res, next) {  //notesDetail
+    Notes.findById(req.params.id).populate({path: 'author', select: 'name', model: 'admin'}).exec(function (err, data) {
+        if (err) {
+            res.status(500).json(Errors.networkError);
+        } else {
+            res.render('pc/nodeDetail', {Data: data, content: JSON.stringify(data.content)});
+        }
+    });
+}
+// ajax bussiness  ------------------------- server
+
 objFun.addthumbImgAjax = function (req, res, next) {    // add notes thumbImg  bussiness
     let base64Data = req.body.thumbImg.replace(/^data:image\/\w+;base64,/, "");
     let dataBuffer = Buffer.from(base64Data, 'base64');
@@ -143,5 +198,8 @@ objFun.delNotesAjax = function (req, res, next) {
         res.status(500).json(Errors.networkError);
     })
 }
+
+// ajax bussiness  ------------------------- web
+
 
 module.exports = objFun;

@@ -7,10 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/public.css">
     <link rel="stylesheet" href="/css/pace-theme-minimal.css">
-    <link rel="stylesheet" href="/css/swiper.min.css">
     <link rel="stylesheet" href="/css/pc/header_footer.css">
     <link rel="stylesheet" href="/css/pc/sidebar.css">
-    <link rel="stylesheet" href="/css/pc/index.css">
+    <link rel="stylesheet" href="/css/pc/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/pc/notesList.css">
     <title>落雨如画博客-临渊羡鱼，不如退而结网！</title>
 </head>
 <body>
@@ -21,26 +21,7 @@
 <div class="content">
     <div class="content_con">
         <div class="con_left left">
-            <!--move images-->
-            <div class="swiper-container index_swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <a href="javascript:void(0);"><img src="/img/pc/slide1.jpg" alt=""></a>
-                        <div class="swiper_des">12345646</div>
-                    </div>
-                    <div class="swiper-slide">
-                        <a href="javascript:void(0);"><img src="/img/pc/slide2.jpg" alt=""></a>
-                        <div class="swiper_des">12345646</div>
-                    </div>
-                    <div class="swiper-slide">
-                        <a href="javascript:void(0);"><img src="/img/pc/slide3.jpg" alt=""></a>
-                        <div class="swiper_des">12345646</div>
-                    </div>
-                </div>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-            </div>
+            <div class="notes_num">全部<b>56</b>篇</div>
             <!--notes list-->
             <div class="notes">
                 <% Datas.forEach((item, index)=>{ %>
@@ -64,7 +45,19 @@
                 </div>
                 <% }) %>
             </div>
-            <div></div>
+            <ul class="pagination">
+                <li><a href="#" class="prev">&laquo</a></li>
+                <li><a href="#" class="active">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">6</a></li>
+                <li><a href="#">7</a></li>
+                <li><a href="#">8</a></li>
+                <li><a href="#">9</a></li>
+                <li><a href="#" class="next">&raquo;</a></li>
+            </ul>
         </div>
         <!--sidebar-->
         <% include ./sidebar.ejs %>
@@ -73,17 +66,6 @@
 <% include ./footer.ejs %>
 </body>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="/js/swiper.min.js"></script>
 <script type="text/javascript" src="/js/pace.min.js"></script>
-<script type="text/javascript">
-    var mySwiper = new Swiper('.index_swiper', {
-        autoplay: 5000,
-        autoplayDisableOnInteraction: false,
-        pagination: '.swiper-pagination',
-        paginationType: 'progress',
-        loop: true,
-        prevButton: '.swiper-button-prev',
-        nextButton: '.swiper-button-next',
-    });
-</script>
+<script type="text/javascript" src="/js/pc/listening.js"></script>
 </html>

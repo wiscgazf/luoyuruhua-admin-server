@@ -9,6 +9,8 @@ html,
 body {
     width: 100%;
     height: auto;
+    background: #e9eaec;
+    position: relative;
 }
 
 html,
@@ -65,5 +67,21 @@ li {
 
 .right {
     float: right;
+}
+
+/*public*/
+.public_title {
+    font-size: 14px;
+    color: #666666;
+    padding: 12px 12px 10px 33px;
+}
+
+.public_padding {
+    padding: 10px;
+}
+
+.public_side_wrap {
+    background: rgba(255, 255, 255, .9);
+    margin-bottom: 20px;
 }
 

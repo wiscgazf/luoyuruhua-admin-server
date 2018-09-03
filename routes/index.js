@@ -4,6 +4,7 @@ let bussinessFun = require('../bussiness/index');
 
 router.get('/', bussinessFun.indexSuc); // index page
 
+
 // ajax request ---------------------------------------
 
 router.post('/login', bussinessFun.loginAjax);  // login ajax

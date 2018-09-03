@@ -1,0 +1,149 @@
+/*header*/
+.header {
+    width: 100%;
+    background: rgba(255, 255, 255, 1);
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    box-shadow: 0 0 10px #D4D6D8;
+    -webkit-box-shadow: 0 0 10px #D4D6D8;
+    transition: all .5s linear 0s;
+    -webkit-transition: all .5s linear 0s;
+}
+
+.header .header_con {
+    width: 1200px;
+    height: 70px;
+    margin: 0 auto;
+}
+
+.header .header_con .logo {
+    display: block;
+    width: 170px;
+    height: auto;
+    vertical-align: middle;
+}
+
+.header .header_con .logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+    margin-top: 15px;
+}
+
+.header_con .channel > ul > li {
+    display: inline-block;
+    position: relative;
+}
+
+.header_con .channel > ul > li a {
+    width: 100px;
+    display: block;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    font-size: 16px;
+    color: #2C9BD8;
+    position: relative;
+}
+
+.header_con .channel > ul .drap a i {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: url("../../img/pc/drap.png") no-repeat center center;
+    background-size: 100%;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%) rotate(180deg);
+    -webkit-transform: translateY(-50%) rotate(180deg);
+    transition: all .3s linear 0s;
+    -webkit-transition: all .3s linear 0s;
+}
+
+.header_con .channel > ul > li:hover > a {
+    background: #f5f6f7;
+}
+
+.header_con .channel > ul > li:hover a i {
+    transform: translateY(-50%) rotate(0deg);
+    -webkit-transform: translateY(-50%) rotate(0deg);
+}
+
+.header_con .channel > ul > li .child_el {
+    position: absolute;
+    left: 0;
+    top: 40px;
+    background: #fff;
+    visibility: hidden;
+    opacity: .5;
+    transition: all .2s linear 0s;
+    -webkit-transition: all .2s linear 0s;
+}
+
+.header_con .channel > ul > li:hover .child_el {
+    display: block;
+    opacity: 1;
+    top: 70px;
+    visibility: visible;
+}
+
+.header_con .channel > ul > li .child_el li {
+    border-bottom: 1px solid #E4E6E8;
+}
+
+.header_con .channel > ul > li .child_el li a {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+
+.header_con .channel > ul > li .child_el li:hover a {
+    background: #f5f6f7;
+}
+
+.header_con .channel > ul > li .child_el li:last-of-type {
+    border: none;
+}
+
+/*footer*/
+.footer {
+    background: #333a40;
+    margin-top: 40px;
+    padding: 20px 0;
+    text-align: center;
+    clear: both;
+}
+
+.footer > ul {
+    width: 1200px;
+    margin: 0 auto 5px;
+    text-align: center;
+}
+
+.footer > ul li {
+    display: inline-block;
+}
+
+.footer > ul li a {
+    color: #93959a;
+    font-size: 14px;
+    margin: 0 20px;
+    line-height: 40px;
+}
+
+.footer > p, .footer > p a {
+    color: #93959a;
+    font-size: 14px;
+}
+
+.footer > ul li a:hover {
+    color: #fff;
+}
+
+.footer > p a:hover {
+    color: #fff;
+}
