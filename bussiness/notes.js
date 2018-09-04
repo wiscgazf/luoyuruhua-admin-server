@@ -24,7 +24,15 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
         let queryData = '';
         count = data;
         if (count == 0) {
-            res.render('pc/notesList', {Data: []});
+            res.render('pc/notesList', {
+                Datas: [],
+                search: req.query.search,
+                count: count,
+                pageSize: pageSize,
+                showCount: showCount,
+                currentPage: currentPage,
+                pagePath: '/notes'
+            });
         } else {
             pageSize = Math.ceil(count / showCount);
 
@@ -45,7 +53,7 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
                 path: 'author',
                 select: 'name',
                 model: 'admin'
-            }).limit(showCount).skip(currentPage - 1).sort({createTime: -1}).exec();
+            }).limit(showCount).skip((currentPage - 1) * showCount).sort({createTime: -1}).exec();
         }
     }).then(data => {
         res.render('pc/notesList', {
@@ -66,37 +74,13 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
             count: count,
             pageSize: pageSize,
             showCount: showCount,
-            currentPage: currentPage
-        })
+            currentPage: currentPage,
+            pagePath: '/notes'
+        });
     }).catch(err => {
         console.log(err)
     })
 
-    /*Notes.find().populate({
-        path: 'author',
-        select: 'name',
-        model: 'admin'
-    }).limit(10).sort({createTime: -1}).exec(function (err, data) {
-        if (err) {
-            res.status(500).json(Errors.networkError);
-        } else {
-            res.render('pc/notesList', {
-                Datas: data.map(item => {
-                    return {
-                        id: item._id,
-                        createTime: moment(item.createTime).format("YYYY-MM-DD"),
-                        title: item.title,
-                        thumbImg: item.thumbImg,
-                        pageView: item.pageView,
-                        category: item.category,
-                        description: item.description,
-                        author: item.author,
-                        replyData: item.replyData.length
-                    }
-                })
-            })
-        }
-    })*/
 }
 
 objFun.notesDetail = function (req, res, next) {  //notesDetail

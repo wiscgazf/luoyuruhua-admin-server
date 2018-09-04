@@ -21,14 +21,20 @@
 <div class="content">
     <div class="content_con">
         <div class="con_left left">
-            <div class="notes_num">全部<b><%= count %></b>篇</div>
+            <% if (search) { %>
+            <div class="notes_num">全部<b><%= count; %></b>篇<span>关键词：<%= search %></span></div>
+            <% }else { %>
+            <div class="notes_num">全部<b><%= count; %></b>篇</div>
+            <% } %>
+
             <!--notes list-->
             <div class="notes">
+                <% if(Datas.length > 0){ %>
                 <% Datas.forEach((item, index)=>{ %>
                 <div class="notes_item">
                     <div class="thumb_img left"><img src="<%= item.thumbImg %>" alt=""></div>
                     <div class="notes_con right">
-                        <a href="/notes/<%= item.id %>" target="_blank">
+                        <a href="<%= pagePath %>/<%= item.id %>" target="_blank">
                             <b><%= item.title %></b>
                             <p><%= item.description %></p>
                         </a>
@@ -44,20 +50,15 @@
                     </div>
                 </div>
                 <% }) %>
+                <% }else{ %>
+                <div class="find_null">
+                    <img src="/img/pc/404.png" alt="">
+                </div>
+                <% } %>
+
             </div>
-            <ul class="pagination">
-                <li><a href="#" class="prev">&laquo</a></li>
-                <li><a href="#" class="active">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">6</a></li>
-                <li><a href="#">7</a></li>
-                <li><a href="#">8</a></li>
-                <li><a href="#">9</a></li>
-                <li><a href="#" class="next">&raquo;</a></li>
-            </ul>
+            <!--paging 分页-->
+            <% include ./paging.ejs %>
         </div>
         <!--sidebar-->
         <% include ./sidebar.ejs %>
@@ -69,10 +70,6 @@
 <script type="text/javascript" src="/js/pace.min.js"></script>
 <script type="text/javascript" src="/js/pc/listening.js"></script>
 <script type="text/javascript">
-    console.log('<%= count %>')
-    console.log('<%= pageSize %>')
-    console.log('<%= showCount %>')
-    console.log('<%= currentPage %>')
-    console.log('<%= search %>')
+
 </script>
 </html>

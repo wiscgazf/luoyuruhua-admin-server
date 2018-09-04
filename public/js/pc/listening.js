@@ -1,6 +1,7 @@
+/*header  listening  is show or hidden*/
 window.onscroll = function (e) {
     var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-    if (scrollTop > 0) {
+    if (scrollTop > 100) {
         document.getElementsByClassName('header')[0].style.opacity = '0';
         document.getElementsByClassName('header')[0].style.transform = 'translateY(-70px)';
     } else {
@@ -9,6 +10,7 @@ window.onscroll = function (e) {
     }
 }
 
+/*channel selected*/
 function GetUrlRelativePath() {
     var url = document.location.toString();
     var arrUrl = url.split("//");

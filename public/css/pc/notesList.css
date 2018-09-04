@@ -26,9 +26,21 @@
     -webkit-box-shadow: 0 0 8px rgba(46, 143, 237, 0.3);
 }
 
+.con_left .notes_num b {
+    margin: 0 2px;
+}
+
+.con_left .notes_num span {
+    margin-left: 20px;
+}
+
 .notes .notes_item .thumb_img {
     width: 190px;
     height: 120px;
+}
+
+.notes .find_null {
+    text-align: center;
 }
 
 .notes .notes_item {

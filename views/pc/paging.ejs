@@ -1,0 +1,109 @@
+<% if (Datas.length > 0){ %>
+<ul class="pagination">
+    <!--处理数字显示个数-->
+    <% var prevNum = showCount; var nextNum = showCount; %>
+
+    <% if(pageSize - currentPage > 5){ %>
+    <% prevNum = 5 %>
+    <% } else { %>
+    <% prevNum = prevNum - (pageSize - currentPage) %>
+    <% } %>
+    <% if(currentPage - 5 > 0){ %>
+    <% nextNum = 5 %>
+    <% } else { %>
+    <% nextNum = nextNum - (currentPage) %>
+    <% } %>
+
+    <% if(pageSize - currentPage > 5 && currentPage - 5 > 0 ){ %>
+    <% prevNum = 5 %>
+    <% nextNum = 4 %>
+    <% } %>
+    <!--处理数字显示个数 end-->
+    <!--<li class="disabled"><a href="javascript:void(0)">总的随笔个数</a></li>-->
+    <li class="disabled"><a href="javascript:void(0)"> 共<%= pageSize %> 页 </a></li>
+    <% if(count == 0){ %>
+    <li class="disabled"><a href="javascript:void(0)">首页</a></li>
+    <% }else{ %>
+    <% if(search){ %>
+    <li><a href="<%= pagePath %>?search=<%= search %>&page=1">首页</a></li>
+    <% }else{ %>
+    <li><a href="<%= pagePath %>?page=1">首页</a></li>
+    <% } %>
+    <% } %>
+    <!--判断有没有前一页-->
+
+    <% if(currentPage == 1){ %>
+    <li class="disabled"><a href="javascript:void(0)" class="prev">&laquo</a></li>
+    <% }else{ %>
+    <% if(count == 0){ %>
+    <li class="disabled"><a href="javascript:void(0)" class="prev">&laquo</a></li>
+    <% }else{ %>
+    <% if(search){ %>
+    <li><a href="<%= pagePath %>?search=<%= search %>&page=<%= currentPage - 1 %>" class="prev">&laquo</a>
+    </li>
+    <% }else{ %>
+    <li><a href="<%= pagePath %>?page=<%= parseInt(currentPage) - 1 %>" class="prev">&laquo</a></li>
+    <% } %>
+    <% } %>
+    <% } %>
+    <!--判断有没有前一页  end-->
+
+    <!--循环显示页码-->
+    <% for(var i = prevNum; i > 0; i--){ %>
+    <% if( parseInt(currentPage) - i > 0 ) { %>
+    <li>
+        <% if(search){ %>
+        <a href="<%= pagePath %>?search=<%= search %>&page=<%= parseInt(currentPage) - i %>"><%= (parseInt(currentPage) - i) %></a>
+        <% }else{ %>
+        <a href="<%= pagePath %>?page=<%= parseInt(currentPage) - i %>"><%= (parseInt(currentPage) - i) %></a>
+        <% } %>
+    </li>
+    <% }} %>
+    <% if(search){ %>
+    <li><a href="<%= pagePath %>?search=<%= search %>&page=<%= currentPage %>"
+           class="active"><%= currentPage %></a>
+    </li>
+    <% }else{ %>
+    <li><a href="<%= pagePath %>?page=<%= currentPage %>" class="active"><%= currentPage %></a></li>
+    <% } %>
+
+    <% for(var i = 1; i <= nextNum; i++){ %>
+    <% if( parseInt(currentPage) + i <= pageSize) { %>
+    <li>
+        <% if(search){ %>
+        <a href="<%= pagePath %>?search=<%= search %>&page=<%= parseInt(currentPage) + i %>"><%= parseInt(currentPage) + i %></a>
+        <% }else{ %>
+        <a href="<%= pagePath %>?page=<%= parseInt(currentPage) + i %>"><%= parseInt(currentPage) + i %></a>
+        <% } %>
+
+    </li>
+    <% }} %>
+    <!--循环显示页码  end-->
+    <!--判断有没有下一页-->
+    <% if(currentPage == pageSize){ %>
+    <li class="disabled"><a href="javascript:void(0)" class="next">&raquo;</a></li>
+    <% }else{ %>
+    <% if(count == 0){ %>
+    <li class="disabled"><a href="javascript:void(0)" class="next">&raquo;</a></li>
+    <% }else{ %>
+    <% if(search){ %>
+    <li><a href="<%= pagePath %>?search=<%= search %>&page=<%= parseInt(currentPage) + 1 %>" class="next">&raquo;</a>
+    </li>
+    <% }else{ %>
+    <li><a href="<%= pagePath %>?page=<%= parseInt(currentPage) + 1 %>" class="next">&raquo;</a></li>
+    <% } %>
+    <% } %>
+
+    <% } %>
+    <!--判断有没有下一页  end-->
+    <% if(count == 0){ %>
+    <li class="disabled"><a href="javascript:void(0)">尾页</a></li>
+    <% }else{ %>
+    <% if(search){ %>
+    <li><a href="<%= pagePath %>?search=<%= search %>&page=<%= pageSize %>">尾页</a></li>
+    <% }else{ %>
+    <li><a href="<%= pagePath %>?page=<%= pageSize %>">尾页</a></li>
+    <% } %>
+    <% } %>
+</ul>
+<% } %>

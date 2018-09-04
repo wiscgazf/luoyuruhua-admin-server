@@ -4,8 +4,9 @@
         <p class="public_title">站内搜索</p>
         <div class="search_in public_padding">
             <div class="search_in_con">
-                <input type="text" class="left" id="keywords" value="" title="" placeholder="请输入随笔关键字">
-                <i class="right"></i>
+                <input type="text" class="left" id="keywords" value="" title="" placeholder="请输入随笔关键字" required
+                       onkeyup="keyNum();">
+                <i class="right" onclick="searchKeyword();"></i>
             </div>
         </div>
     </div>
@@ -178,3 +179,24 @@
         </ul>
     </div>
 </div>
+<script type="text/javascript">
+    var searchInput = document.getElementById('keywords');
+
+    searchInput.onkeyup = function (e) {
+        if (!e) e = window.event;
+        if ((e.keyCode || e.which) == 13) {
+            searchKeyword();
+        }
+    }
+
+    function searchKeyword() {
+        var searchCon = document.getElementById('keywords').value;
+        if (searchCon) {
+            window.location.href = '/notes?search=' + searchCon;
+        } else {
+            alert('搜索内容不能为空，亲！');
+        }
+    }
+
+
+</script>
