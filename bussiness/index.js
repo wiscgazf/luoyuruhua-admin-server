@@ -38,7 +38,41 @@ objFun.indexSuc = function (req, res, next) {   // index page
     })
 };
 
-// ajax bussiness  -------------------------
+objFun.publicData = function (req, res, next) {  //public data(sidebar)
+    let timeSort = Notes.find().populate({
+        path: 'author',
+        select: 'name',
+        model: 'admin'
+    }).limit(3).sort({createTime: -1}).exec();
+    let pageViewSort = Notes.find().limit(3).sort({pageView: -1});
+    Promise.all([timeSort, pageViewSort]).then(data => {
+        req.app.locals.sideBarData = {
+            timeSortData: data[0].map(item => {
+                return {
+                    id: item._id,
+                    createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                    title: item.title,
+                    thumbImg: item.thumbImg,
+                    author: item.author,
+                }
+            }),
+            pageViewData: data[1].map(item => {
+                return {
+                    id: item._id,
+                    createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                    title: item.title,
+                    thumbImg: item.thumbImg,
+                    pageView: item.pageView
+                }
+            })
+        }
+        next();
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    });
+}
+
+// ajax bussiness  -------------------------  server
 
 objFun.loginAjax = function (req, res, next) {  // login ajax  bussiness
     let obj = {

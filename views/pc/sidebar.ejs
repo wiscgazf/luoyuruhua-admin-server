@@ -23,42 +23,20 @@
     <div class="new_information public_side_wrap">
         <p class="public_title">最新随笔</p>
         <ul>
+            <% sideBarData.timeSortData.forEach(function(item, index){ %>
             <li>
                 <div class="inform_img left">
-                    <img src="http://192.168.0.20:30001/static/upload/notes/1535428024619.png" alt="">
+                    <img src="<%= item.thumbImg %>" alt="">
                 </div>
                 <div class="inform_right right">
-                    <a href="javascript:void(0);">这样的话判断授权也是用不到了，我的思路：在需要获取用户信息的地方，先做个按</a>
+                    <a href="/notes/<%= item.id %>" target="_blank"><%= item.title %></a>
                     <div class="inform_des">
-                        <span>2018-08-31</span>
-                        <span>作者：落雨如画</span>
+                        <span><%= item.createTime %></span>
+                        <span>作者：<%= item.author.name %></span>
                     </div>
                 </div>
             </li>
-            <li>
-                <div class="inform_img left">
-                    <img src="http://192.168.0.20:30001/static/upload/notes/1535428024619.png" alt="">
-                </div>
-                <div class="inform_right right">
-                    <a href="javascript:void(0);">这样的话判断授权也是用不到了，我的思路：在需要获取用户信息的地方，先做个按</a>
-                    <div class="inform_des">
-                        <span>2018-08-31</span>
-                        <span>作者：落雨如画</span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="inform_img left">
-                    <img src="http://192.168.0.20:30001/static/upload/notes/1535428024619.png" alt="">
-                </div>
-                <div class="inform_right right">
-                    <a href="javascript:void(0);">这样的话判断授权也是用不到了，我的思路：在需要获取用户信息的地方，先做个按</a>
-                    <div class="inform_des">
-                        <span>2018-08-31</span>
-                        <span>作者：落雨如画</span>
-                    </div>
-                </div>
-            </li>
+            <% }) %>
         </ul>
     </div>
     <!--new reply-->
@@ -107,42 +85,20 @@
     <div class="new_information public_side_wrap page_views">
         <p class="public_title">点击排行</p>
         <ul>
+            <% sideBarData.pageViewData.forEach(function (item, index) { %>
             <li>
                 <div class="inform_img left">
-                    <img src="http://192.168.0.20:30001/static/upload/notes/1535428024619.png" alt="">
+                    <img src="<%= item.thumbImg %>" alt="">
                 </div>
                 <div class="inform_right right">
-                    <a href="javascript:void(0);">这样的话判断授权也是用不到了，我的思路：在需要获取用户信息的地方，先做个按</a>
+                    <a href="/notes/<%= item.id %>" target="_blank"><%= item.title %></a>
                     <div class="inform_des">
-                        <span>2018-08-31</span>
-                        <span>浏览：45</span>
+                        <span><%= item.createTime %></span>
+                        <span>浏览：<%= item.pageView %></span>
                     </div>
                 </div>
             </li>
-            <li>
-                <div class="inform_img left">
-                    <img src="http://192.168.0.20:30001/static/upload/notes/1535428024619.png" alt="">
-                </div>
-                <div class="inform_right right">
-                    <a href="javascript:void(0);">这样的话判断授权也是用不到了，我的思路：在需要获取用户信息的地方，先做个按</a>
-                    <div class="inform_des">
-                        <span>2018-08-31</span>
-                        <span>浏览：45</span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="inform_img left">
-                    <img src="http://192.168.0.20:30001/static/upload/notes/1535428024619.png" alt="">
-                </div>
-                <div class="inform_right right">
-                    <a href="javascript:void(0);">这样的话判断授权也是用不到了，我的思路：在需要获取用户信息的地方，先做个按</a>
-                    <div class="inform_des">
-                        <span>2018-08-31</span>
-                        <span>浏览：45</span>
-                    </div>
-                </div>
-            </li>
+            <% }) %>
         </ul>
     </div>
     <!--tag wrap-->

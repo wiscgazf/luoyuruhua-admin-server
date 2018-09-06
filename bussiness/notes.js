@@ -84,14 +84,19 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
 }
 
 objFun.notesDetail = function (req, res, next) {  //notesDetail
-    Notes.findById(req.params.id).populate({path: 'author', select: 'name', model: 'admin'}).exec(function (err, data) {
-        if (err) {
-            res.status(500).json(Errors.networkError);
-        } else {
-            res.render('pc/nodeDetail', {Data: data, content: JSON.stringify(data.content)});
-        }
+    Promise.try(() => {
+        return Notes.findById(req.params.id);
+    }).then(data => {
+        return Notes.update({_id: req.params.id}, {$set: {pageView: (data.pageView + 1)}});
+    }).then(data => {
+        return Notes.findById(req.params.id).populate({path: 'author', select: 'name', model: 'admin'}).exec();
+    }).then(data => {
+        res.render('pc/nodeDetail', {Data: data, content: JSON.stringify(data.content)});
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
     });
 }
+
 // ajax bussiness  ------------------------- server
 
 objFun.addthumbImgAjax = function (req, res, next) {    // add notes thumbImg  bussiness
