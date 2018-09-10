@@ -38,11 +38,36 @@
     height: 200px;
 }
 
-/*user center*/
+/*user center ------------------------------------*/
+/*no login*/
 .user_center > p {
     background: rgba(255, 255, 255, .8) url("../../img/pc/user_tag.png") no-repeat 10px center;
     background-size: auto;
 }
+
+.user_center .user_form .not_login {
+    padding: 10px 15px 15px;
+}
+
+.user_center .user_form .not_login p {
+    font-size: 14px;
+    color: #666;
+}
+
+.user_center .user_form .not_login p a {
+    color: #759b08;
+}
+
+.user_center .user_form .not_login p a:hover {
+    text-decoration: underline;
+}
+
+.user_center .user_form .not_login p:last-of-type {
+    margin-top: 10px;
+}
+
+/*login success*/
+
 
 /*new_information*/
 .new_information > p {
