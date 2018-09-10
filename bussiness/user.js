@@ -7,6 +7,20 @@ let Errors = require('../err/errors');
 let User = require('../models/User'); // user db
 let Admin = require('../models/Admin'); // admin db
 
+/*
+*
+* show  page router
+* */
+objFun.userLogin = function (req, res, next) {
+    res.render('pc/login');
+}
+
+
+/*
+*
+* server ajax
+* */
+
 objFun.addUserAjax = function (req, res, next) {    // add user  bussiness
     Promise.try(() => {
         return User.find({name: req.body.name});
@@ -106,4 +120,9 @@ objFun.delUserAjax = function (req, res, next) {  // delete user bussiness
         }
     })
 }
+
+/*
+*web ajax
+*
+* */
 module.exports = objFun;

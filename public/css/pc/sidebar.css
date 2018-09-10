@@ -46,7 +46,7 @@
 }
 
 .user_center .user_form .not_login {
-    padding: 10px 15px 15px;
+    padding: 0 15px 15px;
 }
 
 .user_center .user_form .not_login p {
@@ -68,6 +68,38 @@
 
 /*login success*/
 
+.user_center .user_form .login_suc {
+    padding: 15px;
+}
+
+.user_center .user_form .login_suc a {
+    display: inline-block;
+}
+
+.user_center .user_form .login_suc a img {
+    width: 50px;
+    height: 50px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    vertical-align: middle;
+}
+
+.user_center .user_form .login_suc a span {
+    font-size: 14px;
+    color: #666;
+    margin-left: 15px;
+}
+
+.user_center .user_form .login_suc a span:hover {
+    color: #2C9BD8;
+    text-decoration: underline;
+}
+
+.user_center .user_form .login_suc p {
+    font-size: 14px;
+    color: #333;
+    margin-top: 12px;
+}
 
 /*new_information*/
 .new_information > p {
