@@ -11,10 +11,14 @@ let Admin = require('../models/Admin'); // admin db
 *
 * show  page router
 * */
-objFun.userLogin = function (req, res, next) {
+
+objFun.userLogin = function (req, res, next) {  // login  page
     res.render('pc/login');
 }
 
+objFun.userRegister = function (req, res, next) {  // register  page
+    res.render('pc/register');
+}
 
 /*
 *
@@ -125,4 +129,29 @@ objFun.delUserAjax = function (req, res, next) {  // delete user bussiness
 *web ajax
 *
 * */
+objFun.userRegisterAjax = function (req, res, next) {
+    let registerData = req.body;
+    Promise.try(() => {
+        return User.find({name: registerData.names});
+    }).then(data => {
+        if (data.length > 0) {
+            res.json(Errors.userOccupied);
+        } else {
+            return User.find({email: registerData.email});
+        }
+    }).then(data => {
+        if (data.length > 0) {
+            res.json(Errors.emailOccupied);
+        } else {
+            return User.create(registerData);
+        }
+    }).then(data => {
+        req.session.userinfo = registerData.name;
+        req.app.locals.sideBarData["username"] = registerData.name;
+        res.redirect("/");
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    });
+    res.json({suc: '1'})
+}
 module.exports = objFun;

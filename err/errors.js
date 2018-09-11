@@ -15,5 +15,7 @@ module.exports = {
     addNotesSuc: {msg: '1', code: '200', des: '添加成功'},
     editNotesSuc: {msg: '1', code: '200', des: '更新随笔成功'},
     findNotesSuc: {msg: '1', code: '200', des: '查找随笔成功'},
-    delNotesSuc: {msg: '1', code: '200', des: '删除随笔成功'}
+    delNotesSuc: {msg: '1', code: '200', des: '删除随笔成功'},
+    emailOccupied: {msg: '0', code: '10006', des: '该邮箱已被注册'},
+    userRegisterSuc: {msg: '1', code: '200', des: '注册成功'}
 }

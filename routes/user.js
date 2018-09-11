@@ -2,7 +2,9 @@ let express = require('express');
 let router = express.Router();
 let bussinessFun = require('../bussiness/user');
 
-router.get('/login', bussinessFun.userLogin);
+router.get('/login', bussinessFun.userLogin); // user login page
+
+router.get('/register', bussinessFun.userRegister); // user register page
 
 // ajax request ---------------------------------------
 
@@ -20,5 +22,5 @@ router.delete('/delUser', bussinessFun.delUserAjax);   // delete user api
 /*
 * web ajax
 * */
-
+router.post('/userRegister', bussinessFun.userRegisterAjax); // user register api
 module.exports = router;

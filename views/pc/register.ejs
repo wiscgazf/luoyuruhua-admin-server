@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/public.css">
+    <link rel="stylesheet" href="/css/pace-theme-minimal.css">
+    <link rel="stylesheet" href="/css/pc/header_footer.css">
+    <link rel="stylesheet" href="/css/pc/toast.css">
+    <link rel="stylesheet" href="/css/pc/login.css">
+    <title>落雨如画博客-临渊羡鱼，不如退而结网！</title>
+</head>
+<body>
+<!--header-->
+<% include ./header.ejs %>
+<div style="height: 70px;background: transparent;"></div>
+<!--content-->
+<div class="content">
+    <div class="content_con">
+        <div class="con_left">
+            <div class="panel">
+                <div class="breadcrumb">
+                    <ul>
+                        <li><a href="/">主页</a><span class="divider">/</span></li>
+                        <li class="active">注册</li>
+                    </ul>
+                </div>
+                <div class="inner">
+                    <form id="register_form" class="form-horizontal" action="javascript:void(0);" method="post">
+                        <div class="control-group">
+                            <label class="control-label" for="name">用户名</label>
+                            <div class="controls">
+                                <input class="input-xlarge" id="name" name="name" size="30" type="text">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="pass">密码</label>
+                            <div class="controls">
+                                <input class="input-xlarge" id="pass" name="pass" size="30" type="password">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="email">邮箱</label>
+                            <div class="controls">
+                                <input class="input-xlarge" id="email" name="email" size="30" type="text">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input type="submit" class="span-primary" id="register" value="注册">
+                            <a id="forgot_password" href="/login">已有账号，直接登录</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ./footer.ejs %>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/pace.min.js"></script>
+<script type="text/javascript" src="/js/pc/listening.js"></script>
+<script type="text/javascript" src="/js/pc/toast.js"></script>
+<script type="text/javascript">
+    // $.Toast('警告', '错误', 'success', {})
+    var uPattern = /^[\u4E00-\u9FA5a-zA-Z0-9_]{3,10}$/;
+    $('#register').click(function () {
+        if ($('#name').val() == '') {
+            $.Toast('警告', '请输入用户名', 'warning')
+        } else if (!uPattern.test($('#name').val())) {
+            $.Toast('警告', '汉字 英文字母 数字 下划线组成，3-10位', 'warning')
+        } else if ($('#pass').val() == '') {
+            $.Toast('警告', '请输入密码', 'warning')
+        }
+    })
+</script>
+</html>
