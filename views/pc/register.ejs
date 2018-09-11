@@ -66,6 +66,7 @@
 <script type="text/javascript">
     // $.Toast('警告', '错误', 'success', {})
     var uPattern = /^[\u4E00-\u9FA5a-zA-Z0-9_]{3,10}$/;
+    var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
     $('#register').click(function () {
         if ($('#name').val() == '') {
             $.Toast('警告', '请输入用户名', 'warning')
@@ -73,6 +74,39 @@
             $.Toast('警告', '汉字 英文字母 数字 下划线组成，3-10位', 'warning')
         } else if ($('#pass').val() == '') {
             $.Toast('警告', '请输入密码', 'warning')
+        } else if (!/^[0-9a-zA-Z_]{6,12}$/.test($('#pass').val())) {
+            $.Toast('警告', '密码必须为字母数字下划线6-12位组成', 'warning')
+        } else if ($('#email').val() == '') {
+            $.Toast('警告', '请输入邮箱', 'warning')
+        } else if (!emailReg.test($('#email').val())) {
+            $.Toast('警告', '邮箱格式错误', 'warning')
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/userRegister",
+                data: {
+                    name: $('#name').val(),
+                    password: $('#pass').val(),
+                    email: $('#email').val()
+                },
+                success: function (data) {
+                    if (data.msg == 0) {
+                        $.Toast('警告', data.des, 'error');
+                    } else {
+                        $.Toast('成功', data.des, 'success');
+                        $('#name').val('');
+                        $('#pass').val('');
+                        $('#email').val('');
+                        setTimeout(function () {
+                            window.location.href = '/';
+                        }, 2000)
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                    $.Toast('未知错误', '请联系管理员', 'error')
+                }
+            });
         }
     })
 </script>

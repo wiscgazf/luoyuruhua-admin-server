@@ -132,7 +132,7 @@ objFun.delUserAjax = function (req, res, next) {  // delete user bussiness
 objFun.userRegisterAjax = function (req, res, next) {
     let registerData = req.body;
     Promise.try(() => {
-        return User.find({name: registerData.names});
+        return User.find({name: registerData.name});
     }).then(data => {
         if (data.length > 0) {
             res.json(Errors.userOccupied);
@@ -147,11 +147,9 @@ objFun.userRegisterAjax = function (req, res, next) {
         }
     }).then(data => {
         req.session.userinfo = registerData.name;
-        req.app.locals.sideBarData["username"] = registerData.name;
-        res.redirect("/");
+        res.json(Errors.userRegisterSuc);
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     });
-    res.json({suc: '1'})
 }
 module.exports = objFun;

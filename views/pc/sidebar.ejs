@@ -16,16 +16,23 @@
     <div class="user_center public_side_wrap">
         <p class="public_title">用户中心</p>
         <div class="user_form">
+            <% if(locals.username){ %>
+            <div class="login_suc">
+                <a href="javascipt:void(0);" title="落雨如画">
+                    <img src="<%= locals.username.userImg %>" alt="">
+                    <span><%= locals.username.name %></span>
+                </a>
+                <% if(locals.username.signature){ %>
+                <p>“<%= locals.username.signature %>”</p>
+                <% }else{ %>
+                <p>“这个家伙很懒，什么都没留下！”</p>
+                <% } %>
+            </div>
+            <% }else{ %>
             <div class="not_login">
                 <p><a href="/login">登录</a>或<a href="/register">注册</a>后可参与留言和评论</p>
             </div>
-            <div class="login_suc" style="display: none;">
-                <a href="javascipt:void(0);" title="落雨如画">
-                    <img src="https://avatars0.githubusercontent.com/u/26874662?v=4&s=120" alt="">
-                    <span>落雨如画</span>
-                </a>
-                <p>“这个家伙很懒，什么都没留下！”</p>
-            </div>
+            <% } %>
         </div>
     </div>
     <!--new notes-->

@@ -8,6 +8,8 @@ let Errors = require('../err/errors');
 
 let Admin = require('../models/Admin'); // admin db
 
+let User = require('../models/User'); // user db
+
 let Notes = require('../models/Notes'); // notes db
 
 objFun.indexSuc = function (req, res, next) {   // index page
@@ -39,6 +41,15 @@ objFun.indexSuc = function (req, res, next) {   // index page
 };
 
 objFun.publicData = function (req, res, next) {  //public data(sidebar)
+    if (req.session.userinfo) {
+        User.findOne({name: req.session.userinfo}, function (err, data) {
+            if (err) {
+                res.status(500).json(Errors.networkError);
+            } else {
+                req.app.locals.username = data;
+            }
+        })
+    }
     let timeSort = Notes.find().populate({
         path: 'author',
         select: 'name',

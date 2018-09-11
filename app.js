@@ -2,12 +2,10 @@ let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
-// let expressSession = require('express-session');
+let expressSession = require('express-session');
 let bodyParser = require('body-parser');
 let ueditor = require('ueditor');
 let favicon = require('serve-favicon');
-
-// let Cookies = require('cookies');
 
 
 let logger = require('morgan');
@@ -28,15 +26,19 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(favicon(__dirname + '/public/img/favicon.ico'));
 
-app.use(bodyParser.urlencoded({extended: false, limit: '100000kb'}));
+app.use(bodyParser.urlencoded({extended: true, limit: '100000kb'}));
 app.use(bodyParser.json({limit: '100000kb'}));
-//app.use(bodyParser.urlencoded());
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-app.use(cookieParser(cookieSecret.cookieSecret));
-// app.use(expressSession({secret: cookieSecret.cookieSecret, name: "userInfo", cookie: {maxAge: 1000 * 60}}));// set session
+app.use(expressSession({
+    secret: cookieSecret.cookieSecret,
+    resave: true,
+    cookie: {maxAge: 1000 * 60 * 60 * 12 * 7},
+    saveUninitialized: false
+}));
+
 app.use(express.static(path.join(__dirname, 'public'))); // 映射公共文件到public
 
 app.use(express.static(path.join(__dirname, './'))); // 映射文件到当前目录
