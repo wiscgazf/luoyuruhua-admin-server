@@ -68,9 +68,9 @@ objFun.allUserAjax = function (req, res, next) {    // find all user business
         let pageOffset = (currentPage - 1) * showCount;
 
         if (req.query.name == '') {
-            return User.find({}).skip(pageOffset).limit(showCount).exec();
+            return User.find({}).skip(pageOffset).limit(showCount).sort({createTime: -1}).exec();
         } else {
-            return User.find({name: {$regex: reg}}).skip(pageOffset).limit(showCount).exec();
+            return User.find({name: {$regex: reg}}).skip(pageOffset).limit(showCount).sort({createTime: -1}).exec();
         }
     }).then(data => {
         let user = data.map(function (item) {
@@ -129,7 +129,7 @@ objFun.delUserAjax = function (req, res, next) {  // delete user bussiness
 *web ajax
 *
 * */
-objFun.userRegisterAjax = function (req, res, next) {
+objFun.userRegisterAjax = function (req, res, next) {   // usre register bussiness
     let registerData = req.body;
     Promise.try(() => {
         return User.find({name: registerData.name});
@@ -150,6 +150,33 @@ objFun.userRegisterAjax = function (req, res, next) {
         res.json(Errors.userRegisterSuc);
     }).catch(err => {
         res.status(500).json(Errors.networkError);
+    });
+}
+
+objFun.userLoginAjax = function (req, res, next) {   // usre login bussiness
+    let loginData = req.body;
+    User.findOne(loginData, function (err, data) {
+        if (err) {
+            res.status(500).json(Errors.networkError);
+        } else {
+            if (data) {
+                req.session.userinfo = data.name;
+                res.json(Errors.userLoginSuc);
+            } else {
+                res.json(Errors.userLoginWarn);
+            }
+        }
+    })
+}
+
+objFun.userExitAjax = function (req, res, next) {   // usre exit bussiness
+    req.session.destroy(function (err) {
+        if (err) {
+            res.json({code: '500', des: 'exit fail'});
+            return;
+        }
+        res.clearCookie('userinfo');
+        res.redirect('/');
     });
 }
 module.exports = objFun;

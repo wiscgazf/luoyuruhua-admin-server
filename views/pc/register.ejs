@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/css/pc/header_footer.css">
     <link rel="stylesheet" href="/css/pc/toast.css">
     <link rel="stylesheet" href="/css/pc/login.css">
-    <title>落雨如画博客-临渊羡鱼，不如退而结网！</title>
+    <title>落雨如画博客-用户注册</title>
 </head>
 <body>
 <!--header-->
@@ -64,22 +64,21 @@
 <script type="text/javascript" src="/js/pc/listening.js"></script>
 <script type="text/javascript" src="/js/pc/toast.js"></script>
 <script type="text/javascript">
-    // $.Toast('警告', '错误', 'success', {})
     var uPattern = /^[\u4E00-\u9FA5a-zA-Z0-9_]{3,10}$/;
     var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
     $('#register').click(function () {
         if ($('#name').val() == '') {
-            $.Toast('警告', '请输入用户名', 'warning')
+            $.Toast('警告', '请输入用户名', 'error')
         } else if (!uPattern.test($('#name').val())) {
-            $.Toast('警告', '汉字 英文字母 数字 下划线组成，3-10位', 'warning')
+            $.Toast('警告', '汉字 英文字母 数字 下划线组成，3-10位', 'error')
         } else if ($('#pass').val() == '') {
-            $.Toast('警告', '请输入密码', 'warning')
+            $.Toast('警告', '请输入密码', 'error')
         } else if (!/^[0-9a-zA-Z_]{6,12}$/.test($('#pass').val())) {
-            $.Toast('警告', '密码必须为字母数字下划线6-12位组成', 'warning')
+            $.Toast('警告', '密码必须为字母数字下划线6-12位组成', 'error')
         } else if ($('#email').val() == '') {
-            $.Toast('警告', '请输入邮箱', 'warning')
+            $.Toast('警告', '请输入邮箱', 'error')
         } else if (!emailReg.test($('#email').val())) {
-            $.Toast('警告', '邮箱格式错误', 'warning')
+            $.Toast('警告', '邮箱格式错误', 'error')
         } else {
             $.ajax({
                 type: "POST",
@@ -99,7 +98,7 @@
                         $('#email').val('');
                         setTimeout(function () {
                             window.location.href = '/';
-                        }, 2000)
+                        }, 500);
                     }
                 },
                 error: function (err) {

@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="/css/public.css">
     <link rel="stylesheet" href="/css/pace-theme-minimal.css">
     <link rel="stylesheet" href="/css/pc/header_footer.css">
+    <link rel="stylesheet" href="/css/pc/toast.css">
     <link rel="stylesheet" href="/css/pc/login.css">
-    <title>落雨如画博客-临渊羡鱼，不如退而结网！</title>
+    <title>落雨如画博客-用户登录</title>
 </head>
 <body>
 <!--header-->
@@ -27,7 +28,7 @@
                     </ul>
                 </div>
                 <div class="inner">
-                    <form id="login_form" class="form-horizontal" action="/signin" method="post">
+                    <form id="login_form" class="form-horizontal" action="javascript:void(0);" method="post">
                         <div class="control-group">
                             <label class="control-label" for="name">用户名</label>
                             <div class="controls">
@@ -41,7 +42,7 @@
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input type="submit" class="span-primary" value="登录">
+                            <input type="submit" class="span-primary" value="登录" id="userLogin">
                             <a id="forgot_password" href="/searchPsw">忘记密码了?</a>
                         </div>
                     </form>
@@ -55,6 +56,37 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/pace.min.js"></script>
 <script type="text/javascript" src="/js/pc/listening.js"></script>
+<script type="text/javascript" src="/js/pc/toast.js"></script>
 <script type="text/javascript">
+    $('#userLogin').click(function () {
+        if ($('#name').val() == '') {
+            $.Toast('警告', '请输入用户名', 'error')
+        } else if ($('#pass').val() == '') {
+            $.Toast('警告', '请输入密码', 'error')
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/userLogin",
+                data: {
+                    name: $('#name').val(),
+                    password: $('#pass').val()
+                },
+                success: function (data) {
+                    if (data.msg == 0) {
+                        $.Toast('警告', data.des, 'error');
+                    } else {
+                        $.Toast('成功', data.des, 'success');
+                        setTimeout(function () {
+                            window.location.href = '/';
+                        }, 500);
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                    $.Toast('未知错误', '请联系管理员', 'error')
+                }
+            });
+        }
+    })
 </script>
 </html>

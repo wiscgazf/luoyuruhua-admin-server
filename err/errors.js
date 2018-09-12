@@ -17,5 +17,7 @@ module.exports = {
     findNotesSuc: {msg: '1', code: '200', des: '查找随笔成功'},
     delNotesSuc: {msg: '1', code: '200', des: '删除随笔成功'},
     emailOccupied: {msg: '0', code: '10006', des: '该邮箱已被注册'},
-    userRegisterSuc: {msg: '1', code: '200', des: '注册成功'}
+    userRegisterSuc: {msg: '1', code: '200', des: '注册成功'},
+    userLoginWarn: {msg: '0', code: '10007', des: '用户名或密码错误'},
+    userLoginSuc: {msg: '1', code: '200', des: '登陆成功'}
 }

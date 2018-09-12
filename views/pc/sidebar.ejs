@@ -18,7 +18,8 @@
         <div class="user_form">
             <% if(locals.username){ %>
             <div class="login_suc">
-                <a href="javascipt:void(0);" title="落雨如画">
+                <span onclick="window.location.href='/userExit'">退出</span>
+                <a href="javascipt:void(0);" title="<%= locals.username.name %>">
                     <img src="<%= locals.username.userImg %>" alt="">
                     <span><%= locals.username.name %></span>
                 </a>

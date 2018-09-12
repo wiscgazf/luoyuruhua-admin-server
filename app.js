@@ -32,11 +32,13 @@ app.use(bodyParser.json({limit: '100000kb'}));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+app.use(cookieParser());
 app.use(expressSession({
     secret: cookieSecret.cookieSecret,
-    resave: true,
+    resave: false,
     cookie: {maxAge: 1000 * 60 * 60 * 12 * 7},
-    saveUninitialized: false
+    saveUninitialized: false,
+    name: 'userinfo'
 }));
 
 app.use(express.static(path.join(__dirname, 'public'))); // 映射公共文件到public

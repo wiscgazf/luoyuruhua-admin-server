@@ -70,6 +70,7 @@
 
 .user_center .user_form .login_suc {
     padding: 15px;
+    position: relative;
 }
 
 .user_center .user_form .login_suc a {
@@ -99,6 +100,23 @@
     font-size: 14px;
     color: #333;
     margin-top: 12px;
+    font-style: italic;
+    line-height: 22px;
+}
+
+.user_center .user_form .login_suc > span {
+    display: none;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: rgb(255, 10, 0);
+}
+
+.user_center .user_form .login_suc:hover > span {
+    display: block;
+    text-decoration: underline;
 }
 
 /*new_information*/

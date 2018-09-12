@@ -49,6 +49,8 @@ objFun.publicData = function (req, res, next) {  //public data(sidebar)
                 req.app.locals.username = data;
             }
         })
+    } else {
+        delete req.app.locals.username;
     }
     let timeSort = Notes.find().populate({
         path: 'author',

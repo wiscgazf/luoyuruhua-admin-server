@@ -23,4 +23,8 @@ router.delete('/delUser', bussinessFun.delUserAjax);   // delete user api
 * web ajax
 * */
 router.post('/userRegister', bussinessFun.userRegisterAjax); // user register api
+
+router.post('/userLogin', bussinessFun.userLoginAjax); // user login api
+
+router.get('/userExit', bussinessFun.userExitAjax); // user exit api
 module.exports = router;
