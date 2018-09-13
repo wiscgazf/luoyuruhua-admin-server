@@ -16,7 +16,7 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
     let currentPage = req.query.page || 1;
     Promise.try(() => {
         if (req.query.search) {
-            return Notes.countDocuments({$or: [{name: {$regex: new RegExp(req.query.search, 'i')}}, {category: {$regex: new RegExp(req.query.search, 'i')}}, {description: {$regex: new RegExp(req.query.search, 'i')}}]});
+            return Notes.countDocuments({$or: [{title: {$regex: new RegExp(req.query.search, 'i')}}, {category: {$regex: new RegExp(req.query.search, 'i')}}, {description: {$regex: new RegExp(req.query.search, 'i')}}]});
         } else {
             return Notes.countDocuments();
         }
@@ -45,7 +45,7 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
             }
 
             if (req.query.search) {
-                queryData = Notes.find({$or: [{name: {$regex: new RegExp(req.query.search, 'i')}}, {category: {$regex: new RegExp(req.query.search, 'i')}}, {description: {$regex: new RegExp(req.query.search, 'i')}}]});
+                queryData = Notes.find({$or: [{title: {$regex: new RegExp(req.query.search, 'i')}}, {category: {$regex: new RegExp(req.query.search, 'i')}}, {description: {$regex: new RegExp(req.query.search, 'i')}}]});
             } else {
                 queryData = Notes.find();
             }
@@ -93,7 +93,29 @@ objFun.notesDetail = function (req, res, next) {  //notesDetail
     }).then(data => {
         return Notes.findById(req.params.id).populate({path: 'author', select: 'name', model: 'admin'}).exec();
     }).then(data => {
-        res.render('pc/nodeDetail', {Data: data, content: JSON.stringify(data.content)});
+        Notes.find({
+            _id: {$ne: data._id},
+            $or: [{title: {$regex: new RegExp(data.title, 'i')}}, {category: {$regex: new RegExp(data.category, 'i')}}, {description: {$regex: new RegExp(data.title, 'i')}}],
+        }, function (err, data) {
+            if (err) {
+                res.status(500).json(Errors.networkError);
+            } else {
+                console.log(data)
+            }
+        })
+        res.render('pc/nodeDetail', {
+            Data: {
+                id: data._id,
+                createTime: moment(data.createTime).format("YYYY-MM-DD"),
+                title: data.title,
+                pageView: data.pageView,
+                category: data.category,
+                description: data.description,
+                author: data.author,
+                replyData: data.replyData.length,
+                tag: data.tag
+            }, content: JSON.stringify(data.content)
+        });
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     });
