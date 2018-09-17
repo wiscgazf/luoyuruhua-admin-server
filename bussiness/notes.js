@@ -8,6 +8,7 @@ let Errors = require('../err/errors');
 let Admin = require('../models/Admin'); // admin db
 let User = require('../models/User'); // user db
 let Notes = require('../models/Notes'); // notes db
+let Reply = require('../models/Reply'); // Reply db
 
 objFun.notesList = function (req, res, next) {  // find all notes and condition find
     let count = 0;
@@ -87,35 +88,40 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
 
 objFun.notesDetail = function (req, res, next) {  //notesDetail
     Promise.try(() => {
-        return Notes.findById(req.params.id);
-    }).then(data => {
-        return Notes.update({_id: req.params.id}, {$set: {pageView: (data.pageView + 1)}});
+        return Notes.findOneAndUpdate({_id: req.params.id}, {$inc: {pageView: 1}});
     }).then(data => {
         return Notes.findById(req.params.id).populate({path: 'author', select: 'name', model: 'admin'}).exec();
     }).then(data => {
-        Notes.find({
+        // guess what you like
+        let likes = Notes.find({
             _id: {$ne: data._id},
             $or: [{title: {$regex: new RegExp(data.title, 'i')}}, {category: {$regex: new RegExp(data.category, 'i')}}, {description: {$regex: new RegExp(data.title, 'i')}}],
-        }, function (err, data) {
-            if (err) {
-                res.status(500).json(Errors.networkError);
-            } else {
-                console.log(data)
-            }
+        }).limit(3);
+        // pre page
+        let prePage = Notes.find({_id: {$lt: req.params.id}}).limit(1);
+
+        // nextPage
+        let nextPage = Notes.find({_id: {$gt: req.params.id}}).limit(1);
+
+        Promise.all([likes, prePage, nextPage]).then(data1 => {
+            res.render('pc/nodeDetail', {
+                Data: {
+                    id: data._id,
+                    createTime: moment(data.createTime).format("YYYY-MM-DD"),
+                    title: data.title,
+                    pageView: data.pageView,
+                    category: data.category,
+                    description: data.description,
+                    author: data.author,
+                    replyData: data.replyData.length,
+                    tag: data.tag
+                },
+                content: JSON.stringify(data.content),
+                likesData: data1[0],
+                preData: data1[1],
+                nextData: data1[2],
+            });
         })
-        res.render('pc/nodeDetail', {
-            Data: {
-                id: data._id,
-                createTime: moment(data.createTime).format("YYYY-MM-DD"),
-                title: data.title,
-                pageView: data.pageView,
-                category: data.category,
-                description: data.description,
-                author: data.author,
-                replyData: data.replyData.length,
-                tag: data.tag
-            }, content: JSON.stringify(data.content)
-        });
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     });
@@ -259,6 +265,8 @@ objFun.delNotesAjax = function (req, res, next) {
 }
 
 // ajax bussiness  ------------------------- web
+objFun.addCommentAjax = function (req, res, next) {
 
+}
 
 module.exports = objFun;

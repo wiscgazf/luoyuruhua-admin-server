@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/pc/sinaFaceAndEffec.css">
     <link rel="stylesheet" href="/css/public.css">
     <link rel="stylesheet" href="/css/pace-theme-minimal.css">
     <link rel="stylesheet" href="/css/pc/header_footer.css">
@@ -46,28 +47,32 @@
                 <% } %>
             </div>
             <ul class="up_next">
-                <li><span>上一篇：</span><a href="javascript:void(0);">13</a></li>
-                <li><span>下一篇：</span><a href="javascript:void(0);">798</a></li>
+                <% if(preData.length > 0){ %>
+                <li><span>上一篇：</span><a href="/notes/<%= preData[0]._id %>"><%= preData[0].title %></a></li>
+                <% }else{ %>
+                <li><span>上一篇：</span><a href="javascript:void(0);" style="color: #759b08;">没有了</a></li>
+                <% } %>
+                <% if(nextData.length > 0){ %>
+                <li><span>下一篇：</span><a href="/notes/<%= nextData[0]._id %>"><%= nextData[0].title %></a></li>
+                <% }else{ %>
+                <li><span>下一篇：</span><a href="javascript:void(0);" style="color: #759b08;">没有了</a></li>
+                <% } %>
             </ul>
+            <% if(likesData.length > 0){ %>
             <div class="likes">
                 <p>猜你喜欢</p>
                 <div class="likes_con">
-                    <a href="javascript:void(0);">
-                        <div><img src="http://192.168.0.115:30001/static/upload/notes/1535982059267.png" alt=""></div>
-                        <span>只要是你喜欢的</span>
+                    <% likesData.forEach(function (item, index) { %>
+                    <a href="/notes/<%= item._id %>" target="_blank">
+                        <div><img src="<%= item.thumbImg %>" alt=""></div>
+                        <span><%= item.title %></span>
                     </a>
-                    <a href="javascript:void(0);">
-                        <div><img src="http://192.168.0.115:30001/static/upload/notes/1535982059267.png" alt=""></div>
-                        <span>只要是你喜欢的</span>
-                    </a>
-                    <a href="javascript:void(0);">
-                        <div><img src="http://192.168.0.115:30001/static/upload/notes/1535982059267.png" alt=""></div>
-                        <span>只要是你喜欢的</span>
-                    </a>
+                    <% }) %>
                 </div>
             </div>
+            <% } %>
             <div class="reply_title">
-                <span class="left">共有<b>10</b>条评论</span>
+                <span class="left">共有<b><%= Data.replyData %></b>条评论</span>
                 <a href="javascript:void(0);" class="right">发布评论</a>
             </div>
             <div class="reply_list">
@@ -78,7 +83,7 @@
                                         src="https://yezipi.net/style/images/Portrait/40.jpg" alt=""></a></div>
                         <div class="right reply_con">
                             <div class="reply_user">
-                                <span>落雨如画</span>
+                                <span onclick="replyComment('123');">落雨如画</span>
                                 <span>2018/2/12</span>
                             </div>
                             <div class="comment_con">
@@ -172,12 +177,34 @@
                                 <span>2018/2/12</span>
                             </div>
                             <div class="comment_con">
-                                <p>作是一种双赢甚至多赢的模式。对于企业而言，可得到高校的技术和人才支持；对于高校而言，可更好的实现科研成果转化，将知识转化为生产力；而对于学生而言，企业项目的参与，则是个人历练和未来职业发展的有效助力。</p>
+                                <p>
+                                    作是一种双赢甚至多赢的模式。对于企业而言，可得到高校的技术和人才支持；对于高校而言，可更好的实现科研成果转化，将知识转化为生产力；而对于学生而言，企业项目的参与，则是个人历练和未来职业发展的有效助力。</p>
                             </div>
 
                         </div>
                     </li>
                 </ul>
+            </div>
+            <div class="comment_wrap">
+                <div class="comment">
+                    <div class="content">
+                        <div class="cont-box">
+                            <textarea class="text" placeholder="请输入 . . ." maxlength="2000" required></textarea>
+                        </div>
+                        <div class="tools-box">
+                            <div class="operator-box-btn"><span class="face-icon">☺</span><span
+                                        class="img-icon">▧</span></div>
+                            <% if(locals.username){ %>
+                            <div class="submit-btn"><input type="button" onclick="replyComment('null')" value="提交评论">
+                            </div>
+                            <% }else { %>
+                            <div class="submit-btn"><input type="button" value="登录"
+                                                           onclick="window.location.href='/login'"></div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="contents"></div>
+                </div>
             </div>
         </div>
         <!--sidebar-->
@@ -190,6 +217,8 @@
 <script type="text/javascript" src="/js/pace.min.js"></script>
 <script type="text/javascript" src="/js/prism.js"></script>
 <script src="/js/clipboard.min.js"></script>
+<script src="/js/pc/comment.js"></script>
+<script src="/js/pc/sinaFaceAndEffec.js"></script>
 <script type="text/javascript" src="/js/pc/listening.js"></script>
 <script type="text/javascript">
     var notesCon = '<%- content %>';
@@ -243,5 +272,17 @@
             clipboard.destroy();
         });
     });
+    // comment
+    // bind face
+    $('.face-icon').SinaEmotion($('.text'));
+
+    // 测试本地解析
+    function replyComment(val) {
+        console.log(val)
+        var inputText = $('.text').val();
+        $('.contents').html(AnalyticEmotion(inputText));
+    }
+
+    console.log('<%= locals.username.name %>')
 </script>
 </html>

@@ -111,7 +111,7 @@
     top: 15px;
     cursor: pointer;
     font-size: 14px;
-    color: rgb(255, 10, 0);
+    color: #759b08;
 }
 
 .user_center .user_form .login_suc:hover > span {
