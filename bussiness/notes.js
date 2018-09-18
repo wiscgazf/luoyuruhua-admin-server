@@ -289,10 +289,10 @@ objFun.getCommentAjax = function (req, res, next) {
     Promise.try(() => {
         return Reply.countDocuments({notesData: req.query.id});
     }).then(data => {
-        if (data == 0) {
-            res.json({Data: null, code: '200'})
+        count = data;
+        if (!count) {
+            res.json({Data: null, code: '200'});
         } else {
-            count = data;
             pageSize = Math.ceil(data / showCount);
 
             if (currentPage >= pageSize) {
@@ -318,10 +318,12 @@ objFun.getCommentAjax = function (req, res, next) {
                 path: 'replyData.to',
                 model: 'user',
                 select: 'name userImg'
-            }).skip(showCount * (currentPage - 1)).limit(showCount).sort({createTime: -1});
+            }).skip(parseInt(showCount * (currentPage - 1))).limit(showCount).sort({createTime: -1});
         }
     }).then(data => {
-        res.json({Data: data})
+        if (data) {
+            res.json({Data: data, code: '200'});
+        }
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })

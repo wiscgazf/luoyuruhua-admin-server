@@ -28,6 +28,4 @@ let replySchema = new mongoose.Schema({
         }
     ]
 });
-
-
 module.exports = db.zhoufeiMongoose.model('reply', replySchema);

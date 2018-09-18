@@ -76,59 +76,7 @@
                 <a href="javascript:void(0);" class="right">发布评论</a>
             </div>
             <div class="reply_list">
-                <ul>
-                    <li>
-                        <span></span>
-                        <div class="left user_circle_img"><a href="javascript:void(0);"><img
-                                        src="https://yezipi.net/style/images/Portrait/40.jpg" alt=""></a></div>
-                        <div class="right reply_con">
-                            <div class="reply_user">
-                                <span onclick="replyComment('123');">落雨如画</span>
-                                <span>2018/2/12</span>
-                            </div>
-                            <div class="comment_con">
-                                <p>
-                                    曾在海信智能商用实习并成功入职成为软件工程师的哈工大毕业生讲到，“实习最大的收获就是能提前进入真实的工作环境，将在学校所学知识运用到实践中去”。他认为校企合作是一种双赢甚至多赢的模式。对于企业而言，可得到高校的技术和人才支持；对于高校而言，可更好的实现科研成果转化，将知识转化为生产力；而对于学生而言，企业项目的参与，则是个人历练和未来职业发展的有效助力。</p>
-                            </div>
-                            <ul>
-                                <li>
-                                    <span></span>
-                                    <div class="left user_circle_img"><a href="javascript:void(0);"><img
-                                                    src="https://yezipi.net/style/images/Portrait/40.jpg" alt=""></a>
-                                    </div>
-                                    <div class="right reply_con">
-                                        <div class="reply_user">
-                                            <span>落雨如画</span>
-                                            <span>2018/2/12</span>
-                                            <span>回复</span>
-                                            <span>@周宏宇</span>
-                                        </div>
-                                        <div class="comment_con">
-                                            <p>
-                                                而言，企业项目的参与，则是个人历练和未来职业发展的有效助力。</p>
-                                        </div>
-
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <span></span>
-                        <div class="left user_circle_img"><a href="javascript:void(0);"><img
-                                        src="https://yezipi.net/style/images/Portrait/40.jpg" alt=""></a></div>
-                        <div class="right reply_con">
-                            <div class="reply_user">
-                                <span>落雨如画</span>
-                                <span>2018/2/12</span>
-                            </div>
-                            <div class="comment_con">
-                                <p>
-                                    于企业而言，可得到高校的技术和人才支持；对于高校而言，可更好的实现科研成果转化，将知识转化为生产力；而对于学生而言，企业项目的参与，则是个人历练和未来职业发展的有效助力。</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                <ul></ul>
             </div>
             <div class="comment_wrap">
                 <div class="comment">
@@ -237,12 +185,7 @@
             },
             success: function (data) {
                 var test = AnalyticEmotion(data.Data.content);
-                console.log(test)
-                var str = '';
-                [10, 100, 20, 25, 30].forEach(function (item, index) {
-                    str += '<p>' + test + '</p>';
-                })
-                $('.contents').html(str);
+                $('.contents').html(test);
             },
             error: function (err) {
                 console.log(err)
@@ -263,65 +206,64 @@
             success: function (data) {
                 var str = '';
                 var Data = data.Data;
-                Data.forEach(function (item, indx) {
-                    if (item.replyData.length > 0) {
-                        var strItem = '';
-                        for (var i = 0; i < item.replyData.length; i++) {
-                            strItem += '<li>' +
-                                '                                    <span></span>' +
-                                '                                    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
-                                '                                                    src="https://yezipi.net/style/images/Portrait/40.jpg" alt=""></a>' +
-                                '                                    </div>' +
-                                '                                    <div class="right reply_con">' +
-                                '                                        <div class="reply_user">' +
-                                '                                            <span>落雨如画</span>' +
-                                '                                            <span>2018/2/12</span>' +
-                                '                                            <span>回复</span>' +
-                                '                                            <span>@周宏宇</span>' +
-                                '                                        </div>' +
-                                '                                        <div class="comment_con">' +
-                                '                                            <p>' +
-                                '                                                而言，企业项目的参与，则是个人历练和未来职业发展的有效助力。</p>' +
-                                '                                        </div>' +
-                                '\n' +
-                                '                                    </div>' +
-                                '                                </li>';
+                console.log(data)
+                if (Data) {
+                    Data.forEach(function (item, indx) {
+                        console.log(item)
+                        if (item.replyData.length > 0) {
+                            var strItem = '';
+                            for (var i = 0; i < item.replyData.length; i++) {
+                                strItem += '<li>' +
+                                    '    <span></span>' +
+                                    '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
+                                    '                    src="' + item.replyData[i].to.userImg + '" alt=""></a>' +
+                                    '    </div>' +
+                                    '    <div class="right reply_con">' +
+                                    '        <div class="reply_user">' +
+                                    '            <span>' + item.replyData[i].to.name + '</span>' +
+                                    '            <span>' + moment(item.replyData[i].createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
+                                    '             <span>回复</span>' +
+                                    '             <span>@' + item.replyData[i].from.name + '</span>' +
+                                    '         </div>' +
+                                    '         <div class="comment_con">' +
+                                    '             <p>' + AnalyticEmotion(item.replyData[i].content) + '</p>' +
+                                    '         </div>' +
+                                    '     </div>' +
+                                    ' </li>';
+                            }
+                            str += '<li>' +
+                                '    <span></span>' +
+                                '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
+                                '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
+                                '    <div class="right reply_con">' +
+                                '        <div class="reply_user">' +
+                                '            <span>' + item.userData.name + '</span>' +
+                                '            <span>' + moment(item.createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
+                                '        </div>' +
+                                '        <div class="comment_con">' +
+                                '            <p>' + AnalyticEmotion(item.content) + '</p>' +
+                                '        </div>' +
+                                '        <ul>' + strItem + '</ul>' +
+                                '    </div>' +
+                                '</li>';
+                        } else {
+                            var newStr = '<p>' + AnalyticEmotion(item.content) + '</p>';
+                            str += '<li>' +
+                                '    <span></span>' +
+                                '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
+                                '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
+                                '    <div class="right reply_con">' +
+                                '        <div class="reply_user">' +
+                                '            <span>' + item.userData.name + '</span>' +
+                                '            <span>' + moment(item.createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
+                                '        </div>' +
+                                '        <div class="comment_con">' + newStr + '</div>' +
+                                '    </div>' +
+                                '</li>';
                         }
-                        str += '<li>' +
-                            '                        <span></span>' +
-                            '                        <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
-                            '                                        src="https://yezipi.net/style/images/Portrait/40.jpg" alt=""></a></div>' +
-                            '                        <div class="right reply_con">' +
-                            '                            <div class="reply_user">' +
-                            '                                <span onclick="replyComment(\'123\');">落雨如画</span>' +
-                            '                                <span>2018/2/12</span>' +
-                            '                            </div>' +
-                            '                            <div class="comment_con">' +
-                            '                                <p>' +
-                            '                                    曾在海信智能商用实习并成功入职成为软件工程师的哈工大毕业生讲到，“实习最大的收获就是能提前进入真实的工作环境，将在学校所学知识运用到实践中去”。他认为校企合作是一种双赢甚至多赢的模式。对于企业而言，可得到高校的技术和人才支持；对于高校而言，可更好的实现科研成果转化，将知识转化为生产力；而对于学生而言，企业项目的参与，则是个人历练和未来职业发展的有效助力。</p>\n' +
-                            '                            </div>' +
-                            '                            <ul>' +
-                            '
-                        '                            </ul>' +
-                        '                        </div>' +
-                        '                    </li>'
-                    } else {
-                        var newStr = '<p>' + AnalyticEmotion(item.content) + '</p>';
-                        str += '<li>' +
-                            '    <span></span>' +
-                            '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
-                            '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
-                            '    <div class="right reply_con">' +
-                            '        <div class="reply_user">' +
-                            '            <span>' + item.userData.name + '</span>' +
-                            '            <span>' + moment(item.createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
-                            '        </div>' +
-                            '        <div class="comment_con">' + newStr + '</div>' +
-                            '    </div>' +
-                            '</li>';
-                    }
-                });
-                $('.reply_list ul').html(str);
+                    });
+                    $('.reply_list ul').html(str);
+                }
             },
             error: function (err) {
                 console.log(err)
