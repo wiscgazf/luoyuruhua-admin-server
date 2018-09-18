@@ -265,8 +265,66 @@ objFun.delNotesAjax = function (req, res, next) {
 }
 
 // ajax bussiness  ------------------------- web
-objFun.addCommentAjax = function (req, res, next) {
-
+objFun.addCommentAjax = function (req, res, next) {     // public comments
+    let commentData = req.body;
+    let reviewerId = req.app.locals.username._id;
+    Reply.create({
+        notesData: commentData.articleId,
+        userData: reviewerId,
+        content: commentData.content
+    }, function (err, data) {
+        if (err) {
+            res.status(500).json(Errors.networkError);
+        } else {
+            res.json({Data: data});
+        }
+    })
 }
 
+objFun.getCommentAjax = function (req, res, next) {
+    let count = 0;
+    let pageSize = 0;
+    let showCount = 10;
+    let currentPage = req.query.page || 1;
+    Promise.try(() => {
+        return Reply.countDocuments({notesData: req.query.id});
+    }).then(data => {
+        if (data == 0) {
+            res.json({Data: null, code: '200'})
+        } else {
+            count = data;
+            pageSize = Math.ceil(data / showCount);
+
+            if (currentPage >= pageSize) {
+                currentPage = pageSize;
+            }
+
+            if (currentPage <= 0) {
+                currentPage = 1;
+            }
+
+            return Reply.find({notesData: req.query.id}).populate({
+                path: 'notesData',
+                model: 'notes'
+            }).populate({
+                path: 'userData',
+                model: 'user',
+                select: 'name userImg'
+            }).populate({
+                path: 'replyData.from',
+                model: 'user',
+                select: 'name userImg'
+            }).populate({
+                path: 'replyData.to',
+                model: 'user',
+                select: 'name userImg'
+            }).skip(showCount * (currentPage - 1)).limit(showCount).sort({createTime: -1});
+        }
+    }).then(data => {
+        res.json({Data: data})
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    })
+
+}
 module.exports = objFun;
