@@ -73,7 +73,7 @@
             <% } %>
             <div class="reply_title">
                 <span class="left">共有<b><%= Data.replyData %></b>条评论</span>
-                <a href="javascript:void(0);" class="right">发布评论</a>
+                <a href="javascript:void(0);" class="right" onclick="replyComment(null,null,null);">发布评论</a>
             </div>
             <div class="reply_list">
                 <ul></ul>
@@ -177,10 +177,17 @@
     var replyItemId = null;
     var replyfromId = null;
 
-    function replyComment(commentId, fromId) {
+    function replyComment(commentId, fromId, userName) {
         replyItemId = commentId;
         replyfromId = fromId;
-        $('.text').focus().attr('placeholder', '132');
+        if ($('.login_suc').html()) {
+            $('.text').focus();
+            if (userName && userName != $('.login_suc a span').text()) {
+                $('.text').attr('placeholder', '回复@' + userName);
+            }
+        } else {
+            window.location.href = '/login';
+        }
     }
 
     function submitComment() {
@@ -200,7 +207,8 @@
                 success: function (data) {
                     replyItemId = null;
                     replyfromId = null;
-                    alert('13');
+                    $('.text').val('').attr('placeholder', '请输入 . . .');
+                    loadComment();
                 },
                 error: function (err) {
                     console.log(err)
@@ -209,7 +217,7 @@
         }
     }
 
-    window.onload = function () {
+    function loadComment() {
         $.ajax({
             url: '/getComment',
             type: 'GET',
@@ -230,8 +238,8 @@
                                 '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
                                 '    <div class="right reply_con">' +
                                 '        <div class="reply_user">' +
-                                '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ')">' + item.userData.name + '</span>' +
-                                '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
+                                '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ',' + "'" + item.userData.name + "'" + ')">' + item.userData.name + '</span>' +
+                                '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
                                 '        </div>' +
                                 '        <div class="comment_con">' + newStr + '</div>' +
                                 '    </div>' +
@@ -246,10 +254,10 @@
                                     '    </div>' +
                                     '    <div class="right reply_con">' +
                                     '        <div class="reply_user">' +
-                                    '            <span title="@' + item.replyData[i].to.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.replyData[i].to._id + "'" + ')">' + item.replyData[i].to.name + '</span>' +
-                                    '            <span>' + moment(item.replyData[i].createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
+                                    '            <span title="@' + item.replyData[i].to.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.replyData[i].to._id + "'" + ',' + "'" + item.replyData[i].to.name + "'" + ')">' + item.replyData[i].to.name + '</span>' +
+                                    '            <span>' + moment(item.replyData[i].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
                                     '             <span>回复</span>' +
-                                    '             <span title="@' + item.replyData[i].from.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.replyData[i].from._id + "'" + ')">@' + item.replyData[i].from.name + '</span>' +
+                                    '             <span title="@' + item.replyData[i].from.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.replyData[i].from._id + "'" + ',' + "'" + item.replyData[i].from.name + "'" + ')">@' + item.replyData[i].from.name + '</span>' +
                                     '         </div>' +
                                     '         <div class="comment_con">' +
                                     '             <p>' + AnalyticEmotion(item.replyData[i].content) + '</p>' +
@@ -264,7 +272,7 @@
                                 '    <div class="right reply_con">' +
                                 '        <div class="reply_user">' +
                                 '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ')">' + item.userData.name + '</span>' +
-                                '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
+                                '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
                                 '        </div>' +
                                 '        <div class="comment_con">' +
                                 '            <p>' + AnalyticEmotion(item.replyData[0].content) + '</p>' +
@@ -281,6 +289,10 @@
                 console.log(err)
             }
         });
+    }
+
+    window.onload = function () {
+        loadComment();
     }
 
 

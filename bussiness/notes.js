@@ -87,6 +87,20 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
 }
 
 objFun.notesDetail = function (req, res, next) {  //notesDetail
+    Reply.aggregate([
+        {
+            $group: {
+                _id: 1,
+                count: {
+                    $sum: 1
+                }
+            }
+        }
+    ]).then(data => {
+        console.log(data)
+    }).catch(err => {
+        console.log(err)
+    })
     Promise.try(() => {
         return Notes.findOneAndUpdate({_id: req.params.id}, {$inc: {pageView: 1}});
     }).then(data => {
