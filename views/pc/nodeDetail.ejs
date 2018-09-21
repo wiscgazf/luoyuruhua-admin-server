@@ -73,7 +73,7 @@
             <% } %>
             <div class="reply_title">
                 <span class="left">共有<b><%= Data.replyData %></b>条评论</span>
-                <a href="javascript:void(0);" class="right">发布评论</a>
+                <a href="javascript:void(0);" class="right" onclick="replyComment(null,null,null);">发布评论</a>
             </div>
             <div class="reply_list">
                 <ul></ul>
@@ -88,7 +88,8 @@
                             <div class="operator-box-btn"><span class="face-icon">☺</span><span
                                         class="img-icon">▧</span></div>
                             <% if(locals.username){ %>
-                            <div class="submit-btn"><input type="button" onclick="replyComment('null')" value="提交评论">
+                            <div class="submit-btn"><input type="button" onclick="submitComment()"
+                                                           value="提交评论">
                             </div>
                             <% }else { %>
                             <div class="submit-btn"><input type="button" value="登录"
@@ -116,6 +117,7 @@
 <script type="text/javascript" src="/js/pc/listening.js"></script>
 <script type="text/javascript">
     var page = 1;
+    var parentReviewer = '';
     var notesCon = '<%- content %>';
     var result = notesCon.substring(1, notesCon.length - 1);
     insertCodeElement(result, '.con_left .notes_con')
@@ -172,30 +174,50 @@
     $('.face-icon').SinaEmotion($('.text'));
 
     // 测试本地解析
-    function replyComment(val) {
-        var inputText = $('.text').val();
-        $.ajax({
-            url: '/addComment',
-            type: 'POST',
-            data: {
-                articleId: '<%= Data.id %>',
-                content: inputText,
-                replyId: '',
-                replyContent: ''
-            },
-            success: function (data) {
-                var test = AnalyticEmotion(data.Data.content);
-                $('.contents').html(test);
-            },
-            error: function (err) {
-                console.log(err)
+    var replyItemId = null;
+    var replyfromId = null;
+
+    function replyComment(commentId, fromId, userName) {
+        replyItemId = commentId;
+        replyfromId = fromId;
+        if ($('.login_suc').html()) {
+            $('.text').focus();
+            if (userName && userName != $('.login_suc a span').text()) {
+                $('.text').attr('placeholder', '回复@' + userName);
             }
-        });
-
-
+        } else {
+            window.location.href = '/login';
+        }
     }
 
-    window.onload = function () {
+    function submitComment() {
+        var inputText = $('.text').val();
+        if (jQuery.trim(inputText).length < 10) {
+            alert('骚年，多写点吧！');
+        } else {
+            $.ajax({
+                url: '/addComment',
+                type: 'POST',
+                data: {
+                    articleId: '<%= Data.id %>',
+                    replyId: replyItemId,
+                    fromReviewerId: replyfromId,
+                    content: inputText
+                },
+                success: function (data) {
+                    replyItemId = null;
+                    replyfromId = null;
+                    $('.text').val('').attr('placeholder', '请输入 . . .');
+                    loadComment();
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        }
+    }
+
+    function loadComment() {
         $.ajax({
             url: '/getComment',
             type: 'GET',
@@ -206,13 +228,25 @@
             success: function (data) {
                 var str = '';
                 var Data = data.Data;
-                console.log(data)
                 if (Data) {
                     Data.forEach(function (item, indx) {
-                        console.log(item)
-                        if (item.replyData.length > 0) {
+                        if (item.replyData.length == 1) {
+                            var newStr = '<p>' + AnalyticEmotion(item.replyData[0].content) + '</p>';
+                            str += '<li>' +
+                                '    <span></span>' +
+                                '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
+                                '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
+                                '    <div class="right reply_con">' +
+                                '        <div class="reply_user">' +
+                                '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ',' + "'" + item.userData.name + "'" + ')">' + item.userData.name + '</span>' +
+                                '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
+                                '        </div>' +
+                                '        <div class="comment_con">' + newStr + '</div>' +
+                                '    </div>' +
+                                '</li>';
+                        } else {
                             var strItem = '';
-                            for (var i = 0; i < item.replyData.length; i++) {
+                            for (var i = 1; i < item.replyData.length; i++) {
                                 strItem += '<li>' +
                                     '    <span></span>' +
                                     '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
@@ -220,10 +254,10 @@
                                     '    </div>' +
                                     '    <div class="right reply_con">' +
                                     '        <div class="reply_user">' +
-                                    '            <span>' + item.replyData[i].to.name + '</span>' +
-                                    '            <span>' + moment(item.replyData[i].createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
+                                    '            <span title="@' + item.replyData[i].to.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.replyData[i].to._id + "'" + ',' + "'" + item.replyData[i].to.name + "'" + ')">' + item.replyData[i].to.name + '</span>' +
+                                    '            <span>' + moment(item.replyData[i].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
                                     '             <span>回复</span>' +
-                                    '             <span>@' + item.replyData[i].from.name + '</span>' +
+                                    '             <span title="@' + item.replyData[i].from.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.replyData[i].from._id + "'" + ',' + "'" + item.replyData[i].from.name + "'" + ')">@' + item.replyData[i].from.name + '</span>' +
                                     '         </div>' +
                                     '         <div class="comment_con">' +
                                     '             <p>' + AnalyticEmotion(item.replyData[i].content) + '</p>' +
@@ -237,27 +271,13 @@
                                 '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
                                 '    <div class="right reply_con">' +
                                 '        <div class="reply_user">' +
-                                '            <span>' + item.userData.name + '</span>' +
-                                '            <span>' + moment(item.createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
+                                '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ')">' + item.userData.name + '</span>' +
+                                '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
                                 '        </div>' +
                                 '        <div class="comment_con">' +
-                                '            <p>' + AnalyticEmotion(item.content) + '</p>' +
+                                '            <p>' + AnalyticEmotion(item.replyData[0].content) + '</p>' +
                                 '        </div>' +
                                 '        <ul>' + strItem + '</ul>' +
-                                '    </div>' +
-                                '</li>';
-                        } else {
-                            var newStr = '<p>' + AnalyticEmotion(item.content) + '</p>';
-                            str += '<li>' +
-                                '    <span></span>' +
-                                '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
-                                '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
-                                '    <div class="right reply_con">' +
-                                '        <div class="reply_user">' +
-                                '            <span>' + item.userData.name + '</span>' +
-                                '            <span>' + moment(item.createTime).format("YYYY-MM-DD HH:MM:SS") + '</span>' +
-                                '        </div>' +
-                                '        <div class="comment_con">' + newStr + '</div>' +
                                 '    </div>' +
                                 '</li>';
                         }
@@ -269,6 +289,10 @@
                 console.log(err)
             }
         });
+    }
+
+    window.onload = function () {
+        loadComment();
     }
 
 

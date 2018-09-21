@@ -3,10 +3,6 @@ let mongoose = require('mongoose');
 let db = require('../config/mongodbConfig');
 
 let replySchema = new mongoose.Schema({
-    createTime: {
-        type: Date,
-        default: Date.now
-    },
     notesData: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'notes'
@@ -15,7 +11,6 @@ let replySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
-    content: String,
     replyData: [
         {
             createTime: {

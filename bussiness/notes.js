@@ -87,6 +87,20 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
 }
 
 objFun.notesDetail = function (req, res, next) {  //notesDetail
+    Reply.aggregate([
+        {
+            $group: {
+                _id: 1,
+                count: {
+                    $sum: 1
+                }
+            }
+        }
+    ]).then(data => {
+        console.log(data)
+    }).catch(err => {
+        console.log(err)
+    })
     Promise.try(() => {
         return Notes.findOneAndUpdate({_id: req.params.id}, {$inc: {pageView: 1}});
     }).then(data => {
@@ -268,17 +282,44 @@ objFun.delNotesAjax = function (req, res, next) {
 objFun.addCommentAjax = function (req, res, next) {     // public comments
     let commentData = req.body;
     let reviewerId = req.app.locals.username._id;
-    Reply.create({
-        notesData: commentData.articleId,
-        userData: reviewerId,
-        content: commentData.content
-    }, function (err, data) {
-        if (err) {
-            res.status(500).json(Errors.networkError);
-        } else {
-            res.json({Data: data});
-        }
-    })
+    let addComments = '';
+    if (!commentData.replyId || commentData.fromReviewerId == reviewerId) {
+        Reply.create({
+            notesData: commentData.articleId,
+            userData: reviewerId,
+            replyData: [
+                {
+                    from: null,
+                    to: reviewerId,
+                    content: commentData.content
+                }
+            ]
+        }, function (err, data) {
+            if (err) {
+                res.status(500).json(Errors.networkError);
+            } else {
+                console.log(data)
+                res.json({suc: '123'})
+            }
+        });
+    } else {
+        Reply.findByIdAndUpdate(commentData.replyId, {
+            $push: {
+                replyData: {
+                    from: commentData.fromReviewerId,
+                    to: reviewerId,
+                    content: commentData.content
+                }
+            }
+        }, function (err, data) {
+            if (err) {
+                res.status(500).json(Errors.networkError);
+            } else {
+                console.log(data)
+                res.json({suc: '123'})
+            }
+        })
+    }
 }
 
 objFun.getCommentAjax = function (req, res, next) {
