@@ -3,6 +3,7 @@ let fs = require('fs');
 let md5 = require('../utils/md5');
 let Promise = require("bluebird");
 let moment = require('moment');
+let mongoose = require('mongoose');
 let Errors = require('../err/errors');
 
 let Admin = require('../models/Admin'); // admin db
@@ -106,7 +107,16 @@ objFun.notesDetail = function (req, res, next) {  //notesDetail
         // nextPage
         let nextPage = Notes.find({_id: {$gt: req.params.id}}).limit(1);
 
-        Promise.all([likes, prePage, nextPage]).then(data1 => {
+        // reply Number
+        let replyNum = Reply.aggregate([{
+            $match: {notesData: new mongoose.Types.ObjectId(req.params.id)}
+        }, {
+            $project: {
+                _id: 1, replyNum: {$size: '$replyData'}
+            }
+        }, {$group: {_id: null, replyNumber: {$sum: '$replyNum'}}}]);
+
+        Promise.all([likes, prePage, nextPage, replyNum]).then(data1 => {
             res.render('pc/nodeDetail', {
                 Data: {
                     id: data._id,
@@ -116,7 +126,7 @@ objFun.notesDetail = function (req, res, next) {  //notesDetail
                     category: data.category,
                     description: data.description,
                     author: data.author,
-                    replyData: data.replyData.length,
+                    replyData: data1[3],
                     tag: data.tag
                 },
                 content: JSON.stringify(data.content),
@@ -310,7 +320,6 @@ objFun.addCommentAjax = function (req, res, next) {     // public comments
             if (err) {
                 res.status(500).json(Errors.networkError);
             } else {
-                console.log(data)
                 res.json({suc: '123'})
             }
         })

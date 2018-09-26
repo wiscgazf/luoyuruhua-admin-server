@@ -30,7 +30,11 @@
                         <li><span>作者：</span><a href="javascript:void(0);"><%= Data.author.name %></a></li>
                         <li><span>时间：<%= Data.createTime %></span></li>
                         <li><span>浏览：<%= Data.pageView %>次</span></li>
-                        <li><span>评论：</span><a href="javascript:void(0);"><%= Data.replyData %></a></li>
+                        <% if(Data.replyData.length > 0){ %>
+                        <li><span>评论：</span><a href="javascript:void(0);"><%= Data.replyData[0].replyNumber %></a></li>
+                        <% }else{ %>
+                        <li><span>评论：</span><a href="javascript:void(0);">0</a></li>
+                        <% } %>
                     </ul>
                 </div>
                 <div class="notes_des"><%= Data.description %></div>
@@ -72,7 +76,11 @@
             </div>
             <% } %>
             <div class="reply_title">
-                <span class="left">共有<b><%= Data.replyData %></b>条评论</span>
+                <% if(Data.replyData.length > 0){ %>
+                <span class="left">共有<b><%= Data.replyData[0].replyNumber %></b>条评论</span>
+                <% }else{ %>
+                <span class="left">共有<b>0</b>条评论</span>
+                <% } %>
                 <a href="javascript:void(0);" class="right" onclick="replyComment(null,null,null);">发布评论</a>
             </div>
             <div class="reply_list">

@@ -70,7 +70,6 @@ objFun.publicData = function (req, res, next) {  //public data(sidebar)
         select: 'name userImg'
     }).sort({'replyData.createTime': -1});
     Promise.all([timeSort, pageViewSort, tagCloud, newReply]).then(data => {
-        console.log(data[3]);
         req.app.locals.sideBarData = {
             timeSortData: data[0].map(item => {
                 return {
