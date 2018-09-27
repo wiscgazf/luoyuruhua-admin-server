@@ -46,7 +46,7 @@ objFun.indexSuc = function (req, res, next) {   // index page
 };
 
 objFun.publicData = function (req, res, next) {  //public data(sidebar)
-    if (req.session.userinfo) {
+    if (req.session.userinfo) { //  路由拦截 判断用户是否登录
         User.findOne({name: req.session.userinfo}, function (err, data) {
             if (err) {
                 res.status(500).json(Errors.networkError);
@@ -57,41 +57,56 @@ objFun.publicData = function (req, res, next) {  //public data(sidebar)
     } else {
         delete req.app.locals.username;
     }
-    let timeSort = Notes.find().populate({
+
+    let timeSort = Notes.find().populate({  // 最新随笔
         path: 'author',
         select: 'name',
         model: 'admin'
     }).limit(3).sort({createTime: -1}).exec();
-    let pageViewSort = Notes.find().limit(3).sort({pageView: -1});
-    let tagCloud = Notes.distinct('tag');
-    let newReply = Reply.find({}).populate({
-        path: 'replyData.to',
-        model: 'user',
-        select: 'name userImg'
-    }).sort({'replyData.createTime': -1});
-    Promise.all([timeSort, pageViewSort, tagCloud, newReply]).then(data => {
-        req.app.locals.sideBarData = {
-            timeSortData: data[0].map(item => {
-                return {
-                    id: item._id,
-                    createTime: moment(item.createTime).format("YYYY-MM-DD"),
-                    title: item.title,
-                    thumbImg: item.thumbImg,
-                    author: item.author,
-                }
-            }),
-            pageViewData: data[1].map(item => {
-                return {
-                    id: item._id,
-                    createTime: moment(item.createTime).format("YYYY-MM-DD"),
-                    title: item.title,
-                    thumbImg: item.thumbImg,
-                    pageView: item.pageView
-                }
-            }),
-            tagData: data[2]
-        }
-        next();
+
+    let pageViewSort = Notes.find().limit(3).sort({pageView: -1});  // 随笔浏览量进行排序
+
+    let tagCloud = Notes.distinct('tag');   // 从Notes表中去重过滤出 标签云
+
+    //   聚合结合链表 找出最新的评论
+    Promise.try(() => {
+        return Reply.aggregate([{$unwind: '$replyData'}, {$sort: {'replyData.createTime': -1}}, {$limit: 3}]);
+    }).then(data => {
+        return User.populate(data, {path: 'replyData.to', model: 'user', select: 'name userImg'});
+    }).then(data1 => {
+        Promise.all([timeSort, pageViewSort, tagCloud]).then(data => {
+            req.app.locals.sideBarData = {
+                timeSortData: data[0].map(item => {
+                    return {
+                        id: item._id,
+                        createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                        title: item.title,
+                        thumbImg: item.thumbImg,
+                        author: item.author,
+                    }
+                }),
+                pageViewData: data[1].map(item => {
+                    return {
+                        id: item._id,
+                        createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                        title: item.title,
+                        thumbImg: item.thumbImg,
+                        pageView: item.pageView
+                    }
+                }),
+                tagData: data[2],
+                newReply: data1.map(item => {
+                    return {
+                        id: item.notesData,
+                        content: item.replyData.content,
+                        userImg: item.replyData.to.userImg,
+                        userName: item.replyData.to.name,
+                        createTime: moment(item.replyData.createTime).format("YYYY-MM-DD HH:mm:ss")
+                    }
+                })
+            }
+            next();
+        })
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     });

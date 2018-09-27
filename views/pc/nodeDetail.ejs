@@ -75,7 +75,7 @@
                 </div>
             </div>
             <% } %>
-            <div class="reply_title">
+            <div class="reply_title" id="comment">
                 <% if(Data.replyData.length > 0){ %>
                 <span class="left">共有<b><%= Data.replyData[0].replyNumber %></b>条评论</span>
                 <% }else{ %>
@@ -302,7 +302,6 @@
     window.onload = function () {
         loadComment();
     }
-
 
 </script>
 </html>

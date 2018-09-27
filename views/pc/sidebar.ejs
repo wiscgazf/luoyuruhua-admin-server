@@ -60,42 +60,20 @@
     <div class="public_side_wrap new_reply">
         <p class="public_title">最新评论</p>
         <div class="new_reply_con">
+            <% sideBarData.newReply.forEach(function (item, index) { %>
             <div class="reply_item">
                 <div class="reply_img left">
-                    <img src="/static/upload/user/user.png" alt="">
+                    <img src="<%= item.userImg %>" alt="">
                 </div>
                 <div class="right">
                     <div class="replyer">
-                        <span>落雨如画</span>
-                        <span>2018-02-03</span>
+                        <span><%= item.userName %></span>
+                        <span><%= item.createTime %></span>
                     </div>
-                    <a href="javascript:void(0);"><i></i>使用公共实例 组件之间传递数据 $on 多次触发</a>
+                    <a href="/notes/<%= item.id %>#comment"><i></i><%= item.content %></a>
                 </div>
             </div>
-            <div class="reply_item">
-                <div class="reply_img left">
-                    <img src="/static/upload/user/user.png" alt="">
-                </div>
-                <div class="right">
-                    <div class="replyer">
-                        <span>落雨如画</span>
-                        <span>2018-02-03</span>
-                    </div>
-                    <a href="javascript:void(0);"><i></i>使用公共实例 组件之间传递数据 $on 多次触发</a>
-                </div>
-            </div>
-            <div class="reply_item">
-                <div class="reply_img left">
-                    <img src="/static/upload/user/user.png" alt="">
-                </div>
-                <div class="right">
-                    <div class="replyer">
-                        <span>落雨如画</span>
-                        <span>2018-02-03</span>
-                    </div>
-                    <a href="javascript:void(0);"><i></i>使用公共实例 组件之间传递数据 $on 多次触发</a>
-                </div>
-            </div>
+            <% }) %>
         </div>
     </div>
     <!--page_views-->
