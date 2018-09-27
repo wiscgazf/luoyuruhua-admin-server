@@ -12,11 +12,16 @@ let User = require('../models/User'); // user db
 
 let Notes = require('../models/Notes'); // notes db
 
+let Reply = require('../models/Reply'); // reply db
+
 objFun.indexSuc = function (req, res, next) {   // index page
     Notes.find().populate({
         path: 'author',
         select: 'name',
         model: 'admin'
+    }).populate({
+        path: 'replyData',
+        model: 'reply'
     }).limit(10).sort({createTime: -1}).exec(function (err, data) {
         if (err) {
             res.status(500).json(Errors.networkError);
@@ -32,7 +37,7 @@ objFun.indexSuc = function (req, res, next) {   // index page
                         category: item.category,
                         description: item.description,
                         author: item.author,
-                        replyData: item.replyData.length
+                        replyData: item.replyData
                     }
                 })
             })
@@ -58,7 +63,13 @@ objFun.publicData = function (req, res, next) {  //public data(sidebar)
         model: 'admin'
     }).limit(3).sort({createTime: -1}).exec();
     let pageViewSort = Notes.find().limit(3).sort({pageView: -1});
-    Promise.all([timeSort, pageViewSort]).then(data => {
+    let tagCloud = Notes.distinct('tag');
+    let newReply = Reply.find({}).populate({
+        path: 'replyData.to',
+        model: 'user',
+        select: 'name userImg'
+    }).sort({'replyData.createTime': -1});
+    Promise.all([timeSort, pageViewSort, tagCloud, newReply]).then(data => {
         req.app.locals.sideBarData = {
             timeSortData: data[0].map(item => {
                 return {
@@ -77,7 +88,8 @@ objFun.publicData = function (req, res, next) {  //public data(sidebar)
                     thumbImg: item.thumbImg,
                     pageView: item.pageView
                 }
-            })
+            }),
+            tagData: data[2]
         }
         next();
     }).catch(err => {

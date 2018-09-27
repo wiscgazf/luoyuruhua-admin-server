@@ -31,6 +31,12 @@
             <div class="notes">
                 <% if(Datas.length > 0){ %>
                 <% Datas.forEach((item, index)=>{ %>
+                <% var replyNum = 0; %>
+                <% if(item.replyData.length > 0){ %>
+                <% for(var i = 0;i < item.replyData.length;i++){ %>
+                <% replyNum += item.replyData[i].replyData.length %>
+                <% } %>
+                <% } %>
                 <div class="notes_item">
                     <div class="thumb_img left"><img src="<%= item.thumbImg %>" alt=""></div>
                     <div class="notes_con right">
@@ -44,7 +50,7 @@
                             <span class="page_view left" title="浏览">(<a
                                         href="javascript:void(0)"><%= item.pageView %></a>)</span>
                             <span class="reply_num left" title="评论">(<a href="javascript:void(0)"><span
-                                            style="padding-left: 0px;margin-right: 0px;"><%= item.replyData %></span></a>)</span>
+                                            style="padding-left: 0px;margin-right: 0px;"><%= replyNum %></span></a>)</span>
                             <span class="lm right"><a href="javascript:void(0)"><%= item.category %></a></span>
                         </div>
                     </div>

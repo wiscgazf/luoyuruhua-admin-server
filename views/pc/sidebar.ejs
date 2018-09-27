@@ -122,15 +122,9 @@
     <div class="tag_list public_side_wrap">
         <p class="public_title">标签云</p>
         <ul class="tag_wrap public_padding">
-            <li><a href="javascript:void(0);">nodejs</a></li>
-            <li><a href="javascript:void(0);">jquery</a></li>
-            <li><a href="javascript:void(0);">javascript</a></li>
-            <li><a href="javascript:void(0);">nodejs</a></li>
-            <li><a href="javascript:void(0);">jquery</a></li>
-            <li><a href="javascript:void(0);">javascript</a></li>
-            <li><a href="javascript:void(0);">nodejs</a></li>
-            <li><a href="javascript:void(0);">jquery</a></li>
-            <li><a href="javascript:void(0);">javascript</a></li>
+            <% sideBarData.tagData.forEach(function (item, index) { %>
+            <li><a href="/notes?search=<%= item %>"><%= item %></a></li>
+            <% }) %>
         </ul>
     </div>
     <!--friend_link-->
