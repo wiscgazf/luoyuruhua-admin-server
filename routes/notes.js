@@ -22,6 +22,8 @@ router.put('/editNotes', bussinessFun.editNotesAjax);    // edit notes api
 
 router.delete('/delNotes', bussinessFun.delNotesAjax);    // delete notes api
 
+router.get('/getCommentData', bussinessFun.getCommentDataAjax);    // server get comments list api
+
 //ajax request ----------------------------------------- web
 router.post('/addComment', bussinessFun.addCommentAjax)  // add comments
 

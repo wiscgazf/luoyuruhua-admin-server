@@ -14,6 +14,8 @@ let Notes = require('../models/Notes'); // notes db
 
 let Reply = require('../models/Reply'); // reply db
 
+let routerAdd = ['/notes/', '/showreel/'];
+
 objFun.indexSuc = function (req, res, next) {   // index page
     Notes.find().populate({
         path: 'author',
@@ -97,7 +99,7 @@ objFun.publicData = function (req, res, next) {  //public data(sidebar)
                 tagData: data[2],
                 newReply: data1.map(item => {
                     return {
-                        id: item.notesData,
+                        url: routerAdd[item.status] + item.notesData,
                         content: item.replyData.content,
                         userImg: item.replyData.to.userImg,
                         userName: item.replyData.to.name,

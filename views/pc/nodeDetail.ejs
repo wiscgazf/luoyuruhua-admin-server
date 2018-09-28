@@ -204,7 +204,7 @@
             alert('骚年，多写点吧！');
         } else {
             $.ajax({
-                url: '/addComment',
+                url: '/addComment?Status=0',
                 type: 'POST',
                 data: {
                     articleId: '<%= Data.id %>',
@@ -227,7 +227,7 @@
 
     function loadComment() {
         $.ajax({
-            url: '/getComment',
+            url: '/getComment?Status=0',
             type: 'GET',
             data: {
                 id: '<%= Data.id %>',
@@ -302,6 +302,5 @@
     window.onload = function () {
         loadComment();
     }
-
 </script>
 </html>

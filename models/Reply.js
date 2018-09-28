@@ -11,6 +11,7 @@ let replySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
+    status: Number,
     replyData: [
         {
             createTime: {

@@ -253,7 +253,7 @@ objFun.findNotesAjax = function (req, res, next) {  // find notes bussiness
     })
 }
 
-objFun.editNotesAjax = function (req, res, next) {
+objFun.editNotesAjax = function (req, res, next) {  // edit Notes bussiness
     Notes.update({_id: req.body.id}, {$set: req.body.form}, function (err, data) {
         if (err) {
             res.status(500).json(Errors.networkError);
@@ -263,7 +263,7 @@ objFun.editNotesAjax = function (req, res, next) {
     })
 }
 
-objFun.delNotesAjax = function (req, res, next) {
+objFun.delNotesAjax = function (req, res, next) {   // delete Notes bussiness
     let updateData = [];
     Promise.try(() => {
         return Admin.findById(req.body.id);
@@ -283,6 +283,24 @@ objFun.delNotesAjax = function (req, res, next) {
     })
 }
 
+objFun.getCommentDataAjax = function (req, res, next) {
+    Promise.try(() => {
+        return Reply.aggregate([{$unwind: '$replyData'}, {$match: {}}, {
+            $project: {
+                _id: 1,
+                notesData: 1,
+                replyData: 1
+            }
+        }, {$sort: {'replyData.createTime': -1}}]);
+    }).then(data => {
+        return Notes.populate(data, {select: 'title', path: 'notesData', model: 'notes'});
+    }).then(data => {
+        res.json(data)
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    });
+}
+
 // ajax bussiness  ------------------------- web
 objFun.addCommentAjax = function (req, res, next) {     // public comments
     let commentData = req.body;
@@ -292,6 +310,7 @@ objFun.addCommentAjax = function (req, res, next) {     // public comments
             return Reply.create({
                 notesData: commentData.articleId,
                 userData: reviewerId,
+                status: req.query.Status,
                 replyData: [
                     {
                         from: null,
