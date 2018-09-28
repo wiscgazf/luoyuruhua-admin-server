@@ -85,7 +85,7 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
             });
         }
     }).catch(err => {
-        console.log(err)
+        res.status(500).json(Errors.networkError);
     })
 
 }
@@ -210,6 +210,9 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
                 path: 'author',
                 select: 'name',
                 model: 'admin'
+            }).populate({
+                path: 'replyData',
+                model: 'reply'
             }).skip(pageOffset).limit(parseInt(baseMsg.showCount)).sort({createTime: -1}).exec();
         } else {
             return Notes.find({
@@ -219,6 +222,9 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
                 path: 'author',
                 select: 'name',
                 model: 'admin'
+            }).populate({
+                path: 'replyData',
+                model: 'reply'
             }).sort({createTime: -1}).skip(pageOffset).limit(parseInt(baseMsg.showCount)).exec();
         }
     }).then(data => {

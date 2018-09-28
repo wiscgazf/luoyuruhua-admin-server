@@ -1,0 +1,59 @@
+/*清楚指定标签默认样式*/
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html, body, ul, ol, p, div, table, tr, td, th, select, form, button, h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0;
+  font-family: 'Microsoft Yahei';
+}
+
+a {
+  text-decoration: none;
+}
+
+input, select {
+  outline: none;
+}
+
+a img {
+  border: none;
+}
+
+li {
+  list-style: none;
+}
+
+video::-webkit-media-controls {
+  display: none !important;
+}
+
+*::-webkit-media-controls-panel {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+*::--webkit-media-controls-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+*::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+video::-webkit-media-controls {
+  display: none !important;
+}
+
+video::-webkit-media-controls-start-playback-button {
+
+  display: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
