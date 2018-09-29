@@ -264,16 +264,8 @@ objFun.editNotesAjax = function (req, res, next) {  // edit Notes bussiness
 }
 
 objFun.delNotesAjax = function (req, res, next) {   // delete Notes bussiness
-    let updateData = [];
     Promise.try(() => {
-        return Admin.findById(req.body.id);
-    }).then(data => {
-        data.notesData.map((item, index) => {
-            if (item._id == req.body.notesId) {
-                return data.notesData.splice(index, 1)
-            }
-        })
-        return Admin.update({_id: req.body.id}, {$set: {notesData: data.notesData}});
+        return Admin.update({_id: req.body.id}, {$pull: {notesData: req.body.notesId}});
     }).then(data => {
         return Notes.remove({_id: req.body.notesId});
     }).then(data => {
@@ -284,21 +276,26 @@ objFun.delNotesAjax = function (req, res, next) {   // delete Notes bussiness
 }
 
 objFun.getCommentDataAjax = function (req, res, next) {
-    Promise.try(() => {
-        return Reply.aggregate([{$unwind: '$replyData'}, {$match: {}}, {
-            $project: {
-                _id: 1,
-                notesData: 1,
-                replyData: 1
-            }
-        }, {$sort: {'replyData.createTime': -1}}]);
-    }).then(data => {
-        return Notes.populate(data, {select: 'title', path: 'notesData', model: 'notes'});
-    }).then(data => {
-        res.json(data)
-    }).catch(err => {
-        res.status(500).json(Errors.networkError);
-    });
+    Reply.find({$and: [{'replyData.createTime': {$gte: moment(req.query.dataTime[0]).format()}}, {'replyData.createTime': {$lte: moment(req.query.dataTime[1]).format()}}]}).populate({
+        select: 'title',
+        model: 'notes',
+        path: 'notesData'
+    }).populate({
+        select: 'name userImg',
+        model: 'user',
+        path: 'replyData.to'
+    }).populate({
+        select: 'name userImg',
+        model: 'user',
+        path: 'replyData.from'
+    }).exec(function (err, data) {
+        if (err) {
+            res.status(500).json(Errors.networkError);
+        } else {
+            console.log(data)
+            res.json(data);
+        }
+    })
 }
 
 // ajax bussiness  ------------------------- web
@@ -374,9 +371,6 @@ objFun.getCommentAjax = function (req, res, next) {
             }
 
             return Reply.find({notesData: req.query.id}).populate({
-                path: 'notesData',
-                model: 'notes'
-            }).populate({
                 path: 'userData',
                 model: 'user',
                 select: 'name userImg'

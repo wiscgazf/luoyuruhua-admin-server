@@ -14,7 +14,7 @@ let Notes = require('../models/Notes'); // notes db
 
 let Reply = require('../models/Reply'); // reply db
 
-let routerAdd = ['/notes/', '/showreel/'];
+let routerAdd = ['/notes/', '/showreel/', '/album/', '/music/', '/about/', '/message/'];
 
 objFun.indexSuc = function (req, res, next) {   // index page
     Notes.find().populate({

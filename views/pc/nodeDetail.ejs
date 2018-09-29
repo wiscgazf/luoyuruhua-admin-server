@@ -192,6 +192,8 @@
             $('.text').focus();
             if (userName && userName != $('.login_suc a span').text()) {
                 $('.text').attr('placeholder', '回复@' + userName);
+            } else {
+                $('.text').val('').attr('placeholder', '请输入 . . .');
             }
         } else {
             window.location.href = '/login';
@@ -279,7 +281,7 @@
                                 '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
                                 '    <div class="right reply_con">' +
                                 '        <div class="reply_user">' +
-                                '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ')">' + item.userData.name + '</span>' +
+                                '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ',' + "'" + item.userData.name + "'" + ')">' + item.userData.name + '</span>' +
                                 '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
                                 '        </div>' +
                                 '        <div class="comment_con">' +
