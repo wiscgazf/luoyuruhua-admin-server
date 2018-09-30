@@ -21,6 +21,6 @@ module.exports = {
     userLoginWarn: {msg: '0', code: '10007', des: '用户名或密码错误'},
     userLoginSuc: {msg: '1', code: '200', des: '登陆成功'},
     replySuc: {msg: '1', code: '200', des: '评论成功'},
-    delCommentError: {msg: '0', code: '10008', des: '删除评论失败'},
+    delCommentError: {msg: '0', code: '10008', des: '删除评论失败,请检查网络设置'},
     delCommentSuc: {msg: '1', code: '200', des: '删除评论成功'}
 }

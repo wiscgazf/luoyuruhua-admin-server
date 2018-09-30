@@ -1,6 +1,7 @@
 let objFun = {};
 let fs = require('fs');
 let md5 = require('../utils/md5');
+let sendEmail = require('../utils/sendEmail');
 let Promise = require("bluebird");
 let moment = require('moment');
 let mongoose = require('mongoose');
@@ -332,14 +333,25 @@ objFun.deleteCommentDataAjax = function (req, res, next) {
         }]);
         if (filterComment[0].childCommentNum == 1) {
             await Reply.remove({_id: req.body.commentId});
-            delSuc = await Notes.update({_id: req.body.articleId}, {$pull: {replyData: req.body.commentId}});
+            delSuc = await Notes.update({_id: req.body.articleID}, {$pull: {replyData: req.body.commentId}});
         } else {
-            await Reply.update({_id: req.body.commentId}, {$pull: {replyData: req.body.commentChildId}});
+            delSuc = await Reply.update({_id: req.body.commentId}, {$pull: {replyData: {_id: req.body.commentChildId}}});
         }
         return delSuc;
     }
     asyncFun().then(data => {
-        res.json(data)
+        if (data.ok == 1) {
+            User.findById(req.body.userId, function (err, data1) {
+                if (err) {
+                    res.status(500).json(Errors.networkError);
+                } else {
+                    sendEmail('<span>尊敬的用户：<' + data1.email + '></span><p>您好！</p><span>由于您在该平台上的评论信息涉及违规，系统已自动为您删除该条评论。</span><p><span style="color: #f00;">注意：</span>违规次数10次以上系统会自动冻结您的账户，请遵守网上文明评论守则规范！</p><span>系统自动发送，请勿直接回复此邮件！</span>', '<' + data1.email + '}>');
+                }
+            });
+            res.json(Errors.delCommentSuc);
+        } else {
+            res.json(Errors.delCommentError);
+        }
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     });
