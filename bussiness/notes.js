@@ -275,27 +275,74 @@ objFun.delNotesAjax = function (req, res, next) {   // delete Notes bussiness
     })
 }
 
-objFun.getCommentDataAjax = function (req, res, next) {
-    Reply.find({$and: [{'replyData.createTime': {$gte: moment(req.query.dataTime[0]).format()}}, {'replyData.createTime': {$lte: moment(req.query.dataTime[1]).format()}}]}).populate({
-        select: 'title',
-        model: 'notes',
-        path: 'notesData'
-    }).populate({
-        select: 'name userImg',
-        model: 'user',
-        path: 'replyData.to'
-    }).populate({
-        select: 'name userImg',
-        model: 'user',
-        path: 'replyData.from'
-    }).exec(function (err, data) {
-        if (err) {
-            res.status(500).json(Errors.networkError);
+objFun.getCommentDataAjax = function (req, res, next) { // server get comments Data bussiness
+    let matchObj = {};
+    let total = 0;
+    let totalPage = 0;
+    Promise.try(() => {
+        if (req.query.dataTime) {
+            matchObj = {
+                $and: [{
+                    'replyData.createTime': {
+                        $gte: new Date(moment(req.query.dataTime[0]).format()),
+                        $lte: new Date(moment(req.query.dataTime[1]).format())
+                    }
+                }, {'status': parseInt(req.query.channelId)}]
+            }
         } else {
-            console.log(data)
-            res.json(data);
+            matchObj = {
+                'status': parseInt(req.query.channelId)
+            }
         }
-    })
+        return Reply.aggregate([{$unwind: '$replyData'}, {$match: matchObj}, {$count: 'totalCount'}]);
+    }).then(data => {
+        if (data.length == 0) {
+            res.json({msg: '1', code: '200', des: 'succsss', Data: null});
+        } else {
+            total = data[0].totalCount;
+            totalPage = Math.ceil(total / req.query.showCount);
+            let skipNum = parseInt(req.query.currentPage - 1) * parseInt(req.query.showCount);
+            return Reply.aggregate([{$unwind: '$replyData'}, {$match: matchObj}, {$skip: skipNum}, {
+                $project: {_id: 1, notesData: 1, replyData: 1, status: 1}
+            }, {$sort: {'replyData.createTime': -1}}]);
+        }
+    }).then(data => {
+        if (req.query.channelId == 0) {
+            return Notes.populate(data, {model: 'notes', select: 'title', path: 'notesData'});
+        }
+    }).then(data => {
+        return User.populate(data, {model: 'user', select: 'name userImg', path: 'replyData.to replyData.from'});
+    }).then(data => {
+        res.json({Data: data, total: total, totalPage: totalPage});
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    });
+};
+
+objFun.deleteCommentDataAjax = function (req, res, next) {
+    let asyncFun = async function () {
+        let delSuc = {};
+        let filterComment = await Reply.aggregate([{$match: {_id: new mongoose.Types.ObjectId(req.body.commentId)}}, {
+            $project: {
+                _id: 0,
+                childCommentNum: {
+                    $size: '$replyData'
+                }
+            }
+        }]);
+        if (filterComment[0].childCommentNum == 1) {
+            await Reply.remove({_id: req.body.commentId});
+            delSuc = await Notes.update({_id: req.body.articleId}, {$pull: {replyData: req.body.commentId}});
+        } else {
+            await Reply.update({_id: req.body.commentId}, {$pull: {replyData: req.body.commentChildId}});
+        }
+        return delSuc;
+    }
+    asyncFun().then(data => {
+        res.json(data)
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    });
 }
 
 // ajax bussiness  ------------------------- web
@@ -375,11 +422,7 @@ objFun.getCommentAjax = function (req, res, next) {
                 model: 'user',
                 select: 'name userImg'
             }).populate({
-                path: 'replyData.from',
-                model: 'user',
-                select: 'name userImg'
-            }).populate({
-                path: 'replyData.to',
+                path: 'replyData.from replyData.to',
                 model: 'user',
                 select: 'name userImg'
             }).skip(parseInt(showCount * (currentPage - 1))).limit(showCount).sort({'replyData.createTime': -1});

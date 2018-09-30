@@ -24,6 +24,8 @@ router.delete('/delNotes', bussinessFun.delNotesAjax);    // delete notes api
 
 router.get('/getCommentData', bussinessFun.getCommentDataAjax);    // server get comments list api
 
+router.delete('/deleteComment', bussinessFun.deleteCommentDataAjax);    // server delete comments list api
+
 //ajax request ----------------------------------------- web
 router.post('/addComment', bussinessFun.addCommentAjax)  // add comments
 
