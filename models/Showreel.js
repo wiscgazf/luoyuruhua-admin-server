@@ -2,7 +2,7 @@ let mongoose = require('mongoose');
 
 let db = require('../config/mongodbConfig');
 
-let notesSchema = new mongoose.Schema({
+let showreelSchema = new mongoose.Schema({
     createTime: {
         type: Date,
         default: Date.now
@@ -24,12 +24,10 @@ let notesSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    tag: Array,
+    tecTag: Array,
     category: String,
-    description: String,
-    author: {type: mongoose.Schema.Types.ObjectId, ref: 'admin'},
     replyData: [{type: mongoose.Schema.Types.ObjectId, ref: 'reply'}]
 });
 
 
-module.exports = db.zhoufeiMongoose.model('notes', notesSchema);
+module.exports = db.zhoufeiMongoose.model('showreel', showreelSchema);

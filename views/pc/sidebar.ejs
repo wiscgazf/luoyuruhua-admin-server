@@ -101,7 +101,9 @@
         <p class="public_title">标签云</p>
         <ul class="tag_wrap public_padding">
             <% sideBarData.tagData.forEach(function (item, index) { %>
-            <li><a href="/notes?search=<%= item %>"><%= item %></a></li>
+            <li><a href="javascript:void(0);"
+                   onclick="window.location.href='/notes?search='+encodeURI('<%= item %>')"><%= item %></a>
+            </li>
             <% }) %>
         </ul>
     </div>
@@ -137,7 +139,7 @@
     function searchKeyword() {
         var searchCon = document.getElementById('keywords').value;
         if (searchCon) {
-            window.location.href = '/notes?search=' + searchCon;
+            window.location.href = '/notes?search=' + encodeURI(searchCon);
         } else {
             alert('搜索内容不能为空，亲！');
         }

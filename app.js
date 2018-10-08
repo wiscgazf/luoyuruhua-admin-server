@@ -43,7 +43,7 @@ app.use(expressSession({
 
 app.use(express.static(path.join(__dirname, 'public'))); // 映射公共文件到public
 
-app.use(express.static(path.join(__dirname, './'))); // 映射文件到当前目录
+app.use(express.static(path.join(__dirname, '/'))); // 映射文件到当前目录
 
 app.use(require('./bussiness/index').publicData); // 侧边栏 数据
 
@@ -57,16 +57,16 @@ app.use(require('./routes/notes')); // 处理随笔方面的路由
 
 app.use("/ue/upload", ueditor(path.join(__dirname, 'static'), function (req, res, next) {
     //客户端上传文件设置
-    var imgDir = './ue_upload/images/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/';
+    var imgDir = 'ue_upload/images/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/';
     var ActionType = req.query.action;
     if (ActionType === 'uploadimage' || ActionType === 'uploadfile' || ActionType === 'uploadvideo') {
         var file_url = imgDir;//默认图片上传地址
         /*其他上传格式的地址*/
         if (ActionType === 'uploadfile') {
-            file_url = './ue_upload/file/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/'; //附件
+            file_url = 'ue_upload/file/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/'; //附件
         }
         if (ActionType === 'uploadvideo') {
-            file_url = './ue_upload/video/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/'; //视频
+            file_url = 'ue_upload/video/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/'; //视频
         }
         res.ue_up(file_url); //你只要输入要保存的地址 。保存操作交给ueditor来做
         res.setHeader('Content-Type', 'text/html');
