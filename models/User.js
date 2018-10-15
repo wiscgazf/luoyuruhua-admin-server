@@ -1,6 +1,8 @@
 let mongoose = require('mongoose');
 
 let db = require('../config/mongodbConfig');
+let userImg = ['/upload/user/user.png', '/upload/user/user1.jpg', '/upload/user/user2.jpg'];
+let randomImg = parseInt(3 * Math.random());
 
 let userSchema = new mongoose.Schema({
     name: {
@@ -17,7 +19,7 @@ let userSchema = new mongoose.Schema({
     },
     userImg: {
         type: String,
-        default: '/static/upload/user/user.png'
+        default: userImg[randomImg]
     },
     signature: String,
     createTime: {

@@ -43,7 +43,7 @@ app.use(expressSession({
 
 app.use(express.static(path.join(__dirname, 'public'))); // 映射公共文件到public
 
-app.use(express.static(path.join(__dirname, '/'))); // 映射文件到当前目录
+app.use(express.static(path.join(__dirname, 'static'))); // 映射文件static目录
 
 app.use(require('./bussiness/index').publicData); // 侧边栏 数据
 
@@ -54,6 +54,8 @@ app.use(require('./routes/admin')); // 处理管理员方面的路由
 app.use(require('./routes/user')); // 处理用户方面的路由
 
 app.use(require('./routes/notes')); // 处理随笔方面的路由
+
+app.use(require('./routes/showreel')); // 处理作品集方面的路由
 
 app.use("/ue/upload", ueditor(path.join(__dirname, 'static'), function (req, res, next) {
     //客户端上传文件设置
