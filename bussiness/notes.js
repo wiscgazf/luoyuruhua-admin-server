@@ -1,6 +1,7 @@
 let objFun = {};
 let fs = require('fs');
 let md5 = require('../utils/md5');
+let path = require('path');
 let sendEmail = require('../utils/sendEmail');
 let Promise = require("bluebird");
 let moment = require('moment');
@@ -88,7 +89,6 @@ objFun.notesList = function (req, res, next) {  // find all notes and condition 
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })
-
 }
 
 objFun.notesDetail = function (req, res, next) {  //notesDetail
@@ -147,7 +147,7 @@ objFun.addthumbImgAjax = function (req, res, next) {    // add notes thumbImg  b
     let base64Data = req.body.thumbImg.replace(/^data:image\/\w+;base64,/, "");
     let dataBuffer = Buffer.from(base64Data, 'base64');
     var imgName = new Date().getTime();
-    fs.writeFile('static/upload/notes/' + imgName + '.png', dataBuffer, function (err, data) {
+    fs.writeFile(path.join(__dirname, '../static/upload/notes/') + imgName + '.png', dataBuffer, function (err, data) {
         if (err) {
             res.status(500).json(Errors.networkError);
         } else {

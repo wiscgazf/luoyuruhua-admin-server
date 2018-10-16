@@ -19,99 +19,22 @@
 <!--content-->
 <div class="content">
     <div class="content_con">
-        <div class="showreel_num">全部<b>12</b>篇</div>
+        <div class="showreel_num">全部<b><%= count %></b>篇</div>
         <div class="showreel_list">
+            <% Datas.forEach(function (item, index) { %>
             <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
+                <a href="<%= pagePath %>/<%= item.id %>"><img
+                            src="<%= item.thumbImg %>" alt=""></a>
+                <p><%= item.category %> - <%= item.title %></p>
                 <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
+                    <li class="left"><%= item.createTime %></li>
+                    <li class="right"><%= item.pageView %></li>
                 </ul>
             </div>
-            <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
-                <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
-                </ul>
-            </div>
-            <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
-                <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
-                </ul>
-            </div>
-            <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
-                <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
-                </ul>
-            </div>
-            <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
-                <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
-                </ul>
-            </div>
-            <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
-                <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
-                </ul>
-            </div>
-            <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
-                <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
-                </ul>
-            </div>
-            <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
-                <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
-                </ul>
-            </div>
-            <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
-                <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
-                </ul>
-            </div>
-            <div class="showreel_item">
-                <a href="javascript:void(0);"><img
-                            src="https://www.yezipi.net/upload/article/small/smallpic_2018913115218.jpg" alt=""></a>
-                <p>小程序-塔罗心里测试</p>
-                <ul>
-                    <li class="left">2018/9/13</li>
-                    <li class="right">30</li>
-                </ul>
-            </div>
+            <% }) %>
         </div>
+        <!--paging 分页-->
+        <% include ./paging.ejs %>
     </div>
 </div>
 <% include ./footer.ejs %>

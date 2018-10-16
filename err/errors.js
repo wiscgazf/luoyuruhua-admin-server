@@ -22,5 +22,9 @@ module.exports = {
     userLoginSuc: {msg: '1', code: '200', des: '登陆成功'},
     replySuc: {msg: '1', code: '200', des: '评论成功'},
     delCommentError: {msg: '0', code: '10008', des: '删除评论失败,请检查网络设置'},
-    delCommentSuc: {msg: '1', code: '200', des: '删除评论成功'}
+    delCommentSuc: {msg: '1', code: '200', des: '删除评论成功'},
+    addShowreelSuc: {msg: '1', code: '200', des: '添加成功'},
+    getShowreelSuc: {msg: '1', code: '200', des: '获取作品集信息成功'},
+    editShowreelSuc: {msg: '1', code: '200', des: '编辑作品成功'},
+    delShowreelSuc: {msg: '1', code: '200', des: '删除作品成功'},
 }
