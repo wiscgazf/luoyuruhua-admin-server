@@ -1,0 +1,36 @@
+/*content*/
+.content {
+    width: 100%;
+    padding-top: 30px;
+}
+
+.content .content_con {
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.con_left .showreel {
+    width: 754px;
+    padding: 25px;
+    background: #fff;
+}
+
+.con_left .showreel h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2C9BD8;
+    font-size: 22px;
+}
+
+.con_left .showreel .showreel_con {
+    text-align: center;
+}
+
+.con_left .showreel .showreel_con p {
+    text-align: left;
+}
+
+.con_left .showreel .showreel_con img {
+    max-width: 100%;
+}

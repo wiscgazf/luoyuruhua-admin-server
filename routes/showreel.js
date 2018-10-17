@@ -4,7 +4,9 @@ let bussinessFun = require('../bussiness/showreel');
 
 
 // show  page router ---------------------------------------
-router.get('/showreel', bussinessFun.showreelSuc);
+router.get('/showreel', bussinessFun.showreelSuc);  // showreel.html
+
+router.get('/showreel/:id', bussinessFun.showreelDetail)    // showreel detail html
 
 /*
 * server ajax
