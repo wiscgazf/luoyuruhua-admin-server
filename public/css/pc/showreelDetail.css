@@ -18,7 +18,7 @@
 
 .con_left .showreel h2 {
     text-align: center;
-    margin-bottom: 30px;
+    margin: 20px auto 30px;
     color: #2C9BD8;
     font-size: 22px;
 }
@@ -33,4 +33,71 @@
 
 .con_left .showreel .showreel_con img {
     max-width: 100%;
+}
+
+/*right_con*/
+.overview {
+    padding: 20px 15px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+.overview .overview_img {
+    text-align: center;
+}
+
+.overview .overview_img img {
+    max-width: 100%;
+}
+
+.overview .overview_des {
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+    padding: 15px 0 30px;
+}
+
+.overview ul {
+    overflow: hidden;
+}
+
+.overview ul li {
+    float: left;
+    width: 33%;
+    text-align: center;
+}
+
+.overview ul li b {
+    color: #666;
+    font-size: 18px;
+}
+
+.overview ul li p {
+    color: #888;
+    font-size: 12px;
+    margin: 2px auto 5px;
+}
+
+.overview ul li:nth-child(2) {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.overview a {
+    display: block;
+    width: 280px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    margin: 25px auto 18px;
+    color: #fff;
+    background: rgba(44, 155, 216, .7);
+    transition: all .3s linear 0s;
+    -webkit-transition: all .3s linear 0s;
+    -ms-transition: all .3s linear 0s;
+    font-size: 16px;
+}
+
+.overview a:hover {
+    background: rgba(44, 155, 216, 1);
 }
