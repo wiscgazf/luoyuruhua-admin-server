@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/public.css">
+    <link rel="stylesheet" href="/css/pc/sinaFaceAndEffec.css">
     <link rel="stylesheet" href="/css/pace-theme-minimal.css">
     <link rel="stylesheet" href="/css/pc/header_footer.css">
     <link rel="stylesheet" href="/css/pc/sidebar.css">
@@ -30,6 +31,54 @@
                     <img src="https://www.yezipi.net/upload/Article/201809131536809951.jpg" alt=""><br>
                     <img src="http://www.ysjhacc.com/upload/ggao/201809/10/201809100951394519.jpg" alt=""><br>
                     <img src="https://www.yezipi.net/upload/Article/201809131536809951.jpg" alt=""><br>
+                </div>
+                <div class="detail_tag_list">
+
+                    <a href="/notes?search=javascript">javascript</a>
+
+                    <a href="/notes?search=css">css</a>
+
+                </div>
+            </div>
+            <ul class="up_next">
+
+                <li><span>上一篇：</span><a href="javascript:void(0);" style="color: #759b08;">没有了</a></li>
+
+
+                <li><span>下一篇：</span><a href="/notes/5b85febf8a5ad82278007b1b">test9</a></li>
+
+            </ul>
+            <div class="reply_title" id="comment">
+
+                <span class="left">共有<b>0</b>条评论</span>
+
+                <a href="javascript:void(0);" class="right" onclick="replyComment(null,null,null);">发布评论</a>
+            </div>
+            <div class="reply_list">
+                <ul></ul>
+            </div>
+            <div class="comment_wrap">
+                <div class="comment">
+                    <div class="content">
+                        <div class="cont-box">
+                            <textarea class="text" placeholder="请输入 . . ." maxlength="2000" required=""></textarea>
+                        </div>
+                        <div class="tools-box">
+                            <div class="operator-box-btn"><span class="face-icon">☺</span><span
+                                        class="img-icon">▧</span></div>
+
+                            <% if(locals.username){ %>
+                            <div class="submit-btn"><input type="button" onclick="submitComment()"
+                                                           value="提交评论">
+                            </div>
+                            <% }else { %>
+                            <div class="submit-btn"><input type="button" value="登录"
+                                                           onclick="window.location.href='/login'"></div>
+                            <% } %>
+
+                        </div>
+                    </div>
+                    <div class="contents"></div>
                 </div>
             </div>
         </div>
@@ -129,6 +178,136 @@
 </body>
 <script type="text/javascript" src="/js/pace.min.js"></script>
 <script type="text/javascript" src="/js/pc/listening.js"></script>
+<script src="/js/pc/sinaFaceAndEffec.js"></script>
 <script type="text/javascript">
+    var page = 1;
+    var parentReviewer = '';
+
+    // bind face
+    $('.face-icon').SinaEmotion($('.text'));
+
+    // 测试本地解析
+    var replyItemId = null;
+    var replyfromId = null;
+
+    function replyComment(commentId, fromId, userName) {
+        replyItemId = commentId;
+        replyfromId = fromId;
+        if ($('.login_suc').html()) {
+            $('.text').focus();
+            if (userName && userName != $('.login_suc a span').text()) {
+                $('.text').attr('placeholder', '回复@' + userName);
+            } else {
+                $('.text').val('').attr('placeholder', '请输入 . . .');
+            }
+        } else {
+            window.location.href = '/login';
+        }
+    }
+
+    function submitComment() {
+        var inputText = $('.text').val();
+        if (jQuery.trim(inputText).length < 10) {
+            alert('骚年，多写点吧！');
+        } else {
+            $.ajax({
+                url: '/addComment?Status=0',
+                type: 'POST',
+                data: {
+                    articleId: '5b88bb4784e36324685e5305',
+                    replyId: replyItemId,
+                    fromReviewerId: replyfromId,
+                    content: inputText
+                },
+                success: function (data) {
+                    replyItemId = null;
+                    replyfromId = null;
+                    $('.text').val('').attr('placeholder', '请输入 . . .');
+                    loadComment();
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        }
+    }
+
+    function loadComment() {
+        $.ajax({
+            url: '/getComment?Status=1',
+            type: 'GET',
+            data: {
+                id: '5bc583a471e544299c732dfe',
+                page: page
+            },
+            success: function (data) {
+                var str = '';
+                var Data = data.Data;
+                if (Data) {
+                    Data.forEach(function (item, indx) {
+                        if (item.replyData.length == 1) {
+                            var newStr = '<p>' + AnalyticEmotion(item.replyData[0].content) + '</p>';
+                            str += '<li>' +
+                                '    <span></span>' +
+                                '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
+                                '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
+                                '    <div class="right reply_con">' +
+                                '        <div class="reply_user">' +
+                                '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ',' + "'" + item.userData.name + "'" + ')">' + item.userData.name + '</span>' +
+                                '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
+                                '        </div>' +
+                                '        <div class="comment_con">' + newStr + '</div>' +
+                                '    </div>' +
+                                '</li>';
+                        } else {
+                            var strItem = '';
+                            for (var i = 1; i < item.replyData.length; i++) {
+                                strItem += '<li>' +
+                                    '    <span></span>' +
+                                    '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
+                                    '                    src="' + item.replyData[i].to.userImg + '" alt=""></a>' +
+                                    '    </div>' +
+                                    '    <div class="right reply_con">' +
+                                    '        <div class="reply_user">' +
+                                    '            <span title="@' + item.replyData[i].to.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.replyData[i].to._id + "'" + ',' + "'" + item.replyData[i].to.name + "'" + ')">' + item.replyData[i].to.name + '</span>' +
+                                    '            <span>' + moment(item.replyData[i].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
+                                    '             <span>回复</span>' +
+                                    '             <span title="@' + item.replyData[i].from.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.replyData[i].from._id + "'" + ',' + "'" + item.replyData[i].from.name + "'" + ')">@' + item.replyData[i].from.name + '</span>' +
+                                    '         </div>' +
+                                    '         <div class="comment_con">' +
+                                    '             <p>' + AnalyticEmotion(item.replyData[i].content) + '</p>' +
+                                    '         </div>' +
+                                    '     </div>' +
+                                    ' </li>';
+                            }
+                            str += '<li>' +
+                                '    <span></span>' +
+                                '    <div class="left user_circle_img"><a href="javascript:void(0);"><img' +
+                                '                    src="' + item.userData.userImg + '" alt=""></a></div>' +
+                                '    <div class="right reply_con">' +
+                                '        <div class="reply_user">' +
+                                '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ',' + "'" + item.userData.name + "'" + ')">' + item.userData.name + '</span>' +
+                                '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
+                                '        </div>' +
+                                '        <div class="comment_con">' +
+                                '            <p>' + AnalyticEmotion(item.replyData[0].content) + '</p>' +
+                                '        </div>' +
+                                '        <ul>' + strItem + '</ul>' +
+                                '    </div>' +
+                                '</li>';
+                        }
+                    });
+                    $('.reply_list ul').html(str);
+                }
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+    }
+
+    window.onload = function () {
+        loadComment();
+    }
 </script>
 </html>

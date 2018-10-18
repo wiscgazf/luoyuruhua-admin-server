@@ -76,6 +76,7 @@ objFun.showreelSuc = (req, res, next) => {
 }
 
 objFun.showreelDetail = function (req, res, next) {
+
     res.render('pc/showreelDetail');
 }
 

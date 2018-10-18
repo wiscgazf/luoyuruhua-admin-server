@@ -347,7 +347,7 @@ objFun.deleteCommentDataAjax = function (req, res, next) {
                 if (err) {
                     res.status(500).json(Errors.networkError);
                 } else {
-                    sendEmail('<span>尊敬的用户：<' + data1.email + '></span><p>您好！</p><span>由于您在该平台上的评论信息涉及违规，系统已自动为您删除该条评论。</span><p><span style="color: #f00;">注意：</span>违规次数10次以上系统会自动冻结您的账户，请遵守网上文明评论守则规范！</p><span>系统自动发送，请勿直接回复此邮件！</span>', '<' + data1.email + '>');
+                    sendEmail('<span>尊敬的用户：<' + data1.email + '></span><p>您好�?/p><span>由于您在该平台上的评论信息涉及违规，系统已自动为您删除该条评论�?/span><p><span style="color: #f00;">注意�?/span>违规次数10次以上系统会自动冻结您的账户，请遵守网上文明评论守则规范�?/p><span>系统自动发送，请勿直接回复此邮件！</span>', '<' + data1.email + '>');
                 }
             });
             res.json(Errors.delCommentSuc);
@@ -415,7 +415,7 @@ objFun.getCommentAjax = function (req, res, next) {
     let showCount = 10;
     let currentPage = req.query.page || 1;
     Promise.try(() => {
-        return Reply.countDocuments({notesData: req.query.id});
+        return Reply.countDocuments({notesData: req.query.id, status: req.query.Status});
     }).then(data => {
         count = data;
         if (!count) {
@@ -431,7 +431,7 @@ objFun.getCommentAjax = function (req, res, next) {
                 currentPage = 1;
             }
 
-            return Reply.find({notesData: req.query.id}).populate({
+            return Reply.find({notesData: req.query.id, status: req.query.Status}).populate({
                 path: 'userData',
                 model: 'user',
                 select: 'name userImg'
