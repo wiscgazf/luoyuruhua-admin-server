@@ -76,8 +76,70 @@ objFun.showreelSuc = (req, res, next) => {
 }
 
 objFun.showreelDetail = function (req, res, next) {
+    let asyncFun = async () => {
+        try {
+            await Showreel.findOneAndUpdate({_id: req.params.id}, {$inc: {pageView: 1}});
 
-    res.render('pc/showreelDetail');
+            let showreelDetail = Showreel.findById(req.params.id);
+
+            let likeData = Showreel.find({
+                _id: {$ne: showreelDetail._id},
+                $or: [{title: {$regex: new RegExp(showreelDetail.title, 'i')}}, {category: {$regex: new RegExp(showreelDetail.category, 'i')}}]
+            }).limit(3);
+            // pre page
+            let prePage = Showreel.find({_id: {$lt: req.params.id}}).limit(1);
+
+            // nextPage
+            let nextPage = Showreel.find({_id: {$gt: req.params.id}}).limit(1);
+
+            //replyNum
+            let replyNum = Reply.countDocuments({notesData: req.params.id});
+
+            let showreelCount = Showreel.countDocuments();
+
+            let pageViewSort = Showreel.find().sort({pageView: -1}).limit(3).exec();
+
+            return [showreelDetail, likeData, prePage, nextPage, replyNum, showreelCount, pageViewSort];
+        }
+        catch (err) {
+            res.status(500).json(Errors.networkError);
+        }
+    }
+    Promise.all(asyncFun()).then(data => {
+        res.render('pc/showreelDetail', {
+            Data: {
+                id: data[0]._id,
+                createTime: moment(data[0].createTime).format("YYYY-MM-DD"),
+                title: data[0].title,
+                pageView: data[0].pageView,
+                category: data[0].category,
+                tecTag: data[0].tecTag,
+                content: data[0].content,
+                thumbImg: data[0].thumbImg
+            },
+            likesData: data[1],
+            preData: data[2],
+            nextData: data[3],
+            replyNum: data[4],
+            showreelCount: data[5],
+            pageViewSort: data[6].map(item => {
+                return {
+                    id: item._id,
+                    title: item.title,
+                    thumbImg: item.thumbImg,
+                    createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                    pageView: item.pageView
+                }
+            })
+        });
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    });
+    /*asyncFun().then(data => {
+        console.log(data)
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    })*/
 }
 
 /*

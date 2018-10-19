@@ -23,35 +23,46 @@
     <div class="content_con">
         <div class="con_left left">
             <div class="showreel">
-                <h2>小程序-猜歌名大师奖金版</h2>
+                <h2><%= Data.title %></h2>
                 <div class="showreel_con">
-                    <img src="https://www.yezipi.net/upload/Article/201809131536809951.jpg" alt=""><br>
-                    <img src="https://www.yezipi.net/upload/Article/201809131536809951.jpg" alt=""><br>
-                    <img src="https://www.yezipi.net/upload/Article/201809131536809951.jpg" alt=""><br>
-                    <img src="https://www.yezipi.net/upload/Article/201809131536809951.jpg" alt=""><br>
-                    <img src="http://www.ysjhacc.com/upload/ggao/201809/10/201809100951394519.jpg" alt=""><br>
-                    <img src="https://www.yezipi.net/upload/Article/201809131536809951.jpg" alt=""><br>
+                    <%- Data.content %>
                 </div>
+                <% if(Data.tecTag.length > 0){ %>
                 <div class="detail_tag_list">
-
-                    <a href="/notes?search=javascript">javascript</a>
-
-                    <a href="/notes?search=css">css</a>
-
+                    <% Data.tecTag.forEach(function (item, index) { %>
+                    <a href="javascript:void(0);"
+                       onclick="window.location.href='/showreel?search='+encodeURI('<%= item %>')"><%= item %></a>
+                    <% }) %>
                 </div>
+                <% } %>
             </div>
             <ul class="up_next">
-
+                <% if(preData.length > 0){ %>
+                <li><span>上一篇：</span><a href="/showreel/<%= preData[0]._id %>"><%= preData[0].title %></a></li>
+                <% }else{ %>
                 <li><span>上一篇：</span><a href="javascript:void(0);" style="color: #759b08;">没有了</a></li>
-
-
-                <li><span>下一篇：</span><a href="/notes/5b85febf8a5ad82278007b1b">test9</a></li>
-
+                <% } %>
+                <% if(nextData.length > 0){ %>
+                <li><span>下一篇：</span><a href="/showreel/<%= nextData[0]._id %>"><%= nextData[0].title %></a></li>
+                <% }else{ %>
+                <li><span>下一篇：</span><a href="javascript:void(0);" style="color: #759b08;">没有了</a></li>
+                <% } %>
             </ul>
+            <% if(likesData.length > 0){ %>
+            <div class="likes">
+                <p>猜你喜欢</p>
+                <div class="likes_con">
+                    <% likesData.forEach(function (item, index) { %>
+                    <a href="/showreel/<%= item._id %>" target="_blank">
+                        <div><img src="<%= item.thumbImg %>" alt=""></div>
+                        <span><%= item.title %></span>
+                    </a>
+                    <% }) %>
+                </div>
+            </div>
+            <% } %>
             <div class="reply_title" id="comment">
-
-                <span class="left">共有<b>0</b>条评论</span>
-
+                <span class="left">共有<b><%= replyNum %></b>条评论</span>
                 <a href="javascript:void(0);" class="right" onclick="replyComment(null,null,null);">发布评论</a>
             </div>
             <div class="reply_list">
@@ -85,14 +96,16 @@
         <div class="con_right right">
             <!--overview-->
             <div class="overview">
-                <div class="overview_img"><img src="/upload/notes/1535982059267.png" alt=""></div>
-                <p class="overview_des">使用websocket做的对战游戏</p>
+                <div class="overview_img"><img src="<%= Data.thumbImg %>" alt=""></div>
+                <p class="overview_des"><%= Data.title %></p>
                 <ul>
-                    <li><b>11</b>
+                    <li><b>
+                            <%= Data.pageView %>
+                        </b>
                         <p>浏览</p></li>
-                    <li><b>11</b>
+                    <li><b><%= replyNum %></b>
                         <p>评论</p></li>
-                    <li><b>11</b>
+                    <li><b><%= showreelCount %></b>
                         <p>作品数</p></li>
                 </ul>
                 <a href="javascript:void(0);">打开链接</a>
@@ -102,57 +115,34 @@
                 <p class="public_title">站内搜索</p>
                 <div class="search_in public_padding">
                     <div class="search_in_con">
-                        <input type="text" class="left" id="keywords" value="" title="" placeholder="请输入随笔关键字" required
+                        <input type="text" class="left" id="keywords" value="" title="" placeholder="请输入作品名称" required
                                onkeyup="keyNum();">
                         <i class="right" onclick="searchKeyword();"></i>
                     </div>
                 </div>
             </div>
             <!--page_views-->
+            <% if(pageViewSort.length > 0){ %>
             <div class="new_information public_side_wrap page_views">
                 <p class="public_title">点击排行</p>
                 <ul>
+                    <% pageViewSort.forEach(function (item, index) { %>
                     <li>
                         <div class="inform_img left">
-                            <img src="/upload/notes/1535464909442.png" alt="">
+                            <img src="<%= item.thumbImg %>" alt="">
                         </div>
                         <div class="inform_right right">
-                            <a href="/notes/5b8555ead193e81fece799ff" target="_blank">test1</a>
+                            <a href="/showreel/<%= item.id %>" target="_blank"><%= item.title %></a>
                             <div class="inform_des">
-                                <span>2018-08-28</span>
-                                <span>浏览：134</span>
+                                <span><%= item.createTime %></span>
+                                <span>浏览：<%= item.pageView %></span>
                             </div>
                         </div>
                     </li>
-
-                    <li>
-                        <div class="inform_img left">
-                            <img src="/upload/notes/1535982059267.png" alt="">
-                        </div>
-                        <div class="inform_right right">
-                            <a href="/notes/5b8d3a3b8e36e00fb85bb003" target="_blank">test9</a>
-                            <div class="inform_des">
-                                <span>2018-09-03</span>
-                                <span>浏览：132</span>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="inform_img left">
-                            <img src="/upload/notes/1535899749509.png" alt="">
-                        </div>
-                        <div class="inform_right right">
-                            <a href="/notes/5b8bf8773002610c88d1f9cb" target="_blank">test8</a>
-                            <div class="inform_des">
-                                <span>2018-09-02</span>
-                                <span>浏览：44</span>
-                            </div>
-                        </div>
-                    </li>
-
+                    <% }) %>
                 </ul>
             </div>
+            <% } %>
             <!--friend_link-->
             <div class="friend_link public_side_wrap">
                 <div class="friend_link_title">
@@ -178,7 +168,9 @@
 </body>
 <script type="text/javascript" src="/js/pace.min.js"></script>
 <script type="text/javascript" src="/js/pc/listening.js"></script>
+<script src="/js/pc/comment.js"></script>
 <script src="/js/pc/sinaFaceAndEffec.js"></script>
+<script src="/js/moment.js"></script>
 <script type="text/javascript">
     var page = 1;
     var parentReviewer = '';
@@ -193,16 +185,16 @@
     function replyComment(commentId, fromId, userName) {
         replyItemId = commentId;
         replyfromId = fromId;
-        if ($('.login_suc').html()) {
+        <% if(locals.username){ %>
             $('.text').focus();
             if (userName && userName != $('.login_suc a span').text()) {
                 $('.text').attr('placeholder', '回复@' + userName);
             } else {
                 $('.text').val('').attr('placeholder', '请输入 . . .');
             }
-        } else {
+        <% }else{ %>
             window.location.href = '/login';
-        }
+        <% } %>
     }
 
     function submitComment() {
@@ -211,10 +203,10 @@
             alert('骚年，多写点吧！');
         } else {
             $.ajax({
-                url: '/addComment?Status=0',
+                url: '/addComment?Status=1',
                 type: 'POST',
                 data: {
-                    articleId: '5b88bb4784e36324685e5305',
+                    articleId: '<%= Data.id %>',
                     replyId: replyItemId,
                     fromReviewerId: replyfromId,
                     content: inputText
@@ -237,7 +229,7 @@
             url: '/getComment?Status=1',
             type: 'GET',
             data: {
-                id: '5bc583a471e544299c732dfe',
+                id: '<%= Data.id %>',
                 page: page
             },
             success: function (data) {

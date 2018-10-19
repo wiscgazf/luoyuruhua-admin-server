@@ -26,6 +26,10 @@ let showreelSchema = new mongoose.Schema({
     },
     tecTag: Array,
     category: String,
+    showreelUrl: {
+        type: String,
+        default: null
+    },
     replyData: [{type: mongoose.Schema.Types.ObjectId, ref: 'reply'}]
 });
 

@@ -188,16 +188,16 @@
     function replyComment(commentId, fromId, userName) {
         replyItemId = commentId;
         replyfromId = fromId;
-        if ($('.login_suc').html()) {
+        <% if(locals.username){ %>
             $('.text').focus();
             if (userName && userName != $('.login_suc a span').text()) {
                 $('.text').attr('placeholder', '回复@' + userName);
             } else {
                 $('.text').val('').attr('placeholder', '请输入 . . .');
             }
-        } else {
+        <% }else{ %>
             window.location.href = '/login';
-        }
+        <% } %>
     }
 
     function submitComment() {

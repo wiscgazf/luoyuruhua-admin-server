@@ -361,6 +361,13 @@ objFun.deleteCommentDataAjax = function (req, res, next) {
 
 // ajax bussiness  ------------------------- web
 objFun.addCommentAjax = function (req, res, next) {     // public comments
+    /*.then(data => {
+            return Notes.findByIdAndUpdate(commentData.articleId, {
+                $push: {
+                    replyData: data._id
+                }
+            });
+        })*/
     let commentData = req.body;
     let reviewerId = req.app.locals.username._id;
     if (!commentData.replyId || commentData.fromReviewerId == reviewerId) {
@@ -376,12 +383,6 @@ objFun.addCommentAjax = function (req, res, next) {     // public comments
                         content: commentData.content
                     }
                 ]
-            });
-        }).then(data => {
-            return Notes.findByIdAndUpdate(commentData.articleId, {
-                $push: {
-                    replyData: data._id
-                }
             });
         }).then(data => {
             if (data) {
@@ -403,7 +404,7 @@ objFun.addCommentAjax = function (req, res, next) {     // public comments
             if (err) {
                 res.status(500).json(Errors.networkError);
             } else {
-                res.json({suc: '123'})
+                res.json({suc: '123'});
             }
         })
     }
