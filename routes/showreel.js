@@ -8,6 +8,8 @@ router.get('/showreel', bussinessFun.showreelSuc);  // showreel.html
 
 router.get('/showreel/:id', bussinessFun.showreelDetail)    // showreel detail html
 
+router.get('/showreelList', bussinessFun.showreelList);     // showreelList html
+
 
 /*
 * server ajax

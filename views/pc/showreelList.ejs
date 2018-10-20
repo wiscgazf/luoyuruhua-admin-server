@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="/css/pace-theme-minimal.css">
     <link rel="stylesheet" href="/css/pc/header_footer.css">
     <link rel="stylesheet" href="/css/pc/sidebar.css">
-    <link rel="stylesheet" href="/css/pc/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/pc/notesList.css">
+    <link rel="stylesheet" href="/css/pc/showreelList.css">
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
     <title>落雨如画博客-临渊羡鱼，不如退而结网！</title>
 </head>
 <body>
@@ -22,12 +22,12 @@
     <div class="content_con">
         <div class="con_left left">
             <% if (search) { %>
-            <div class="notes_num">全部<b><%= count; %></b>篇<span>关键词：<%= search %></span></div>
+            <div class="showreel_num">全部<b><%= count; %></b>篇<span>关键词：<%= search %></span></div>
             <% }else { %>
-            <div class="notes_num">全部<b><%= count; %></b>篇</div>
+            <div class="showreel_num">全部<b><%= count; %></b>篇</div>
             <% } %>
-            <!--notes list-->
-            <div class="notes">
+            <!--showreel list-->
+            <div class="showreel">
                 <% if(Datas.length > 0){ %>
                 <% Datas.forEach((item, index)=>{ %>
                 <% var replyNum = 0; %>
@@ -36,16 +36,15 @@
                 <% replyNum += item.replyData[i].replyData.length %>
                 <% } %>
                 <% } %>
-                <div class="notes_item">
+                <div class="showreel_item">
                     <div class="thumb_img left"><img src="<%= item.thumbImg %>" alt=""></div>
                     <div class="notes_con right">
-                        <a href="<%= pagePath %>/<%= item.id %>" target="_blank">
+                        <a href="/showreel/<%= item.id %>" target="_blank">
                             <b><%= item.title %></b>
-                            <p><%= item.description %></p>
                         </a>
                         <div class="tags">
                             <span class="create_time left"><%= item.createTime %></span>
-                            <span class="author_icon left" title="作者"><%= item.author.name %></span>
+                            <span class="author_icon left" title="作者">落雨如画</span>
                             <span class="page_view left" title="浏览">(<a
                                         href="javascript:void(0)"><%= item.pageView %></a>)</span>
                             <span class="reply_num left" title="评论">(<a href="javascript:void(0)"><span
@@ -70,10 +69,8 @@
 </div>
 <% include ./footer.ejs %>
 </body>
-<script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/pace.min.js"></script>
 <script type="text/javascript" src="/js/pc/listening.js"></script>
 <script type="text/javascript">
-
 </script>
 </html>

@@ -62,7 +62,11 @@
             </div>
             <% } %>
             <div class="reply_title" id="comment">
-                <span class="left">共有<b><%= replyNum %></b>条评论</span>
+                <% if(replyNum.length > 0){ %>
+                <span class="left">共有<b><%= replyNum[0].replyNumber %></b>条评论</span>
+                <% }else{ %>
+                <span class="left">共有<b>0</b>条评论</span>
+                <% } %>
                 <a href="javascript:void(0);" class="right" onclick="replyComment(null,null,null);">发布评论</a>
             </div>
             <div class="reply_list">
@@ -103,8 +107,14 @@
                             <%= Data.pageView %>
                         </b>
                         <p>浏览</p></li>
-                    <li><b><%= replyNum %></b>
+                    <% if(replyNum.length > 0){ %>
+                    <li><b><%= replyNum[0].replyNumber %></b>
                         <p>评论</p></li>
+                    <% }else { %>
+                    <li><b>0</b>
+                        <p>评论</p></li>
+                    <% } %>
+
                     <li><b><%= showreelCount %></b>
                         <p>作品数</p></li>
                 </ul>
@@ -115,8 +125,7 @@
                 <p class="public_title">站内搜索</p>
                 <div class="search_in public_padding">
                     <div class="search_in_con">
-                        <input type="text" class="left" id="keywords" value="" title="" placeholder="请输入作品名称" required
-                               onkeyup="keyNum();">
+                        <input type="text" class="left" id="keywords" value="" title="" placeholder="请输入作品名称" required>
                         <i class="right" onclick="searchKeyword();"></i>
                     </div>
                 </div>
@@ -296,6 +305,15 @@
                 console.log(err)
             }
         });
+    }
+
+    function searchKeyword() {
+        var searchCon = document.getElementById('keywords').value;
+        if (searchCon) {
+            window.location.href = '/showreelList?search=' + encodeURI(searchCon);
+        } else {
+            alert('搜索内容不能为空，亲！');
+        }
     }
 
     window.onload = function () {

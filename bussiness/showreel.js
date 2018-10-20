@@ -3,6 +3,7 @@ let fs = require('fs');
 let moment = require('moment');
 let path = require('path');
 let Promise = require('bluebird');
+let mongoose = require('mongoose');
 let Errors = require('../err/errors');
 
 let User = require('../models/User'); // user db
@@ -93,7 +94,13 @@ objFun.showreelDetail = function (req, res, next) {
             let nextPage = Showreel.find({_id: {$gt: req.params.id}}).limit(1);
 
             //replyNum
-            let replyNum = Reply.countDocuments({notesData: req.params.id});
+            let replyNum = Reply.aggregate([{
+                $match: {notesData: new mongoose.Types.ObjectId(req.params.id)}
+            }, {
+                $project: {
+                    _id: 1, replyNum: {$size: '$replyData'}
+                }
+            }, {$group: {_id: null, replyNumber: {$sum: '$replyNum'}}}]);
 
             let showreelCount = Showreel.countDocuments();
 
@@ -142,6 +149,74 @@ objFun.showreelDetail = function (req, res, next) {
     })*/
 }
 
+objFun.showreelList = function (req, res, next) {
+    let count = 0;
+    let pageSize = 0;
+    let showCount = 10;
+    let currentPage = req.query.page || 1;
+    let asyncFun = async () => {
+        if (req.query.search) {
+            count = await Showreel.countDocuments({$or: [{title: {$regex: new RegExp(req.query.search, 'i')}}, {category: {$regex: new RegExp(req.query.search, 'i')}}]});
+        } else {
+            count = await Showreel.countDocuments();
+        }
+        if (count == 0) {
+            res.render('pc/showreelList', {
+                Datas: [],
+                search: req.query.search,
+                count: count,
+                pageSize: pageSize,
+                showCount: showCount,
+                currentPage: currentPage,
+                pagePath: '/showreelList'
+            });
+        } else {
+            pageSize = Math.ceil(count / showCount);
+
+            if (currentPage >= pageSize) {
+                currentPage = pageSize;
+            }
+
+            if (currentPage <= 0) {
+                currentPage = 1;
+            }
+            let queryData = '';
+            if (req.query.search) {
+                queryData = Showreel.find({$or: [{title: {$regex: new RegExp(req.query.search, 'i')}}, {category: {$regex: new RegExp(req.query.search, 'i')}}]});
+            } else {
+                queryData = Showreel.find();
+            }
+            let showreelData = await queryData.populate({
+                path: 'replyData',
+                model: 'reply'
+            }).limit(showCount).skip((currentPage - 1) * showCount).sort({createTime: -1}).exec();
+            return showreelData;
+        }
+    }
+    asyncFun().then(data => {
+        res.render('pc/showreelList', {
+            Datas: data.map(item => {
+                return {
+                    id: item._id,
+                    createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                    title: item.title,
+                    thumbImg: item.thumbImg,
+                    pageView: item.pageView,
+                    category: item.category,
+                    replyData: item.replyData
+                }
+            }),
+            search: req.query.search,
+            count: count,
+            pageSize: pageSize,
+            showCount: showCount,
+            currentPage: currentPage,
+            pagePath: '/showreelList'
+        })
+    }).catch(err => {
+        console.log(err)
+    })
+}
 /*
 *
 * server ajax

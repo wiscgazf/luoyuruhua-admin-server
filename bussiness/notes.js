@@ -12,6 +12,7 @@ let Admin = require('../models/Admin'); // admin db
 let User = require('../models/User'); // user db
 let Notes = require('../models/Notes'); // notes db
 let Reply = require('../models/Reply'); // Reply db
+let Showreel = require('../models/Showreel'); // Showreel db
 
 objFun.notesList = function (req, res, next) {  // find all notes and condition find
     let count = 0;
@@ -192,7 +193,7 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
     }).then(data => {
         totalCount = data;
         if (totalCount == 0) {
-            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: '成功', Datas: []})
+            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: '閹存劕濮?, Datas: []})
         }
         let currentPage = baseMsg.currentPage ? baseMsg.currentPage : 1;
         totalPage = Math.ceil(totalCount / baseMsg.showCount);
@@ -229,7 +230,7 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
             }).sort({createTime: -1}).skip(pageOffset).limit(parseInt(baseMsg.showCount)).exec();
         }
     }).then(data => {
-        res.json({msg: 'suc', code: '200', totalPage: totalPage, totalCount: totalCount, des: '成功', Datas: data})
+        res.json({msg: 'suc', code: '200', totalPage: totalPage, totalCount: totalCount, des: '閹存劕濮?, Datas: data})
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })
@@ -347,7 +348,7 @@ objFun.deleteCommentDataAjax = function (req, res, next) {
                 if (err) {
                     res.status(500).json(Errors.networkError);
                 } else {
-                    sendEmail('<span>尊敬的用户：<' + data1.email + '></span><p>您好�?/p><span>由于您在该平台上的评论信息涉及违规，系统已自动为您删除该条评论�?/span><p><span style="color: #f00;">注意�?/span>违规次数10次以上系统会自动冻结您的账户，请遵守网上文明评论守则规范�?/p><span>系统自动发送，请勿直接回复此邮件！</span>', '<' + data1.email + '>');
+                    sendEmail('<span>鐏忓﹥鏆氶惃鍕暏閹村嚖绱?' + data1.email + '></span><p>閹劌銈介敍?/p><span>閻㈠彉绨幃銊ユ躬鐠囥儱閽╅崣棰佺瑐閻ㄥ嫯鐦庣拋杞颁繆閹垱绉归崣濠呯箽鐟欏嫸绱濈化鑽ょ埠瀹歌尪鍤滈崝銊よ礋閹劌鍨归梽銈堫嚉閺壜ょ槑鐠佹亽鈧?/span><p><span style="color: #f00;">濞夈劍鍓伴敍?/span>鏉╂繆顫夊▎鈩冩殶10濞嗏€蹭簰娑撳﹦閮寸紒鐔剁窗閼奉亜濮╅崘鑽ょ波閹劎娈戠拹锔藉煕閿涘矁顕柆闈涚暓缂冩垳绗傞弬鍥ㄦ鐠囧嫯顔戠€瑰牆鍨憴鍕瘱閿?/p><span>缁崵绮洪懛顏勫З閸欐垿鈧緤绱濈拠宄板瑏閻╁瓨甯撮崶鐐差槻濮濄倝鍋栨禒璁圭磼</span>', '<' + data1.email + '>');
                 }
             });
             res.json(Errors.delCommentSuc);
@@ -361,13 +362,6 @@ objFun.deleteCommentDataAjax = function (req, res, next) {
 
 // ajax bussiness  ------------------------- web
 objFun.addCommentAjax = function (req, res, next) {     // public comments
-    /*.then(data => {
-            return Notes.findByIdAndUpdate(commentData.articleId, {
-                $push: {
-                    replyData: data._id
-                }
-            });
-        })*/
     let commentData = req.body;
     let reviewerId = req.app.locals.username._id;
     if (!commentData.replyId || commentData.fromReviewerId == reviewerId) {
@@ -385,9 +379,18 @@ objFun.addCommentAjax = function (req, res, next) {     // public comments
                 ]
             });
         }).then(data => {
-            if (data) {
+            let updateData = '';
+            if (data.status == 0) {
+                updateData = Notes.update({_id: data.notesData}, {$push: {replyData: data._id}});
+            }
+            if (data.status == 1) {
+                updateData = Showreel.update({_id: data.notesData}, {$push: {replyData: data._id}});
+            }
+            updateData.exec(function (err, result) {
+                if (result) {
                 res.json(Errors.replySuc);
             }
+            });
         }).catch(err => {
             res.status(500).json(Errors.networkError);
         });
