@@ -123,6 +123,7 @@
 <script src="/js/pc/sinaFaceAndEffec.js"></script>
 <script src="/js/moment.js"></script>
 <script type="text/javascript" src="/js/pc/listening.js"></script>
+<script src="/js/pc/img_browser.js"></script>
 <script type="text/javascript">
     var page = 1;
     var parentReviewer = '';
@@ -303,6 +304,10 @@
 
     window.onload = function () {
         loadComment();
+        PostbirdImgGlass.init({
+            domSelector: ".notes_con p img",
+            animation: true
+        });
     }
 </script>
 </html>

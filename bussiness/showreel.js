@@ -122,7 +122,8 @@ objFun.showreelDetail = function (req, res, next) {
                 category: data[0].category,
                 tecTag: data[0].tecTag,
                 content: data[0].content,
-                thumbImg: data[0].thumbImg
+                thumbImg: data[0].thumbImg,
+                showreelUrl: data[0].showreelUrl
             },
             likesData: data[1],
             preData: data[2],
@@ -142,11 +143,6 @@ objFun.showreelDetail = function (req, res, next) {
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     });
-    /*asyncFun().then(data => {
-        console.log(data)
-    }).catch(err => {
-        res.status(500).json(Errors.networkError);
-    })*/
 }
 
 objFun.showreelList = function (req, res, next) {
@@ -160,16 +156,9 @@ objFun.showreelList = function (req, res, next) {
         } else {
             count = await Showreel.countDocuments();
         }
+        let pageView = await Showreel.find().limit(3).sort({pageView: -1});
         if (count == 0) {
-            res.render('pc/showreelList', {
-                Datas: [],
-                search: req.query.search,
-                count: count,
-                pageSize: pageSize,
-                showCount: showCount,
-                currentPage: currentPage,
-                pagePath: '/showreelList'
-            });
+            return [[], pageView, count];
         } else {
             pageSize = Math.ceil(count / showCount);
 
@@ -190,12 +179,32 @@ objFun.showreelList = function (req, res, next) {
                 path: 'replyData',
                 model: 'reply'
             }).limit(showCount).skip((currentPage - 1) * showCount).sort({createTime: -1}).exec();
-            return showreelData;
+            return [showreelData, pageView, count];
         }
     }
-    asyncFun().then(data => {
-        res.render('pc/showreelList', {
-            Datas: data.map(item => {
+    Promise.all(asyncFun()).then(data => {
+        let publicObj = {
+            search: req.query.search,
+            count: count,
+            pageSize: pageSize,
+            showCount: showCount,
+            currentPage: currentPage,
+            pagePath: '/showreelList'
+        }
+        let pageViews = data[1].map((item) => {
+            return {
+                id: item._id,
+                createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                title: item.title,
+                thumbImg: item.thumbImg,
+                pageView: item.pageView
+            }
+        });
+        if (data[2] == 0) {
+            res.render('pc/showreelList', Object.assign(publicObj, {Datas: []}, {PageView: pageViews}));
+        } else {
+            res.render('pc/showreelList', Object.assign(publicObj, {
+                Datas: data[0].map(item => {
                 return {
                     id: item._id,
                     createTime: moment(item.createTime).format("YYYY-MM-DD"),
@@ -205,14 +214,9 @@ objFun.showreelList = function (req, res, next) {
                     category: item.category,
                     replyData: item.replyData
                 }
-            }),
-            search: req.query.search,
-            count: count,
-            pageSize: pageSize,
-            showCount: showCount,
-            currentPage: currentPage,
-            pagePath: '/showreelList'
         })
+            }, {PageView: pageViews}));
+        }
     }).catch(err => {
         console.log(err)
     })
@@ -225,7 +229,7 @@ objFun.showreelList = function (req, res, next) {
 objFun.addShowreelImg = function (req, res, next) {
     let base64Data = req.body.thumbImg.replace(/^data:image\/\w+;base64,/, "");
     let dataBuffer = Buffer.from(base64Data, 'base64');
-    var imgName = new Date().getTime();
+    let imgName = new Date().getTime();
     fs.writeFile(path.join(__dirname, '../static/upload/showreel/') + imgName + '.png', dataBuffer, function (err, data) {
         if (err) {
             res.status(500).json(Errors.networkError);
@@ -308,7 +312,8 @@ objFun.getShowreel = function (req, res, next) {
                 thumbImg: data.thumbImg,
                 content: data.content,
                 tecTag: data.tecTag,
-                category: data.category
+                category: data.category,
+                showreelUrl: data.showreelUrl
             }))
         }
     })
@@ -321,6 +326,7 @@ objFun.putShowreel = function (req, res, next) {
         content: req.body.form.content,
         tecTag: req.body.form.tecTag,
         category: req.body.form.category,
+        showreelUrl: req.body.form.showreelUrl
     }
     Showreel.update({_id: req.body.id}, {$set: modifiedData}, function (err, data) {
         if (err) {

@@ -118,7 +118,9 @@
                     <li><b><%= showreelCount %></b>
                         <p>作品数</p></li>
                 </ul>
-                <a href="javascript:void(0);">打开链接</a>
+                <% if(Data.showreelUrl){ %>
+                <a href="<%= Data.showreelUrl %>" target="_blank">打开链接</a>
+                <% } %>
             </div>
             <!--search-->
             <div class="mini_search public_side_wrap">
@@ -180,16 +182,23 @@
 <script src="/js/pc/comment.js"></script>
 <script src="/js/pc/sinaFaceAndEffec.js"></script>
 <script src="/js/moment.js"></script>
+<script src="/js/pc/img_browser.js"></script>
 <script type="text/javascript">
     var page = 1;
     var parentReviewer = '';
-
     // bind face
     $('.face-icon').SinaEmotion($('.text'));
 
     // 测试本地解析
     var replyItemId = null;
     var replyfromId = null;
+    window.onload = function () {
+        loadComment();
+        PostbirdImgGlass.init({
+            domSelector: ".showreel_con p img",
+            animation: true
+        });
+    }
 
     function replyComment(commentId, fromId, userName) {
         replyItemId = commentId;
@@ -307,6 +316,15 @@
         });
     }
 
+    var searchInput = document.getElementById('keywords');
+
+    searchInput.onkeyup = function (e) {
+        if (!e) e = window.event;
+        if ((e.keyCode || e.which) == 13) {
+            searchKeyword();
+        }
+    }
+
     function searchKeyword() {
         var searchCon = document.getElementById('keywords').value;
         if (searchCon) {
@@ -314,10 +332,6 @@
         } else {
             alert('搜索内容不能为空，亲！');
         }
-    }
-
-    window.onload = function () {
-        loadComment();
     }
 </script>
 </html>
