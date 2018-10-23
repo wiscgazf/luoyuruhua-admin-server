@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"/>
     <link rel="stylesheet" href="/css/pc/sinaFaceAndEffec.css">
     <link rel="stylesheet" href="/css/public.css">
     <link rel="stylesheet" href="/css/pace-theme-minimal.css">
@@ -129,7 +130,7 @@
     var parentReviewer = '';
     var notesCon = '<%- content %>';
     var result = notesCon.substring(1, notesCon.length - 1);
-    insertCodeElement(result, '.con_left .notes_con')
+    insertCodeElement(result, '.con_left .notes_con');
 
     function insertCodeElement(content, container) {
         container = container || document;
@@ -202,7 +203,7 @@
     }
 
     function submitComment() {
-        var inputText = $('.text').val();
+        var inputText = unhtml($('.text').val());
         if (jQuery.trim(inputText).length < 10) {
             alert('骚年，多写点吧！');
         } else {

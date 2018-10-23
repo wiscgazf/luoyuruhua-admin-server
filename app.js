@@ -57,6 +57,8 @@ app.use(require('./routes/notes')); // 处理随笔方面的路由
 
 app.use(require('./routes/showreel')); // 处理作品集方面的路由
 
+app.use(require('./routes/album')); // 处理相册方面的路由
+
 app.use("/ue/upload", ueditor(path.join(__dirname, 'static'), function (req, res, next) {
     //客户端上传文件设置
     var imgDir = 'ue_upload/images/' + (new Date().getFullYear() + '' + ltTenFun(new Date().getMonth() + 1)) + '/' + ltTenFun(new Date().getDate()) + '/';

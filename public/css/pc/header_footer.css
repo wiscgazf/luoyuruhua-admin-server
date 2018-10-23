@@ -1,7 +1,7 @@
 /*header*/
 .header {
     width: 100%;
-    background: rgba(255, 255, 255, 1);
+    background: #fff;
     position: fixed;
     z-index: 10;
     left: 0;
@@ -60,6 +60,8 @@
 
 /*footer*/
 .footer {
+    width: 100%;
+    min-width: 1200px;
     background: #333a40;
     margin-top: 40px;
     padding: 20px 0;

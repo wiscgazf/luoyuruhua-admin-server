@@ -31,3 +31,15 @@ for (var i = 0; i < $('.channel ul>li').length; i++) {
         }
     }
 }
+
+// filter element
+function unhtml(str) {
+    return str ? str.replace(/[<">']/g, (a) => {
+        return {
+            '<': '&lt;',
+            '"': '&quot;',
+            '>': '&gt;',
+            "'": '&#39;'
+        }[a]
+    }) : '';
+}

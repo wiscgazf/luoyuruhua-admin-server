@@ -216,7 +216,7 @@
     }
 
     function submitComment() {
-        var inputText = $('.text').val();
+        var inputText = unhtml($('.text').val());
         if (jQuery.trim(inputText).length < 10) {
             alert('骚年，多写点吧！');
         } else {

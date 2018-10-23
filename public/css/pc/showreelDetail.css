@@ -243,6 +243,10 @@
     color: #333;
     line-height: 24px;
     padding: 10px 0;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }
 
 .reply_con ul li {

@@ -165,7 +165,7 @@ objFun.addNotesAjax = function (req, res, next) {
         return Admin.findOne({name: md5.aseDecode(notesData.name, 'zhoufei')});
     }).then(data => {
         newArr = data.notesData;
-        return Notes.create(Object.assign(notesData.form, {author: data._id}))
+        return Notes.create(Object.assign(notesData.form, {author: data._id}));
     }).then(data => {
         newArr.push(data._id);
         return Admin.update({_id: data.author}, {$set: {notesData: newArr}});
@@ -193,7 +193,7 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
     }).then(data => {
         totalCount = data;
         if (totalCount == 0) {
-            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: '閹存劕濮?, Datas: []})
+            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: '闁瑰瓨鍔曟慨?, Datas: []})
         }
         let currentPage = baseMsg.currentPage ? baseMsg.currentPage : 1;
         totalPage = Math.ceil(totalCount / baseMsg.showCount);
@@ -230,7 +230,7 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
             }).sort({createTime: -1}).skip(pageOffset).limit(parseInt(baseMsg.showCount)).exec();
         }
     }).then(data => {
-        res.json({msg: 'suc', code: '200', totalPage: totalPage, totalCount: totalCount, des: '閹存劕濮?, Datas: data})
+        res.json({msg: 'suc', code: '200', totalPage: totalPage, totalCount: totalCount, des: '闁瑰瓨鍔曟慨?, Datas: data})
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })
@@ -348,7 +348,7 @@ objFun.deleteCommentDataAjax = function (req, res, next) {
                 if (err) {
                     res.status(500).json(Errors.networkError);
                 } else {
-                    sendEmail('<span>鐏忓﹥鏆氶惃鍕暏閹村嚖绱?' + data1.email + '></span><p>閹劌銈介敍?/p><span>閻㈠彉绨幃銊ユ躬鐠囥儱閽╅崣棰佺瑐閻ㄥ嫯鐦庣拋杞颁繆閹垱绉归崣濠呯箽鐟欏嫸绱濈化鑽ょ埠瀹歌尪鍤滈崝銊よ礋閹劌鍨归梽銈堫嚉閺壜ょ槑鐠佹亽鈧?/span><p><span style="color: #f00;">濞夈劍鍓伴敍?/span>鏉╂繆顫夊▎鈩冩殶10濞嗏€蹭簰娑撳﹦閮寸紒鐔剁窗閼奉亜濮╅崘鑽ょ波閹劎娈戠拹锔藉煕閿涘矁顕柆闈涚暓缂冩垳绗傞弬鍥ㄦ鐠囧嫯顔戠€瑰牆鍨憴鍕瘱閿?/p><span>缁崵绮洪懛顏勫З閸欐垿鈧緤绱濈拠宄板瑏閻╁瓨甯撮崶鐐差槻濮濄倝鍋栨禒璁圭磼</span>', '<' + data1.email + '>');
+                    sendEmail('<span>閻忓繐锕ラ弳姘舵儍閸曨厽鏆忛柟鏉戝殩缁?' + data1.email + '></span><p>闁诡喓鍔岄妶浠嬫晬?/p><span>闁汇垹褰夌花顒勫箖閵娿儲韬悹鍥ュ劚闁解晠宕ｆ０浣虹憪闁汇劌瀚惁搴ｆ媼鏉為绻嗛柟顓у灡缁夊綊宕ｆ繝鍛閻熸瑥瀚哥槐婵堝寲閼姐倗鍩犵€规瓕灏崵婊堝礉閵娿倛绀嬮柟顔哄妼閸ㄥ綊姊介妶鍫殙闁哄銈囨閻犱焦浜介埀?/span><p><span style="color: #f00;">婵炲鍔嶉崜浼存晬?/span>閺夆晜绻嗛～澶娾枎閳╁啯娈?0婵炲棌鈧弓绨板☉鎾筹功闁绱掗悢鍓佺獥闁煎浜滄慨鈺呭礃閼姐倗娉㈤柟顔哄妿濞堟垹鎷归敂钘夌厱闁挎稑鐭侀顒勬焼闂堟稓鏆撶紓鍐╁灣缁楀倿寮崶銊︻潠閻犲洤瀚鎴犫偓鐟扮墕閸垳鎲撮崟顔肩槺闁?/p><span>缂侇垵宕电划娲嚊椤忓嫬袟闁告瑦鍨块埀顑跨筏缁辨繄鎷犲畡鏉跨憦闁烩晛鐡ㄧ敮鎾炊閻愬樊妲绘慨婵勫€濋崑鏍ㄧ鐠佸湱纾?/span>', '<' + data1.email + '>');
                 }
             });
             res.json(Errors.delCommentSuc);
