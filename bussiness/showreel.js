@@ -138,7 +138,8 @@ objFun.showreelDetail = function (req, res, next) {
                     createTime: moment(item.createTime).format("YYYY-MM-DD"),
                     pageView: item.pageView
                 }
-            })
+            }),
+            csrfToken: req.csrfToken()
         });
     }).catch(err => {
         res.status(500).json(Errors.networkError);

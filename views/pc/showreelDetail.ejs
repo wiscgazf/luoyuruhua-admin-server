@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/css/pace-theme-minimal.css">
     <link rel="stylesheet" href="/css/pc/header_footer.css">
     <link rel="stylesheet" href="/css/pc/sidebar.css">
+    <link rel="stylesheet" href="/css/pc/photoswipe.css">
+    <link rel="stylesheet" href="/css/pc/default-skin.css">
     <link rel="stylesheet" href="/css/pc/showreelDetail.css">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <title>落雨如画博客-临渊羡鱼，不如退而结网！</title>
@@ -175,6 +177,72 @@
         </div>
     </div>
 </div>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 <% include ./footer.ejs %>
 </body>
 <script type="text/javascript" src="/js/pace.min.js"></script>
@@ -182,7 +250,8 @@
 <script src="/js/pc/comment.js"></script>
 <script src="/js/pc/sinaFaceAndEffec.js"></script>
 <script src="/js/moment.js"></script>
-<script src="/js/pc/img_browser.js"></script>
+<script src="/js/pc/photoswipe.min.js"></script>
+<script src="/js/pc/photoswipe-ui-default.min.js"></script>
 <script type="text/javascript">
     var page = 1;
     var parentReviewer = '';
@@ -194,10 +263,6 @@
     var replyfromId = null;
     window.onload = function () {
         loadComment();
-        PostbirdImgGlass.init({
-            domSelector: ".showreel_con p img",
-            animation: true
-        });
     }
 
     function replyComment(commentId, fromId, userName) {
@@ -244,7 +309,7 @@
 
     function loadComment() {
         $.ajax({
-            url: '/getComment?Status=1',
+            url: '/getComment?Status=1&csrfToken=<%= csrfToken %>',
             type: 'GET',
             data: {
                 id: '<%= Data.id %>',
@@ -333,5 +398,43 @@
             alert('搜索内容不能为空，亲！');
         }
     }
+
+    // 获取案例分析题中的图片
+    function isImages() {
+        var imgBrowser = [];
+        var imgObj = $('.showreel_con img');
+        if (imgObj.length > 0) {
+            for (var i = 0; i < imgObj.length; i++) {
+                var img = new Image();
+                var obj = {};
+                img.src = $(imgObj[i]).attr('src');
+                if (img.width > $(window).width()) {
+                    img.height = $(window).width() / img.width * img.height;
+                    img.width = $(window).width();
+                }
+                obj.src = img.src;
+                obj.w = img.width;
+                obj.h = img.height;
+                imgBrowser.push(obj);
+            }
+        }
+        return imgBrowser;
+    }
+
+    $('.showreel_con img').click(function () {
+        var currentIndex = $(this).index();
+        var pswpElement = document.querySelectorAll('.pswp')[0];
+        var options = {
+            maxSpreadZoom: 3,
+            history: false,
+            focus: false,
+            shareButtons: [],
+            showAnimationDuration: 0,
+            hideAnimationDuration: 0,
+            index: currentIndex // start at first slide
+        };
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, isImages(), options);
+        gallery.init();
+    });
 </script>
 </html>
