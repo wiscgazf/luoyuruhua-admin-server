@@ -18,6 +18,7 @@
 .con_left .notes_con img {
     width: auto;
     max-width: 100%;
+    cursor: pointer;
 }
 
 /*notes title*/

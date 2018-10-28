@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/css/pc/default-skin.css">
     <link rel="stylesheet" href="/css/pc/showreelDetail.css">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <title>落雨如画博客-临渊羡鱼，不如退而结网！</title>
+    <title><%= Data.title %></title>
 </head>
 <body>
 <!--header-->
@@ -309,7 +309,7 @@
 
     function loadComment() {
         $.ajax({
-            url: '/getComment?Status=1&csrfToken=<%= csrfToken %>',
+            url: '/getComment?Status=1',
             type: 'GET',
             data: {
                 id: '<%= Data.id %>',
@@ -399,28 +399,6 @@
         }
     }
 
-    // 获取案例分析题中的图片
-    function isImages() {
-        var imgBrowser = [];
-        var imgObj = $('.showreel_con img');
-        if (imgObj.length > 0) {
-            for (var i = 0; i < imgObj.length; i++) {
-                var img = new Image();
-                var obj = {};
-                img.src = $(imgObj[i]).attr('src');
-                if (img.width > $(window).width()) {
-                    img.height = $(window).width() / img.width * img.height;
-                    img.width = $(window).width();
-                }
-                obj.src = img.src;
-                obj.w = img.width;
-                obj.h = img.height;
-                imgBrowser.push(obj);
-            }
-        }
-        return imgBrowser;
-    }
-
     $('.showreel_con img').click(function () {
         var currentIndex = $(this).index();
         var pswpElement = document.querySelectorAll('.pswp')[0];
@@ -433,7 +411,7 @@
             hideAnimationDuration: 0,
             index: currentIndex // start at first slide
         };
-        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, isImages(), options);
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, isImages($('.showreel_con img')), options);
         gallery.init();
     });
 </script>

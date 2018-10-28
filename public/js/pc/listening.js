@@ -43,3 +43,24 @@ function unhtml(str) {
         }[a]
     }) : '';
 }
+
+/*init image width and height*/
+function isImages(imgObj) {
+    var imgBrowser = [];
+    if (imgObj.length > 0) {
+        for (var i = 0; i < imgObj.length; i++) {
+            var img = new Image();
+            var obj = {};
+            img.src = $(imgObj[i]).attr('src');
+            if (img.width > $(window).width()) {
+                img.height = $(window).width() / img.width * img.height;
+                img.width = $(window).width();
+            }
+            obj.src = img.src;
+            obj.w = img.width;
+            obj.h = img.height;
+            imgBrowser.push(obj);
+        }
+    }
+    return imgBrowser;
+}

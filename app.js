@@ -1,7 +1,6 @@
 let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
-let csrf = require('csurf');
 let cookieParser = require('cookie-parser');
 let expressSession = require('express-session');
 let bodyParser = require('body-parser');
@@ -16,7 +15,6 @@ const crossDomain = require('./utils/crossDomain');
 
 
 let app = express();
-let csrfProtection = csrf({cookie: true});
 
 app.all('*', crossDomain);  //跨域处理（不建议用）
 
@@ -42,7 +40,6 @@ app.use(expressSession({
     saveUninitialized: false,
     name: 'userinfo'
 }));
-app.use(csrfProtection);
 
 app.use(express.static(path.join(__dirname, 'public'))); // 映射公共文件到public
 

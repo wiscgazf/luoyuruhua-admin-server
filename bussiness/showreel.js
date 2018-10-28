@@ -138,8 +138,7 @@ objFun.showreelDetail = function (req, res, next) {
                     createTime: moment(item.createTime).format("YYYY-MM-DD"),
                     pageView: item.pageView
                 }
-            }),
-            csrfToken: req.csrfToken()
+            })
         });
     }).catch(err => {
         res.status(500).json(Errors.networkError);
@@ -268,7 +267,7 @@ objFun.allShowreel = function (req, res, next) {
     }).then(data => {
         totalCount = data;
         if (totalCount == 0) {
-            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: '鎴愬姛', Datas: []})
+            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: '成功', Datas: []})
         }
         let currentPage = baseMsg.currentPage ? baseMsg.currentPage : 1;
         totalPage = Math.ceil(totalCount / baseMsg.showCount);
@@ -297,7 +296,7 @@ objFun.allShowreel = function (req, res, next) {
             }).sort({createTime: -1}).skip(pageOffset).limit(parseInt(baseMsg.showCount)).exec();
         }
     }).then(data => {
-        res.json({msg: 'suc', code: '200', totalPage: totalPage, totalCount: totalCount, des: '鎴愬姛', Datas: data})
+        res.json({msg: 'suc', code: '200', totalPage: totalPage, totalCount: totalCount, des: '成功', Datas: data})
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })
