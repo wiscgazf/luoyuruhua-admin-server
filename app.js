@@ -45,6 +45,8 @@ app.use(express.static(path.join(__dirname, 'public'))); // 映射公共文件�
 
 app.use(express.static(path.join(__dirname, 'static'))); // 映射文件static目录
 
+app.use(express.static(path.join(__dirname, 'admin'))); // 映射文件admin目录
+
 app.use(require('./bussiness/index').publicData); // 侧边栏 数据
 
 app.use(require('./routes/index')); // 处理首页方面的路由

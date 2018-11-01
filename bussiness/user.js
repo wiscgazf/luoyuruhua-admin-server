@@ -3,9 +3,11 @@ let fs = require('fs');
 let moment = require('moment');
 let Promise = require('bluebird')
 let Errors = require('../err/errors');
+let mongoose = require('mongoose');
 
 let User = require('../models/User'); // user db
 let Admin = require('../models/Admin'); // admin db
+let Reply = require('../models/Reply'); // reply db
 
 /*
 *
@@ -116,13 +118,25 @@ objFun.userDetailAjax = function (req, res, next) { // get user detail
     })
 }
 objFun.delUserAjax = function (req, res, next) {  // delete user bussiness
-    User.remove({_id: req.body.id}, function (err, data) {
-        if (err) {
-            res.status(500).json(Errors.networkError);
-        } else {
+    let asyncFun = async () => {
+        await User.remove({_id: req.body.id});
+
+        await Reply.remove({userData: req.body.id});
+
+        await Reply.update({}, {$pull: {'replyData': {from: req.body.id}}}, {multi: true});
+
+        let delUser = await Reply.update({}, {$pull: {'replyData': {to: req.body.id}}}, {multi: true});
+
+        return delUser;
+    }
+
+    asyncFun().then(data => {
+        if (data) {
             res.json(Errors.delUserSuc);
         }
-    })
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    });
 }
 
 /*

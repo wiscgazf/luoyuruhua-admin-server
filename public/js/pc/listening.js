@@ -34,7 +34,7 @@ for (var i = 0; i < $('.channel ul>li').length; i++) {
 
 // filter element
 function unhtml(str) {
-    return str ? str.replace(/[<">']/g, (a) => {
+    return str ? str.replace(/[<">']/g, function (a) {
         return {
             '<': '&lt;',
             '"': '&quot;',

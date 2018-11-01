@@ -247,10 +247,23 @@
     width: 695px;
 }
 
+.reply_con .reply_user {
+    overflow: hidden;
+}
+
 .reply_con .reply_user span {
     margin-right: 10px;
     font-size: 14px;
     color: #666;
+    float: left;
+}
+
+.reply_con .reply_user i {
+    float: right;
+    color: #9c6;
+    font-size: 14px;
+    margin-right: 2px;
+    letter-spacing: 1px;
 }
 
 .reply_con .reply_user span:first-child, .reply_con .reply_user span:nth-of-type(4) {

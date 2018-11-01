@@ -13,6 +13,9 @@ let User = require('../models/User'); // user db
 let Notes = require('../models/Notes'); // notes db
 let Reply = require('../models/Reply'); // Reply db
 let Showreel = require('../models/Showreel'); // Showreel db
+let ImgSort = require('../models/ImgSort'); // ImgSort db
+
+let DataCollection = [Notes, Showreel, ImgSort];
 
 objFun.notesList = function (req, res, next) {  // find all notes and condition find
     let count = 0;
@@ -193,7 +196,7 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
     }).then(data => {
         totalCount = data;
         if (totalCount == 0) {
-            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: '闁瑰瓨鍔曟慨?, Datas: []})
+            res.json({msg: 'suc', code: '200', totalPage: 0, totalCount: 0, des: 'no data', Datas: []})
         }
         let currentPage = baseMsg.currentPage ? baseMsg.currentPage : 1;
         totalPage = Math.ceil(totalCount / baseMsg.showCount);
@@ -230,7 +233,14 @@ objFun.allNotesAjax = function (req, res) {     //find all  notes bussiness
             }).sort({createTime: -1}).skip(pageOffset).limit(parseInt(baseMsg.showCount)).exec();
         }
     }).then(data => {
-        res.json({msg: 'suc', code: '200', totalPage: totalPage, totalCount: totalCount, des: '闁瑰瓨鍔曟慨?, Datas: data})
+        res.json({
+            msg: 'suc',
+            code: '200',
+            totalPage: totalPage,
+            totalCount: totalCount,
+            des: 'find data success',
+            Datas: data
+        })
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })
@@ -342,7 +352,7 @@ objFun.deleteCommentDataAjax = function (req, res, next) {
         }]);
         if (filterComment[0].childCommentNum == 1) {
             await Reply.remove({_id: req.body.commentId});
-            delSuc = await Notes.update({_id: req.body.articleID}, {$pull: {replyData: req.body.commentId}});
+            delSuc = await DataCollection[req.body.channelId].update({_id: req.body.articleID}, {$pull: {replyData: req.body.commentId}});
         } else {
             delSuc = await Reply.update({_id: req.body.commentId}, {$pull: {replyData: {_id: req.body.commentChildId}}});
         }
@@ -354,7 +364,7 @@ objFun.deleteCommentDataAjax = function (req, res, next) {
                 if (err) {
                     res.status(500).json(Errors.networkError);
                 } else {
-                    sendEmail('<span>閻忓繐锕ラ弳姘舵儍閸曨厽鏆忛柟鏉戝殩�?' + data1.email + '></span><p>闁诡喓鍔岄妶浠嬫�?/p><span>闁汇垹褰夌花顒勫箖閵娿儲韬悹鍥ュ劚闁解晠宕ｆ０浣虹憪闁汇劌瀚惁搴ｆ媼鏉為绻嗛柟顓у灡缁夊綊宕ｆ繝鍛閻熸瑥瀚哥槐婵堝寲閼姐倗鍩犵€规瓕灏崵婊堝礉閵娿倛绀嬮柟顔哄妼閸ㄥ綊姊介妶鍫殙闁哄銈囨閻犱焦浜介埀?/span><p><span style="color: #f00;">婵炲鍔嶉崜浼存�?/span>閺夆晜绻嗛～澶娾枎閳╁啯�?0婵炲棌鈧弓绨板☉鎾筹功闁绱掗悢鍓佺獥闁煎浜滄慨鈺呭礃閼姐倗娉㈤柟顔哄妿濞堟垹鎷归敂钘夌厱闁挎稑鐭侀顒勬焼闂堟稓鏆撶紓鍐╁灣缁楀倿寮崶銊︻潠閻犲洤瀚鎴犫偓鐟扮墕閸垳鎲撮崟顔肩槺�?/p><span>缂侇垵宕电划娲嚊椤忓嫬袟闁告瑦鍨块埀顑跨筏缁辨繄鎷犲畡鏉跨憦闁烩晛鐡ㄧ敮鎾炊閻愬樊妲绘慨婵勫€濋崑鏍ㄧ鐠佸湱�?/span>', '<' + data1.email + '>');
+                    sendEmail('<span>尊敬的用户：<' + data1.email + '></span><p>您好�?/p><span>由于您在该平台上的评论信息涉及违规，系统已自动为您删除该条评论�?/span><p><span style="color: #f00;">注意�?/span>违规次数10次以上系统会自动冻结您的账户，请遵守网上文明评论守则规范�?/p><span>系统自动发送，请勿直接回复此邮件！</span>', '<' + data1.email + '>');
                 }
             });
             res.json(Errors.delCommentSuc);
@@ -385,14 +395,7 @@ objFun.addCommentAjax = function (req, res, next) {     // public comments
                 ]
             });
         }).then(data => {
-            let updateData = '';
-            if (data.status == 0) {
-                updateData = Notes.update({_id: data.notesData}, {$push: {replyData: data._id}});
-            }
-            if (data.status == 1) {
-                updateData = Showreel.update({_id: data.notesData}, {$push: {replyData: data._id}});
-            }
-            updateData.exec(function (err, result) {
+            DataCollection[data.status].update({_id: data.notesData}, {$push: {replyData: data._id}}).exec(function (err, result) {
                 if (result) {
                 res.json(Errors.replySuc);
             }

@@ -319,7 +319,7 @@
                 var str = '';
                 var Data = data.Data;
                 if (Data) {
-                    Data.forEach(function (item, indx) {
+                    Data.forEach(function (item, index) {
                         if (item.replyData.length == 1) {
                             var newStr = '<p>' + AnalyticEmotion(item.replyData[0].content) + '</p>';
                             str += '<li>' +
@@ -330,6 +330,7 @@
                                 '        <div class="reply_user">' +
                                 '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ',' + "'" + item.userData.name + "'" + ')">' + item.userData.name + '</span>' +
                                 '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
+                                '            <i>' + (Data.length - index) + 'F</i>' +
                                 '        </div>' +
                                 '        <div class="comment_con">' + newStr + '</div>' +
                                 '    </div>' +
@@ -363,6 +364,7 @@
                                 '        <div class="reply_user">' +
                                 '            <span title="@' + item.userData.name + '" onclick="replyComment(' + "'" + item._id + "'" + ',' + "'" + item.userData._id + "'" + ',' + "'" + item.userData.name + "'" + ')">' + item.userData.name + '</span>' +
                                 '            <span>' + moment(item.replyData[0].createTime).format("YYYY-MM-DD HH:mm:ss") + '</span>' +
+                                '            <i>' + (Data.length - index) + 'F</i>' +
                                 '        </div>' +
                                 '        <div class="comment_con">' +
                                 '            <p>' + AnalyticEmotion(item.replyData[0].content) + '</p>' +
