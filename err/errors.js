@@ -27,4 +27,5 @@ module.exports = {
     getShowreelSuc: {msg: '1', code: '200', des: '获取作品集信息成功'},
     editShowreelSuc: {msg: '1', code: '200', des: '编辑作品成功'},
     delShowreelSuc: {msg: '1', code: '200', des: '删除作品成功'},
+    insertImgSuc: {msg: '1', code: '200', des: '上传图片成功'},
 }

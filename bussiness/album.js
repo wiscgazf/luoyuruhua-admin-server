@@ -23,6 +23,19 @@ objFun.albumSuc = function (req, res, next) {
 * server ajax
 * */
 
+objFun.uploadImg = function (req, res, next) {
+    if (req.files.length > 0) {
+        res.json({
+            imgArr: req.files.map(item => {
+                return {
+                    name: item.originalname,
+                    url: '/upload/album/' + item.filename
+                }
+            })
+        })
+    }
+}
+
 /*
 *web ajax
 *

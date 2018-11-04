@@ -1,5 +1,7 @@
 let fs = require('fs');
 let path = require('path');
+let multer = require("multer");
+
 let get_client_ip = function (req) {    // 获取用户的IP
     var ip = req.headers['x-forwarded-for'] ||
         req.ip ||
@@ -102,9 +104,24 @@ function ltTenFun(num) {
     }
 }
 
+function insertImg() { //多图上传
+    let storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, path.join(__dirname, '../static/upload/album/'));
+        },
+        filename: function (req, file, cb) {
+            var str = file.originalname.split('.');
+            cb(null, Date.now() + '.' + str[1]);
+        }
+    });
+
+    return multer({storage: storage});
+}
+
 module.exports = {
     getUserIp: get_client_ip,
     dealObjectValue: dealObjectValue,
     dirExists: dirExists,
-    ltTenFun: ltTenFun
+    ltTenFun: ltTenFun,
+    insertImg: insertImg
 }

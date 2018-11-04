@@ -405,13 +405,13 @@
         var currentIndex = $(this).index();
         var pswpElement = document.querySelectorAll('.pswp')[0];
         var options = {
-            maxSpreadZoom: 3,
+            // history & focus options are disabled on CodePen
             history: false,
             focus: false,
             shareButtons: [],
             showAnimationDuration: 0,
             hideAnimationDuration: 0,
-            index: currentIndex // start at first slide
+            index: currentIndex
         };
         var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, isImages($('.showreel_con img')), options);
         gallery.init();
