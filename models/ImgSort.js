@@ -21,7 +21,8 @@ let imgSortSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    replyData: [{type: mongoose.Schema.Types.ObjectId, ref: 'reply'}]
+    replyData: [{type: mongoose.Schema.Types.ObjectId, ref: 'reply'}],
+    author: [{type: mongoose.Schema.Types.ObjectId, ref: 'admin'}]
 });
 
 module.exports = db.zhoufeiMongoose.model('imgSort', imgSortSchema);

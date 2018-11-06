@@ -10,7 +10,15 @@ router.get('/album', bussinessFun.albumSuc);  // album.html
 /*
 * server ajax
 * */
+
+// upload img to album folder
 router.post('/uploadImg', Other.insertImg().array("file", 20), bussinessFun.uploadImg);
+
+// upload img to album folder
+router.post('/thumbPhotoType', bussinessFun.thumbPhotoTypeFun);
+
+// add image kind function
+router.post('/addImgType', bussinessFun.addImgTypeFun);
 /*
 * web ajax
 * */
