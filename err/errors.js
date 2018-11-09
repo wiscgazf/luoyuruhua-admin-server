@@ -28,5 +28,8 @@ module.exports = {
     editShowreelSuc: {msg: '1', code: '200', des: '编辑作品成功'},
     delShowreelSuc: {msg: '1', code: '200', des: '删除作品成功'},
     insertImgSuc: {msg: '1', code: '200', des: '上传图片成功'},
-    addKindSuc: {msg: '1', code: '200', des: '添加相册类别成功'}
+    addKindSuc: {msg: '1', code: '200', des: '添加相册类别成功'},
+    findPhotoAlbumSuc: {msg: '1', code: '200', des: 'success'},
+    delAlbumPhotoSuc: {msg: '1', code: '200', des: 'success'},
+    addImgToAlbumSuc: {msg: '1', code: '200', des: 'success'}
 }

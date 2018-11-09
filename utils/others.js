@@ -104,10 +104,10 @@ function ltTenFun(num) {
     }
 }
 
-function insertImg() { //多图上传
+function insertImg(urlPath) { //多图上传
     let storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, path.join(__dirname, '../static/upload/album/'));
+            cb(null, urlPath);
         },
         filename: function (req, file, cb) {
             var str = file.originalname.split('.');
@@ -118,10 +118,41 @@ function insertImg() { //多图上传
     return multer({storage: storage});
 }
 
+function deleteFolderRecursive(url, delImgArr) {
+    let info = false;
+    let files = [];
+    //判断给定的路径是否存在
+    if (fs.existsSync(url)) {
+        //返回文件和子目录的数组
+        files = fs.readdirSync(url);
+        files.forEach(function (file, index) {
+            let curPath = path.join(url, file);
+            //fs.statSync同步读取文件夹文件，如果是文件夹，在重复触发函数
+            if (fs.statSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+                // 是文件delete file
+            } else {
+                delImgArr.forEach(function (item) {
+                    if (item == file) {
+                        fs.unlinkSync(path.join(url, item));
+                    }
+                })
+                info = true;
+            }
+        });
+        //清除文件夹
+        // fs.rmdirSync(url);
+    } else {
+        info = false;
+        console.log("给定的路径不存在，请给出正确的路径");
+    }
+    return info;
+};
 module.exports = {
     getUserIp: get_client_ip,
     dealObjectValue: dealObjectValue,
     dirExists: dirExists,
     ltTenFun: ltTenFun,
-    insertImg: insertImg
+    insertImg: insertImg,
+    deleteFolderRecursive: deleteFolderRecursive
 }

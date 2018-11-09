@@ -1,5 +1,6 @@
 let objFun = {};
 let fs = require('fs');
+let path = require('path');
 let Promise = require("bluebird");
 let moment = require('moment');
 let md5 = require('../utils/md5');
