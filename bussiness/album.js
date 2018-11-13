@@ -20,7 +20,113 @@ let Album = require('../models/Album'); // album db
 * show  page router
 * */
 objFun.albumSuc = function (req, res, next) {
-    res.render('pc/album')
+    ImgSort.find({}).populate({
+        model: 'admin',
+        select: 'name userImg',
+        path: 'author'
+    }).sort({createTime: -1}).exec(function (err, data) {
+        if (data.length > 0) {
+            res.render('pc/album', {
+                Data: data.map(item => {
+                    return {
+                        createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                        title: item.title,
+                        description: item.description,
+                        thumbImg: item.thumbImg,
+                        pageView: item.pageView,
+                        imgNum: item.imgNum,
+                        id: item._id
+                    }
+                })
+            });
+        } else {
+            res.render('pc/album', {Data: []});
+        }
+    });
+}
+
+objFun.albumList = function (req, res, next) {
+    let count = 0;
+    let pageSize = 0;
+    let showCount = 20;
+    let currentPage = req.query.page || 1;
+    let asyncFun = async () => {
+        await ImgSort.findByIdAndUpdate(req.params.id, {$inc: {pageView: 1}});
+        let imgNums = await Album.aggregate([{$unwind: '$photoList'}, {$match: {kind: new mongoose.Types.ObjectId(req.params.id)}}, {
+            $group: {
+                _id: 0,
+                count: {$sum: 1}
+            }
+        }]);
+        if (imgNums.length == 0) {
+            return imgNums;
+        } else {
+            count = imgNums[0].count;
+            pageSize = Math.ceil(imgNums[0].count / showCount);
+
+            if (currentPage > pageSize) {
+                currentPage = pageSize;
+            }
+            if (currentPage <= 0) {
+                currentPage = 1;
+            }
+
+            let skip = showCount * (currentPage - 1);
+
+            let albumFun = await Album.aggregate([{
+                $lookup: {
+                    from: "ImgSort",
+                    localField: "title",
+                    foreignField: "title",
+                    as: "inventory"
+                }
+            }, {$unwind: '$photoList'}, {$match: {kind: new mongoose.Types.ObjectId(req.params.id)}}, {
+                $project: {
+                    _id: 1,
+                    title: 1,
+                    createTime: 1,
+                    photoList: 1,
+                    kind: 1,
+                    inventory: 1
+                }
+            }, {$skip: skip}, {$sort: {createTime: -1}}]);
+            // let populateAuthor = await Album.populate(albumFun, {model: 'imgSort', path: 'kind'});
+            return albumFun;
+        }
+    }
+    asyncFun().then(data => {
+        console.log(data)
+        if (data.length == 0) {
+            res.render('pc/albumList', {
+                Datas: [],
+                search: '',
+                count: count,
+                pageSize: pageSize,
+                showCount: showCount,
+                currentPage: currentPage,
+                pagePath: '/album/' + req.params.id
+            });
+        } else {
+            res.render('pc/albumList', {
+                Datas: data.map(item => {
+                    return {
+                        id: item._id,
+                        createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                        title: item.title,
+                        imgMsg: item.photoList
+                    }
+                }),
+                search: '',
+                count: count,
+                pageSize: pageSize,
+                showCount: showCount,
+                currentPage: currentPage,
+                pagePath: '/album/' + req.params.id
+            });
+        }
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    })
 }
 /*
 *

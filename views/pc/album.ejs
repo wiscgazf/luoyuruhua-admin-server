@@ -20,28 +20,23 @@
 <div class="content">
     <div class="content_con">
         <div class="album_list">
+            <% if(Data.length > 0){ %>
+            <% Data.forEach(function (item) { %>
             <div class="album_item">
-                <a href="javascript:void(0);" target="_blank"><img
-                            src="http://192.168.0.20:30001/upload/showreel/1539670939625.png" alt=""></a>
-                <p>西湖三日游</p>
-                <span>西湖三日游，全是人</span>
+                <a href="/album/<%= item.id %>"><img
+                            src="<%= item.thumbImg %>" alt=""></a>
+                <p><%= item.title %></p>
+                <span><%= item.description %></span>
                 <ul>
-                    <li class="date_time">2018-10-16</li>
-                    <li class="views">45</li>
-                    <li class="photo_num"><span>45</span>张</li>
+                    <li class="date_time"><%= item.createTime %></li>
+                    <li class="views"><%= item.pageView %></li>
+                    <li class="photo_num"><span><%= item.imgNum %></span>张</li>
                 </ul>
             </div>
-            <div class="album_item">
-                <a href="javascript:void(0);" target="_blank"><img
-                            src="http://192.168.0.20:30001/upload/showreel/1539670939625.png" alt=""></a>
-                <p>西湖三日游</p>
-                <span>西湖三日游，全是人</span>
-                <ul>
-                    <li class="date_time">2018-10-16</li>
-                    <li class="views">45</li>
-                    <li class="photo_num"><span>45</span>张</li>
-                </ul>
-            </div>
+            <% }) %>
+            <% }else{ %>
+            <img src="/img/pc/404.png" alt="">
+            <% } %>
         </div>
     </div>
 </div>

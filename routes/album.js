@@ -7,7 +7,7 @@ let Other = require('../utils/others');
 // show  page router ---------------------------------------
 router.get('/album', bussinessFun.albumSuc);  // album.html
 
-
+router.get('/album/:id', bussinessFun.albumList);    // albumList.html
 /*
 * server ajax
 * */

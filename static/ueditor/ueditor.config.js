@@ -20,7 +20,7 @@
    * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
    */
   // window.UEDITOR_HOME_URL = "/vue2-management-platform/static/UE/"  // vue2-management-platform是为gh-pages添加，本地开发写"/static/UE/"足以
-  window.UEDITOR_HOME_URL = "/static/ueditor/";
+  window.UEDITOR_HOME_URL = "/ueditor/";
   var URL = window.UEDITOR_HOME_URL || getUEBasePath();
   /**
    * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。

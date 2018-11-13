@@ -86,7 +86,7 @@ app.use("/ue/upload", ueditor(path.join(__dirname, 'static'), function (req, res
     else {
         // console.log('config.json')
         res.setHeader('Content-Type', 'application/json');
-        res.redirect('/static/ueditor/nodejs/config.json');
+        res.redirect('/ueditor/nodejs/config.json');
     }
 
     function ltTenFun(num) {
