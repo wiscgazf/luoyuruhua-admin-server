@@ -29,6 +29,9 @@ router.delete('/delPhoto', bussinessFun.delPhotoFun);
 
 //  add album image
 router.post('/addImgToAlbum', bussinessFun.addImgToAlbumFun);
+
+// find album image
+router.get('/findAlbumImg', bussinessFun.findAlbumImg);
 /*
 * web ajax
 * */

@@ -328,7 +328,7 @@ objFun.getCommentDataAjax = function (req, res, next) { // server get comments D
             return Showreel.populate(data, {model: 'showreel', select: 'title', path: 'notesData'});
         }
         if (req.query.channelId == 2) {
-            return Showreel.populate(data, {model: 'album', select: 'title', path: 'notesData'});
+            return ImgSort.populate(data, {model: 'imgSort', select: 'title', path: 'notesData'});
         }
     }).then(data => {
         return User.populate(data, {model: 'user', select: 'name userImg', path: 'replyData.to replyData.from'});

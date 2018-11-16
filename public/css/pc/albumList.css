@@ -1,6 +1,5 @@
 /*content*/
 .content {
-    width: 100%;
     padding-top: 30px;
 }
 
@@ -143,4 +142,208 @@
     border-color: #4285F4;
     background: #4285F4;
     color: #fff;
+}
+
+/*reply*/
+.reply_title {
+    width: 764px;
+    margin-top: 30px;
+    background: #fff;
+    height: 40px;
+    overflow: hidden;
+    padding: 0 20px;
+}
+
+.reply_title span, .reply_title a {
+    font-size: 14px;
+    color: #939292;
+    line-height: 40px;
+}
+
+.reply_title span b {
+    color: #2C9BD8;
+}
+
+.reply_title a {
+    background: url("../../img/pc/comment.png") no-repeat left center;
+    background-size: 18px 18px;
+    padding-left: 23px;
+}
+
+.reply_title a:hover {
+    background: url("../../img/pc/comment1.png") no-repeat left center;
+    background-size: 18px 18px;
+    color: #666;
+}
+
+/*reply_list*/
+.reply_list {
+    width: 804px;
+    margin-top: 30px;
+}
+
+.reply_list > ul > li {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 15px 20px;
+}
+
+.user_circle_img {
+    width: 43px;
+    height: 43px;
+    -webkit-border-radius: 43px;
+    -moz-border-radius: 43px;
+    border-radius: 43px;
+    overflow: hidden;
+}
+
+.user_circle_img a, .user_circle_img a img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.reply_list .reply_con {
+    width: 695px;
+}
+
+.reply_con .reply_user {
+    overflow: hidden;
+}
+
+.reply_con .reply_user span {
+    margin-right: 10px;
+    font-size: 14px;
+    color: #666;
+    float: left;
+}
+
+.reply_con .reply_user i {
+    float: right;
+    color: #9c6;
+    font-size: 14px;
+    margin-right: 2px;
+    letter-spacing: 1px;
+}
+
+.reply_con .reply_user span:first-child, .reply_con .reply_user span:nth-of-type(4) {
+    color: #2C9BD8;
+}
+
+.reply_con .reply_user span:first-child:hover, .reply_con .reply_user span:nth-of-type(4):hover {
+    cursor: pointer;
+}
+
+.comment_con p {
+    font-size: 16px;
+    color: #333;
+    line-height: 24px;
+    padding: 10px 0;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+}
+
+.reply_con ul li {
+    overflow: hidden;
+    border-top: 1px dotted #eee;
+    padding: 10px 0;
+}
+
+.reply_list ul li ul li .reply_con {
+    width: 627px;
+}
+
+/*comment*/
+.comment_wrap {
+    width: 804px;
+    margin-top: 30px;
+}
+
+.comment {
+    width: 100%;
+    height: auto;
+}
+
+.comment .content {
+    width: 90%;
+}
+
+.cont-box {
+    width: 100%;
+    height: 150px;
+    background: #fff;
+}
+
+.cont-box .text {
+    width: 96.6%;
+    height: 86.9%;
+    padding: 8px 12px;
+    color: #666;
+    font-family: 'Microsoft Yahei';
+    font-size: 14px;
+    resize: none;
+    border: 1px solid transparent;
+    outline: 0;
+}
+
+.cont-box .text:focus {
+    border: 1px solid #9c6;
+    box-shadow: 0 0 5px #9c6;
+}
+
+.tools-box {
+    width: 100%;
+    height: 30px;
+    margin-top: 15px;
+}
+
+.tools-box .operator-box-btn {
+    width: 85%;
+    height: 30px;
+    float: left
+}
+
+.tools-box .operator-box-btn .face-icon {
+    display: block;
+    float: left;
+    margin-top: -1px;
+    margin-left: 10px;
+    font-family: 微软雅黑;
+    font-size: 22px;
+    color: #9c6;
+    cursor: pointer
+}
+
+.tools-box .operator-box-btn .img-icon {
+    display: block;
+    float: left;
+    margin-top: -8px;
+    margin-left: 10px;
+    font-family: 'Microsoft Yahei';
+    font-size: 33px;
+    font-weight: lighter;
+    color: #9c6;
+    cursor: pointer
+}
+
+.tools-box .submit-btn {
+    width: 15%;
+    height: 30px;
+    float: right
+}
+
+.tools-box .submit-btn input {
+    width: 100%;
+    height: 100%;
+    font-family: 'Microsoft Yahei';
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    border: 0;
+    outline: 0;
+    background-color: #9c6
 }
