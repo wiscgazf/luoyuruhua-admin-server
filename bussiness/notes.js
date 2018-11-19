@@ -436,9 +436,9 @@ objFun.getCommentAjax = function (req, res, next) {
         } else {
             pageSize = Math.ceil(data / showCount);
 
-            if (currentPage >= pageSize) {
+            /*if (currentPage >= pageSize) {
                 currentPage = pageSize;
-            }
+            }*/
 
             if (currentPage <= 0) {
                 currentPage = 1;

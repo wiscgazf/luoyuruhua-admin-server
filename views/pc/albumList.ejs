@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/css/pc/default-skin.css">
     <link rel="stylesheet" href="/css/pc/albumList.css">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <title>落雨如画博客-临渊羡鱼，不如退而结网！</title>
+    <title><%= Title %>-落雨如画博客</title>
 </head>
 <body>
 <!--header-->
@@ -22,7 +22,7 @@
 <!--content-->
 <div class="content">
     <div class="content_con">
-        <div class="photo_num">全部<b><%= imgNum %></b>篇</div>
+        <div class="photo_num"><%= Title %>（<b><%= imgNum %></b>）</div>
         <div class="photo_list">
             <% if(Datas.length == 0){ %>
             <img src="/img/pc/404.png" alt="">

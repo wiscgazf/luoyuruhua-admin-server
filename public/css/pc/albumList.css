@@ -13,8 +13,8 @@
     background: #fff;
     font-size: 14px;
     padding: 15px 15px 15px 37px;
-    background: #fff url("../../img/pc/list.png") no-repeat 15px center;
-    background-size: auto;
+    background: #fff url("../../img/pc/album.png") no-repeat 13px center;
+    background-size: 20px;
     color: #2C9BD8;
     box-shadow: 0 0 8px rgba(46, 143, 237, 0.3);
     -webkit-box-shadow: 0 0 8px rgba(46, 143, 237, 0.3);

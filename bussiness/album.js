@@ -142,6 +142,7 @@ objFun.albumList = function (req, res, next) {
                 },
                 imgNum: data[0].inventory[0].imgNum,
                 pageView: data[0].inventory[0].pageView,
+                Title: data[0].inventory[0].title,
                 replyNum: replyNum,
                 search: '',
                 count: count,
@@ -284,9 +285,9 @@ objFun.findAlbumImg = function (req, res, next) {
             count = imgNum[0].imgNums;
             pageSize = Math.ceil(count / showCount);
 
-            if (currentPage > pageSize) {
+            /*if (currentPage > pageSize) {
                 currentPage = pageSize;
-            }
+            }*/
             if (currentPage <= 0) {
                 currentPage = 1;
             }
@@ -325,8 +326,33 @@ objFun.findAlbumImg = function (req, res, next) {
 
     };
     asyncFun().then(data => {
-        console.log(data)
-        res.json(data);
+        if (data.length == 0) {
+            res.json({Datas: []});
+        } else {
+            res.json({
+                Datas: data.map(item => {
+                    return {
+                        id: item._id,
+                        createTime: moment(item.createTime).format("YYYY-MM-DD"),
+                        title: item.title,
+                        imgMsg: item.photoList,
+                        kind: item.kind
+                    }
+                }),
+                author: {
+                    name: data[0].inventory_doc[0].name,
+                    userImg: data[0].inventory_doc[0].userImg
+                },
+                imgNum: data[0].inventory[0].imgNum,
+                pageView: data[0].inventory[0].pageView,
+                Title: data[0].inventory[0].title,
+                count: count,
+                pageSize: pageSize,
+                showCount: showCount,
+                currentPage: currentPage
+            });
+        }
+
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })
