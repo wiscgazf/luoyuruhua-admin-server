@@ -209,7 +209,11 @@ objFun.addImgTypeFun = function (req, res, next) {
 }
 
 objFun.photoAlbumFun = function (req, res, next) {
-    ImgSort.find({}).populate({model: 'admin', select: 'name', path: 'author'}).exec(function (err, data) {
+    ImgSort.find({}).populate({
+        model: 'admin',
+        select: 'name',
+        path: 'author'
+    }).sort({createTime: -1}).exec(function (err, data) {
         if (err) {
             res.status(500).json(Errors.networkError);
         } else {
@@ -353,6 +357,89 @@ objFun.findAlbumImg = function (req, res, next) {
             });
         }
 
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    })
+}
+objFun.delImgKindFun = function (req, res, next) {
+    let info = false;
+    let asyncFun = async () => {
+        try {
+            let findImgSort = await ImgSort.findById(req.body.id);
+            let findKindImg = await Album.findOne({kind: req.body.id});
+            let dataArr = findKindImg.photoList.map(item => {
+                return item.url.substring(item.url.lastIndexOf('/') + 1, item.url.length);
+            });
+            dataArr.push(findImgSort.thumbImg.substring((findImgSort.thumbImg.lastIndexOf('/') + 1), findImgSort.thumbImg.length));
+            await ImgSort.remove({_id: req.body.id});
+            await Reply.remove({notesData: req.body.id});
+            await Album.remove({kind: req.body.id});
+
+            if (await otherUtil.deleteFolderRecursive(path.join(__dirname, '../static/upload/album/'), dataArr)) {
+                info = true;
+            }
+            return info;
+        }
+        catch (e) {
+            res.status(500).json(Errors.networkError);
+        }
+    }
+    asyncFun().then(data => {
+        if (data) {
+            res.json(Errors.delImgKindSuc)
+        } else {
+            res.json(Errors.delImgKindError);
+        }
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    })
+}
+
+objFun.kindDetailFun = function (req, res, next) {
+    ImgSort.findById(req.query.id).populate({
+        model: 'admin',
+        select: 'name',
+        path: 'author'
+    }).exec(function (err, data) {
+        if (err) {
+            res.status(500).json(Errors.networkError);
+        } else {
+            res.json(Object.assign({
+                title: data.title,
+                description: data.description,
+                thumbImg: data.thumbImg,
+                author: data.author
+            }, Errors.findPhotoAlbumSuc));
+        }
+    });
+}
+
+objFun.editKindFun = function (req, res, next) {
+    let asyncFun = async () => {
+        let info = 0;
+        try {
+            let getAdminMsg = await Admin.findOne({name: md5.aseDecode(req.body.name, 'zhoufei')});
+            if (getAdminMsg.permissions == 'auth') {
+                info = 1;
+                let isEqualy = await ImgSort.findById(req.body.id);
+                if (req.body.form.thumbImg != isEqualy.thumbImg) {
+                    let delImgStr = isEqualy.thumbImg.substring((isEqualy.thumbImg.lastIndexOf('/') + 1), isEqualy.thumbImg.length);
+                    await otherUtil.deleteFolderRecursive(path.join(__dirname, '../static/upload/album/'), [delImgStr])
+                }
+                await ImgSort.update({_id: req.body.id}, {$set: req.body.form});
+            }
+            return info;
+        }
+        catch (e) {
+            res.status(500).json(Errors.networkError);
+        }
+    }
+    asyncFun().then(data => {
+        if (data == 1) {
+            res.json(Errors.editImgKindSuc);
+        } else {
+            res.json(Errors.notAuth);
+        }
     }).catch(err => {
         res.status(500).json(Errors.networkError);
     })

@@ -32,6 +32,15 @@ router.post('/addImgToAlbum', bussinessFun.addImgToAlbumFun);
 
 // find album image
 router.get('/findAlbumImg', bussinessFun.findAlbumImg);
+
+// delete kind
+router.delete('/delImgKind', bussinessFun.delImgKindFun);
+
+//find album detail
+router.get('/kindDetail', bussinessFun.kindDetailFun);
+
+//edit image kind
+router.post('/editKind', bussinessFun.editKindFun);
 /*
 * web ajax
 * */

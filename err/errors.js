@@ -1,6 +1,7 @@
 // errors record
 module.exports = {
     networkError: {msg: '0', code: '500', des: '网络异常错误'},
+    notAuth: {msg: '0', code: '200', des: '不是作者无法对其进行编辑'},
     nameOccupied: {msg: '0', code: '10001', des: '该用户名已被占用'},
     phoneregisted: {msg: '0', code: '10002', des: '该手机号已被注册'},
     twoPswSame: {msg: '0', code: '10003', des: '新密码和原密码一致，请重新输入'},
@@ -31,5 +32,8 @@ module.exports = {
     addKindSuc: {msg: '1', code: '200', des: '添加相册类别成功'},
     findPhotoAlbumSuc: {msg: '1', code: '200', des: 'success'},
     delAlbumPhotoSuc: {msg: '1', code: '200', des: 'success'},
-    addImgToAlbumSuc: {msg: '1', code: '200', des: 'success'}
+    addImgToAlbumSuc: {msg: '1', code: '200', des: 'success'},
+    delImgKindSuc: {msg: '1', code: '200', des: 'success'},
+    delImgKindError: {msg: '0', code: '10008', des: 'fail'},
+    editImgKindSuc: {msg: '1', code: '200', des: '编辑相册集成功'}
 }
