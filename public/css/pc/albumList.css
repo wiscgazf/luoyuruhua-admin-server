@@ -3,6 +3,10 @@
     padding-top: 30px;
 }
 
+.comment .content {
+    padding-top: 0;
+}
+
 .content .content_con {
     width: 1200px;
     margin: 0 auto;

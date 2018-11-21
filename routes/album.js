@@ -41,6 +41,10 @@ router.get('/kindDetail', bussinessFun.kindDetailFun);
 
 //edit image kind
 router.post('/editKind', bussinessFun.editKindFun);
+
+//delete album image
+router.delete('/delKindImg', bussinessFun.delKindImgFun);
+
 /*
 * web ajax
 * */

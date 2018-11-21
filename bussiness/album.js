@@ -444,6 +444,47 @@ objFun.editKindFun = function (req, res, next) {
         res.status(500).json(Errors.networkError);
     })
 }
+
+objFun.delKindImgFun = function (req, res, next) {
+    let asyncFun = async () => {
+        let Data = req.body.delData;
+        let delImgData = [];
+        try {
+            for (let i = 0; i < Data.length; i++) {
+                let imgStr = Data[i].imgMsg.url.substring((Data[i].imgMsg.url.lastIndexOf('/') + 1), Data[i].imgMsg.url.length);
+                delImgData.push(imgStr);
+                let judgeImgNum = await Album.aggregate([{
+                    $match: {
+                        kind: new mongoose.Types.ObjectId(req.body.id),
+                        _id: new mongoose.Types.ObjectId(Data[i].id)
+                    }
+                }, {$project: {_id: 0, imgSize: {$size: '$photoList'}}}]);
+                if (judgeImgNum[0].imgSize == 1) {
+                    await Album.remove({kind: req.body.id, _id: Data[i].id});
+                } else {
+                    await Album.update({
+                        kind: req.body.id,
+                        _id: Data[i].id
+                    }, {$pull: {photoList: {url: Data[i].imgMsg.url}}});
+                }
+                await ImgSort.update({_id: req.body.id}, {$inc: {imgNum: -1}});
+            }
+            return await otherUtil.deleteFolderRecursive(path.join(__dirname, '../static/upload/album/'), delImgData);
+        }
+        catch (e) {
+            res.status(500).json(Errors.networkError);
+        }
+    }
+    asyncFun().then(data => {
+        if (data) {
+            res.json(Errors.delImgSuc);
+        } else {
+            res.json(Errors.delImgFail);
+        }
+    }).catch(err => {
+        res.status(500).json(Errors.networkError);
+    })
+}
 /*
 *web ajax
 *

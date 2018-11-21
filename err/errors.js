@@ -35,5 +35,7 @@ module.exports = {
     addImgToAlbumSuc: {msg: '1', code: '200', des: 'success'},
     delImgKindSuc: {msg: '1', code: '200', des: 'success'},
     delImgKindError: {msg: '0', code: '10008', des: 'fail'},
-    editImgKindSuc: {msg: '1', code: '200', des: '编辑相册集成功'}
+    editImgKindSuc: {msg: '1', code: '200', des: '编辑相册集成功'},
+    delImgSuc: {msg: '1', code: '200', des: '删除图片成功'},
+    delImgFail: {msg: '0', code: '10009', des: '删除图片失败'}
 }
